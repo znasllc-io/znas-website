@@ -1,30 +1,53 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap-config";
 import { workContent } from "@/data/content";
 import SectionLabel from "@/components/ui/SectionLabel";
 import PillTag from "@/components/ui/PillTag";
+import ProjectModal, { getProjectUrl } from "@/components/ui/ProjectModal";
 
 export default function Work() {
   const sectionRef = useRef<HTMLElement>(null);
-  const rowsRef = useRef<HTMLDivElement[]>([]);
+  const cardsRef = useRef<HTMLDivElement[]>([]);
+  const [selectedProject, setSelectedProject] = useState<{
+    title: string;
+    challenge: string;
+    url: string | null;
+  } | null>(null);
 
   useEffect(() => {
-    rowsRef.current.forEach((row) => {
-      if (!row) return;
-      gsap.from(row, {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: row,
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
+    if (!sectionRef.current) return;
+
+    const ctx = gsap.context(() => {
+      cardsRef.current.forEach((card) => {
+        if (!card) return;
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        });
+
+        // ClipPath reveal — blueprint unrolls left to right
+        tl.fromTo(
+          card,
+          { clipPath: "inset(0 100% 0 0)" },
+          { clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "power2.inOut" }
+        );
+
+        // Then draw internal lines
+        tl.from(
+          card.querySelectorAll(".blueprint-line"),
+          { scaleX: 0, duration: 0.6, ease: "power2.inOut", stagger: 0.1 },
+          "-=0.3"
+        );
       });
-    });
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -37,25 +60,149 @@ export default function Work() {
       <div className="container">
         <SectionLabel number={workContent.number} label={workContent.label} />
 
-        <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           {workContent.projects.map((project, i) => (
             <div
               key={i}
               ref={(el) => {
-                if (el) rowsRef.current[i] = el;
+                if (el) cardsRef.current[i] = el;
               }}
-              className="work-row px-4 md:px-6"
+              className="blueprint-card group"
+              style={{
+                position: "relative",
+                padding: "2rem",
+                border: "1px solid var(--color-border)",
+                borderRadius: 0,
+                backgroundColor: "transparent",
+                transition: "border-color 0.4s",
+                cursor: "none",
+              }}
+              onClick={() => {
+                setSelectedProject({
+                  title: project.title,
+                  challenge: project.challenge,
+                  url: getProjectUrl(project.title),
+                });
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--color-accent)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--color-border)";
+              }}
             >
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-heading work-title">{project.title}</h3>
-                <span className="work-arrow text-2xl">→</span>
-              </div>
-              <p
-                className="text-small mb-3"
-                style={{ color: "var(--color-text-secondary)" }}
+              {/* Corner registration marks */}
+              <div className="corner-bl" />
+              <div className="corner-br" />
+
+              {/* Blueprint grid background */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  backgroundImage: `
+                    linear-gradient(var(--color-border) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--color-border) 1px, transparent 1px)
+                  `,
+                  backgroundSize: "40px 40px",
+                  opacity: 0.06,
+                }}
+              />
+
+              {/* Header: revision + title */}
+              <div
+                className="flex items-start justify-between mb-6"
+                style={{ position: "relative" }}
               >
-                {project.description}
-              </p>
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "clamp(1.25rem, 2vw, 1.75rem)",
+                    fontWeight: 500,
+                    letterSpacing: "-0.02em",
+                    lineHeight: 1.2,
+                  }}
+                  data-code-comment={
+                    i === 0 ? "// go generate ./asyncapi/..."
+                    : i === 1 ? "// tags > tree // obviously"
+                    : i === 2 ? "// 12yr monolith.Decompose()"
+                    : "// amadeus.Fly(ctx, global)"
+                  }
+                >
+                  {project.title}
+                </h3>
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.55rem",
+                    letterSpacing: "0.15em",
+                    color: "var(--color-text-ghost)",
+                    textTransform: "uppercase",
+                    whiteSpace: "nowrap",
+                    marginLeft: "1rem",
+                  }}
+                >
+                  REV: {String(i + 1).padStart(2, "0")}
+                </span>
+              </div>
+
+              {/* Divider line */}
+              <div
+                className="blueprint-line"
+                style={{
+                  height: 1,
+                  backgroundColor: "var(--color-border)",
+                  marginBottom: "1.5rem",
+                  transformOrigin: "left",
+                }}
+              />
+
+              {/* Blueprint sections: Challenge / Approach / Impact */}
+              <div className="flex flex-col gap-4" style={{ position: "relative" }}>
+                {[
+                  { label: "Challenge", text: project.challenge },
+                  { label: "Approach", text: project.approach },
+                  { label: "Impact", text: project.impact },
+                ].map((section) => (
+                  <div key={section.label}>
+                    <div
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "0.55rem",
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: "var(--color-accent)",
+                        marginBottom: "0.35rem",
+                        opacity: 0.7,
+                      }}
+                    >
+                      {section.label}
+                    </div>
+                    <p
+                      className="text-small"
+                      style={{
+                        color: "var(--color-text-secondary)",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {section.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Bottom divider */}
+              <div
+                className="blueprint-line"
+                style={{
+                  height: 1,
+                  backgroundColor: "var(--color-border)",
+                  marginTop: "1.5rem",
+                  marginBottom: "1rem",
+                  transformOrigin: "left",
+                }}
+              />
+
+              {/* Tags */}
               <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
                   <PillTag key={tag} label={tag} />
@@ -65,6 +212,13 @@ export default function Work() {
           ))}
         </div>
       </div>
+
+      {/* Redirect confirmation modal */}
+      <ProjectModal
+        isOpen={selectedProject !== null}
+        onClose={() => setSelectedProject(null)}
+        project={selectedProject}
+      />
     </section>
   );
 }

@@ -1,26 +1,26 @@
 export const siteConfig = {
   name: "ZNAS",
-  title: "ZNAS — Software Architect & Engineer",
+  title: "ZNAS — Software Engineering & Consulting",
   description:
-    "Senior software architect with 15+ years of experience building systems that scale.",
+    "Full-stack software engineering and consulting. Helping organizations build scalable software across healthcare, airlines, finance, and telecom.",
   url: "https://znas.io",
 };
 
 export const heroContent = {
   headline: ["Software", "Architect"],
   subtitle:
-    "15 years engineering systems that scale. From architecture to deployment — no shortcuts.",
+    "17 years engineering systems at scale — from call centers to airlines to language platforms. Tucson, AZ.",
   scrollCta: "Scroll to explore",
 };
 
 export const aboutContent = {
   number: ".01",
   label: "About",
-  statement: "I architect and build the systems that others depend on.",
+  statement: "I build the systems that organizations depend on to operate.",
   paragraphs: [
-    "With over 15 years as a software engineer and architect, I've designed and built production systems handling millions of requests, led engineering teams through complex technical transformations, and delivered solutions that stand the test of time.",
-    "I believe great software is invisible — it works so well that nobody thinks about it. My approach combines deep technical expertise with strategic thinking, ensuring every system I build isn't just functional today, but scalable tomorrow.",
-    "Now available for select freelance engagements where technical depth and architectural thinking make the difference.",
+    "I'm Jose Sanz — founder of Znas LLC and co-founder of Visionarys. For over 17 years I've engineered and architected production software across healthcare, airlines, finance, and telecommunications.",
+    "My career has taken me from call center workflow systems at Afni, to airline technology at Amadeus IT Group, to a 12-year run at CyraCom where I grew from Software Developer to Junior Software Architect leading distributed systems and mobile platforms.",
+    "I'm MIT-certified in AI Business Strategy and actively building AI-powered tools and developer infrastructure through Znas LLC. Fluent in English and Spanish. Based in Tucson, AZ.",
   ],
 };
 
@@ -32,53 +32,55 @@ export const expertiseContent = {
       id: "architecture",
       title: "System Architecture",
       description:
-        "Designing distributed systems, microservices, and scalable infrastructure. From whiteboard to production — I architect systems that grow with your business.",
+        "Designing distributed systems, microservices, and public APIs that handle real production load. From whiteboard to deployment across healthcare, airlines, finance, and telecom.",
       tags: [
         "Distributed Systems",
         "Microservices",
-        "Cloud Architecture",
-        "System Design",
-        "API Design",
+        "Public APIs",
+        "WCF Services",
+        ".NET",
+        "AsyncAPI",
       ],
     },
     {
       id: "engineering",
       title: "Full-Stack Engineering",
       description:
-        "End-to-end development across the stack. Frontend interfaces, backend services, databases, and everything in between — built with precision.",
+        "End-to-end development across mobile, web, IoT, and blockchain. 17 years of shipping production software across multiple stacks and industries.",
       tags: [
-        "TypeScript",
-        "React",
-        "Node.js",
+        "Go",
         "Python",
-        "PostgreSQL",
-        "Redis",
-      ],
-    },
-    {
-      id: "leadership",
-      title: "Technical Leadership",
-      description:
-        "Guiding teams through complex builds, establishing engineering culture, code review practices, and technical decision-making frameworks.",
-      tags: [
-        "Team Leadership",
-        "Code Review",
-        "Tech Strategy",
-        "Mentorship",
-        "Agile",
+        ".NET / C#",
+        "Mobile",
+        "Web",
+        "IoT",
+        "Blockchain",
       ],
     },
     {
       id: "ai",
-      title: "AI & Modern Stack",
+      title: "AI & Emerging Tech",
       description:
-        "Integrating AI capabilities into production systems. From LLM orchestration to real-time data pipelines — building the future, today.",
+        "MIT-certified in AI Business Strategy. Building AI-powered applications and developer tooling. Led the AI Trailblazers developer workshop series at CyraCom.",
       tags: [
         "AI Integration",
         "LLMs",
-        "Real-Time Systems",
-        "Data Pipelines",
-        "Edge Computing",
+        "AI Architecture",
+        "Developer Tooling",
+        "Open Source",
+      ],
+    },
+    {
+      id: "leadership",
+      title: "Startup Leadership",
+      description:
+        "Founder of Znas LLC (2017) and Co-Founder of Visionarys (2025). Experienced in architecting teams, delegating technical work, and bridging engineering with business strategy.",
+      tags: [
+        "Start-up Leadership",
+        "Enterprise Software",
+        "Team Building",
+        "Mentorship",
+        "Consulting",
       ],
     },
   ],
@@ -89,39 +91,39 @@ export const journeyContent = {
   label: "Journey",
   milestones: [
     {
-      year: "2009 — 2012",
+      year: "2008 — 2011",
       role: "Software Engineer",
-      company: "Enterprise Corp",
+      company: "Afni",
       description:
-        "Started building production systems from day one. Developed core services handling real-time data processing and learned the fundamentals of scalable architecture.",
+        "Started my career building user-friendly applications for call center workflows. Engineered OOP-based software frameworks, conducted research on emerging technologies, and developed proofs of concept for new systems.",
     },
     {
-      year: "2012 — 2016",
-      role: "Senior Engineer",
-      company: "Scale Systems Inc.",
+      year: "2011 — 2013",
+      role: "Applications Developer",
+      company: "Amadeus IT Group",
       description:
-        "Led the migration of monolithic applications to microservices architecture. Reduced deployment time by 80% and improved system reliability to 99.99% uptime.",
+        "Lead developer on the mobile project at one of the world's largest airline technology companies. Designed and maintained WCF services and .NET applications serving the global travel industry.",
     },
     {
-      year: "2016 — 2020",
-      role: "Lead Architect",
-      company: "Global Tech Solutions",
+      year: "2013 — 2025",
+      role: "Software Developer → Architect",
+      company: "CyraCom Language Solutions",
       description:
-        "Architected a distributed platform serving 10M+ users. Designed the event-driven system that became the company's core infrastructure.",
+        "A 12-year career progression from Software Developer through Senior Developer, Lead Developer, and ultimately Junior Software Architect. Drove innovation across language platform infrastructure, distributed systems, and mobile.",
     },
     {
-      year: "2020 — 2024",
-      role: "Principal Engineer",
-      company: "Innovation Labs",
+      year: "2017 — Present",
+      role: "Founder & CEO",
+      company: "Znas LLC",
       description:
-        "Led a team of 20+ engineers. Introduced AI-powered services, built real-time collaboration features, and established engineering best practices.",
+        "Founded Znas LLC to bring deep software engineering expertise directly to organizations. Building scalable applications across healthcare, finance, airlines, and telecom. Open-source contributor and developer tooling author.",
     },
     {
-      year: "2024 — Present",
-      role: "Freelance Architect",
-      company: "ZNAS",
+      year: "2025 — Present",
+      role: "Co-Founder & CEO",
+      company: "Visionarys",
       description:
-        "Bringing 15+ years of deep engineering expertise directly to companies that need it most. Architecture consulting, system design, and hands-on engineering.",
+        "Co-founded Visionarys to pursue the next chapter in AI-driven software and startup ventures. Combining 17 years of engineering depth with strategic product leadership.",
     },
   ],
 };
@@ -131,28 +133,50 @@ export const workContent = {
   label: "Work",
   projects: [
     {
-      title: "Distributed Event Platform",
-      description:
-        "Real-time event processing system handling 50K events/sec",
-      tags: ["Architecture", "Kafka", "Go"],
+      title: "asyncapi-codegen",
+      challenge:
+        "Distributed systems teams waste weeks hand-writing async messaging boilerplate for every new service.",
+      approach:
+        "Go code generator that reads AsyncAPI specs and produces production-ready client and server code automatically.",
+      impact:
+        "Open-source tool eliminating manual boilerplate — shipping messaging infrastructure 10x faster.",
+      tags: ["Go", "AsyncAPI", "Distributed Systems", "Open Source"],
     },
     {
-      title: "AI-Powered Analytics Engine",
-      description:
-        "ML pipeline for predictive analytics serving enterprise clients",
-      tags: ["Python", "TensorFlow", "AWS"],
+      title: "t4t — Tag-based Filesystem",
+      challenge:
+        "Hierarchical folder structures break down as projects and contexts multiply across a developer's filesystem.",
+      approach:
+        "Tag-based CLI that replaces rigid folders with composable, searchable metadata. Think tags, not trees.",
+      impact:
+        "Open-source. Enables cross-cutting organization without duplicating or moving files.",
+      tags: ["Go", "CLI", "Developer Tooling", "Open Source"],
     },
     {
-      title: "Enterprise SaaS Platform",
-      description:
-        "Full-stack platform rebuild from monolith to microservices",
-      tags: ["TypeScript", "React", "Node.js"],
+      title: "Language Platform Infrastructure",
+      challenge:
+        "Scaling one of the largest US language services platforms from monolith to distributed architecture.",
+      approach:
+        "12-year progression: decomposed monolith into microservices, built mobile platforms, led distributed systems design.",
+      impact:
+        "Production infrastructure serving millions of interpretation minutes across healthcare and telecom.",
+      tags: [
+        "Architecture",
+        ".NET",
+        "Microservices",
+        "Mobile",
+        "Healthcare / Telecom",
+      ],
     },
     {
-      title: "Real-Time Collaboration System",
-      description:
-        "WebSocket-based system supporting 100K concurrent users",
-      tags: ["WebSockets", "Redis", "React"],
+      title: "Airline Technology Systems",
+      challenge:
+        "Global airline technology needed mobile-first interfaces and reliable service infrastructure at scale.",
+      approach:
+        "Led mobile development and WCF service architecture at Amadeus IT Group for the global travel industry.",
+      impact:
+        "Production systems supporting major airlines worldwide with high-availability service infrastructure.",
+      tags: ["Mobile", "WCF Services", ".NET", "Airlines"],
     },
   ],
 };
@@ -162,14 +186,24 @@ export const testimonialsContent = {
   label: "Words",
   quotes: [
     {
-      text: "One of the most talented architects I've ever worked with. He doesn't just write code — he thinks in systems.",
-      author: "Former CTO",
-      role: "Series B Startup",
+      text: "Jose is an extremely competent AI developer. In a very short time, he put together architectural documentation, determined which components each team member could take on and quickly delegated work. After development was complete, he also jumped into presenting to a group of software developers as part of the AI Trailblazers developer workshop series.",
+      author: "Aaron Eden",
+      role: "AI Process Automation, Intuit",
     },
     {
-      text: "Transformed our entire engineering culture. The systems he designed are still the backbone of our product three years later.",
-      author: "VP Engineering",
-      role: "Enterprise SaaS Company",
+      text: "I can't say enough good things about Jose. He did not disappoint — his technical skills are top notch, but more than that, he has a firm grasp of the soft skills necessary to help a team work better together. If you need a software developer to lead your team who also has a firm grasp of the business side, Jose is your guy.",
+      author: "Allen Trevethan",
+      role: "Technologist & Entrepreneur",
+    },
+    {
+      text: "Jose is an excellent software engineer, professional, and co-worker. I witnessed Jose drive innovation and excel as a software developer at CyraCom. Jose is a great mentor and has excellent leadership abilities. Any company would benefit from having Jose as a Lead Software Engineer or Architect on their team.",
+      author: "Stephen Miller",
+      role: "Senior Software Engineer, University of North Dakota",
+    },
+    {
+      text: "Jose exhibits a variety of high-value characteristics in addition to his technical proficiency. I found him to be driven in his style, sharp in formulating questions to root out requirements, and quite creative in finding interesting ways to solve challenges. On an interpersonal level, Jose is a positive contributor and an overall pleasure to be around.",
+      author: "Chris Arrasmith",
+      role: "Senior, Afni",
     },
   ],
 };
@@ -178,13 +212,15 @@ export const contactContent = {
   number: ".06",
   label: "Contact",
   headline: ["Let's build", "something real."],
-  email: "hello@znas.io",
+  email: "znas@znas.io",
   socials: [
-    { label: "GitHub", url: "#" },
-    { label: "LinkedIn", url: "#" },
-    { label: "Twitter", url: "#" },
+    { label: "GitHub", url: "https://github.com/znas-io" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/znas-io/" },
   ],
 };
+
+export const marqueeText =
+  "Software Architecture  /  Distributed Systems  /  Full-Stack Engineering  /  AI Strategy  /  Open Source  /  ";
 
 export const navLinks = [
   { label: "About", href: "#about" },

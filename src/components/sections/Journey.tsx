@@ -16,84 +16,85 @@ export default function Journey() {
   useEffect(() => {
     if (!sectionRef.current || !progressRef.current) return;
 
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const ctx = gsap.context(() => {
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-    // Progress line
-    gsap.to(progressRef.current, {
-      height: "100%",
-      ease: "none",
-      scrollTrigger: {
-        trigger: timelineRef.current,
-        start: "top 60%",
-        end: "bottom 40%",
-        scrub: 0.5,
-      },
-    });
-
-    // Nodes and cards
-    const milestones = journeyContent.milestones;
-    milestones.forEach((_, i) => {
-      const node = nodesRef.current[i];
-      const card = cardsRef.current[i];
-      if (!node || !card) return;
-
-      const tl = gsap.timeline({
+      // Progress line
+      gsap.to(progressRef.current, {
+        height: "100%",
+        ease: "none",
         scrollTrigger: {
-          trigger: card,
-          start: "top 75%",
-          toggleActions: "play none none none",
+          trigger: timelineRef.current,
+          start: "top 60%",
+          end: "bottom 40%",
+          scrub: 0.5,
         },
       });
 
-      tl.to(node, {
-        scale: 1,
-        duration: 0.5,
-        ease: "back.out(1.7)",
-        onComplete: () => {
-          node.classList.add("is-active");
-          if (i === milestones.length - 1) {
-            node.classList.add("is-current");
-          }
-        },
-      }).from(
-        card,
-        {
-          x: isMobile ? 30 : i % 2 === 0 ? -60 : 60,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        },
-        "-=0.2"
-      );
+      // Nodes and cards
+      const milestones = journeyContent.milestones;
+      milestones.forEach((_, i) => {
+        const node = nodesRef.current[i];
+        const card = cardsRef.current[i];
+        if (!node || !card) return;
 
-      // Stagger card inner content
-      const innerEls = card.querySelectorAll(".card-inner");
-      tl.from(
-        innerEls,
-        {
-          y: 20,
-          opacity: 0,
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none none",
+          },
+        });
+
+        tl.to(node, {
+          scale: 1,
           duration: 0.5,
-          stagger: 0.08,
-          ease: "power3.out",
-        },
-        "-=0.4"
-      );
-    });
+          ease: "back.out(1.7)",
+          onComplete: () => {
+            node.classList.add("is-active");
+            if (i === milestones.length - 1) {
+              node.classList.add("is-current");
+            }
+          },
+        }).from(
+          card,
+          {
+            x: isMobile ? 30 : i % 2 === 0 ? -60 : 60,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out",
+          },
+          "-=0.2"
+        );
 
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => {
-        if (
-          t.trigger === timelineRef.current ||
-          cardsRef.current.includes(t.trigger as HTMLDivElement)
-        ) {
-          t.kill();
-        }
+        const innerEls = card.querySelectorAll(".card-inner");
+        tl.from(
+          innerEls,
+          {
+            y: 20,
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.08,
+            ease: "power3.out",
+          },
+          "-=0.4"
+        );
       });
-    };
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   const milestones = journeyContent.milestones;
+
+  // Go-idiomatic tooltips per milestone
+  const milestoneComments = [
+    "// go run callcenter.go",
+    "// import \"amadeus/flights\"",
+    "// for range 12.Years { grow() }",
+    "// go mod init znas.io",
+    "// func init() { visionarys() }",
+  ];
 
   return (
     <section
@@ -143,6 +144,7 @@ export default function Journey() {
                         if (el) cardsRef.current[i] = el;
                       }}
                       className="timeline-card"
+                      data-code-comment={milestoneComments[i]}
                     >
                       <div
                         className="card-inner text-micro mb-2"
@@ -150,7 +152,9 @@ export default function Journey() {
                       >
                         {m.year}
                       </div>
-                      <h3 className="card-inner text-subhead mb-1">
+                      <h3
+                        className="card-inner text-subhead mb-1"
+                      >
                         {m.role}
                       </h3>
                       <p

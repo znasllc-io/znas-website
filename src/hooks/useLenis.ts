@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Lenis from "@studio-freight/lenis";
+import Lenis from "lenis";
 import { gsap } from "@/lib/gsap-config";
 import { ScrollTrigger } from "@/lib/gsap-config";
 
@@ -9,7 +9,6 @@ export function useLenis() {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Disable smooth scroll on mobile
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"

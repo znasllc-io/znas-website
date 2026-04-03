@@ -38,10 +38,14 @@ export default function Contact() {
         />
 
         <div className="max-w-3xl">
-          <h2 className="text-display reveal-up">
+          <h2
+            className="text-display reveal-up"
+          >
             {contactContent.headline.map((line, i) => (
               <span key={i} className="block">
-                {line}
+                <span data-code-comment={i === 0 ? "// go build -o partnership" : undefined}>
+                  {line}
+                </span>
               </span>
             ))}
           </h2>
@@ -49,6 +53,7 @@ export default function Contact() {
           <a
             href={`mailto:${contactContent.email}`}
             className="inline-block mt-12 reveal-up"
+            data-code-comment="// net.Dial(tcp, partner)"
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: "clamp(1.25rem, 2.5vw, 2rem)",
@@ -72,10 +77,12 @@ export default function Contact() {
               <a
                 key={social.label}
                 href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center justify-center transition-all duration-300"
                 style={{
-                  width: 48,
                   height: 48,
+                  padding: "0 1.25rem",
                   backgroundColor: "var(--color-bg-surface)",
                   border: "1px solid var(--color-border)",
                   borderRadius: "0.5rem",
@@ -83,20 +90,23 @@ export default function Contact() {
                   textDecoration: "none",
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.7rem",
-                  letterSpacing: "0.05em",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget;
                   el.style.borderColor = "var(--color-accent)";
-                  el.style.transform = "scale(1.05)";
+                  el.style.color = "var(--color-accent)";
+                  el.style.transform = "translateY(-2px)";
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget;
                   el.style.borderColor = "var(--color-border)";
-                  el.style.transform = "scale(1)";
+                  el.style.color = "var(--color-text-secondary)";
+                  el.style.transform = "translateY(0)";
                 }}
               >
-                {social.label.slice(0, 2).toUpperCase()}
+                {social.label}
               </a>
             ))}
           </div>

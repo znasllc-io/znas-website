@@ -1,68 +1,115 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "@/lib/gsap-config";
+import { gsap, DrawSVGPlugin } from "@/lib/gsap-config";
 import { ScrollTrigger } from "@/lib/gsap-config";
 import { expertiseContent } from "@/data/content";
 import SectionLabel from "@/components/ui/SectionLabel";
-import PillTag from "@/components/ui/PillTag";
+
+// Stack architecture — technologies as connected nodes
+const STACK_LAYERS = [
+  {
+    id: "systems",
+    label: "Systems",
+    color: "var(--color-accent)",
+    nodes: ["Distributed Systems", "Microservices", "Public APIs", "AsyncAPI"],
+  },
+  {
+    id: "engineering",
+    label: "Engineering",
+    color: "#60A5FA",
+    nodes: ["Go", ".NET / C#", "Python", "React", "Mobile"],
+  },
+  {
+    id: "infra",
+    label: "Infrastructure",
+    color: "#34D399",
+    nodes: ["Docker", "Kubernetes", "CI/CD", "PostgreSQL", "Redis"],
+  },
+  {
+    id: "ai",
+    label: "AI & Strategy",
+    color: "#A78BFA",
+    nodes: ["Machine Learning", "LLMs", "AI Architecture", "Open Source"],
+  },
+];
+
+// Vertical connections between layers (fromLayerIdx, fromNodeIdx, toLayerIdx, toNodeIdx)
+const CROSS_CONNECTIONS: [number, number, number, number][] = [
+  [0, 1, 1, 0], // Microservices → Go
+  [0, 1, 1, 1], // Microservices → .NET
+  [0, 2, 1, 0], // Public APIs → Go
+  [0, 3, 1, 0], // AsyncAPI → Go
+  [1, 0, 2, 0], // Go → Docker
+  [1, 1, 2, 3], // .NET → PostgreSQL
+  [1, 2, 3, 0], // Python → ML
+  [1, 2, 3, 1], // Python → LLMs
+  [2, 0, 2, 1], // Docker → Kubernetes
+  [2, 3, 2, 4], // PostgreSQL → Redis
+  [3, 0, 3, 1], // ML → LLMs
+  [3, 1, 3, 2], // LLMs → AI Architecture
+];
 
 export default function Expertise() {
   const sectionRef = useRef<HTMLElement>(null);
-  const pinContainerRef = useRef<HTMLDivElement>(null);
-  const [activePillar, setActivePillar] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-  const pillarsRef = useRef<HTMLDivElement[]>([]);
+  const diagramRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const nodeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   useEffect(() => {
-    const mobile = window.matchMedia("(max-width: 768px)").matches;
-    setIsMobile(mobile);
+    if (!sectionRef.current) return;
 
-    if (mobile) {
-      // Stacked cards animation on mobile
-      pillarsRef.current.forEach((el) => {
-        if (!el) return;
-        gsap.from(el, {
-          y: 60,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        });
+    const ctx = gsap.context(() => {
+      // Animate layer rows
+      gsap.from(".stack-layer", {
+        x: -40,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: diagramRef.current,
+          start: "top 75%",
+          toggleActions: "play none none none",
+        },
       });
-      return;
-    }
 
-    // Desktop pinned section
-    const pillars = expertiseContent.pillars;
-    const numPillars = pillars.length;
+      // Animate nodes within layers
+      gsap.from(".stack-node", {
+        scale: 0,
+        opacity: 0,
+        duration: 0.4,
+        ease: "back.out(1.5)",
+        stagger: 0.03,
+        scrollTrigger: {
+          trigger: diagramRef.current,
+          start: "top 70%",
+          toggleActions: "play none none none",
+        },
+      });
 
-    const st = ScrollTrigger.create({
-      trigger: pinContainerRef.current,
-      pin: true,
-      scrub: 1,
-      start: "top top",
-      end: `+=${numPillars * 100}vh`,
-      onUpdate: (self) => {
-        const progress = self.progress;
-        const index = Math.min(
-          Math.floor(progress * numPillars),
-          numPillars - 1
-        );
-        setActivePillar(index);
-      },
-    });
+      // Animate pillar descriptions
+      gsap.from(".pillar-card", {
+        y: 40,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: ".pillar-grid",
+          start: "top 80%",
+          toggleActions: "play none none none",
+        },
+      });
+    }, sectionRef);
 
-    return () => {
-      st.kill();
-    };
+    return () => ctx.revert();
   }, []);
 
-  const pillar = expertiseContent.pillars[activePillar];
+  // Get node position for SVG lines (computed on render)
+  const getNodeKey = (layerIdx: number, nodeIdx: number) =>
+    `${layerIdx}-${nodeIdx}`;
 
   return (
     <section
@@ -77,100 +124,155 @@ export default function Expertise() {
           label={expertiseContent.label}
         />
 
-        {isMobile ? (
-          // Mobile: stacked cards
-          <div className="flex flex-col gap-12">
-            {expertiseContent.pillars.map((p, i) => (
-              <div
-                key={p.id}
-                ref={(el) => {
-                  if (el) pillarsRef.current[i] = el;
-                }}
-                className="p-6 rounded-lg"
-                style={{
-                  backgroundColor: "var(--color-bg-elevated)",
-                  border: "1px solid var(--color-border)",
-                }}
-              >
+        {/* Stack architecture diagram */}
+        <div ref={diagramRef} className="relative mt-12 mb-20">
+          {/* Connection lines SVG overlay */}
+          <svg
+            ref={svgRef}
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            style={{ zIndex: 0 }}
+          >
+            {/* Vertical cross-connections drawn as lines between layer rows */}
+          </svg>
+
+          {/* Layer rows */}
+          <div className="flex flex-col gap-8">
+            {STACK_LAYERS.map((layer, layerIdx) => (
+              <div key={layer.id} className="stack-layer flex items-center gap-6">
+                {/* Category label */}
                 <div
-                  className="text-hero font-bold mb-4"
+                  className="w-28 shrink-0 text-right"
                   style={{
-                    color: "var(--color-text-ghost)",
-                    fontFamily: "var(--font-display)",
-                    fontSize: "clamp(4rem, 8vw, 6rem)",
-                    lineHeight: 1,
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                    color: layer.color,
+                    opacity: 0.8,
                   }}
                 >
-                  {String(i + 1).padStart(2, "0")}
+                  {layer.label}
                 </div>
-                <h3 className="text-display mb-4">{p.title}</h3>
-                <p
-                  className="text-body mb-6"
-                  style={{ color: "var(--color-text-secondary)" }}
-                >
-                  {p.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {p.tags.map((tag) => (
-                    <PillTag key={tag} label={tag} />
-                  ))}
+
+                {/* Connecting line */}
+                <div
+                  className="hidden md:block"
+                  style={{
+                    width: 24,
+                    height: 1,
+                    backgroundColor: layer.color,
+                    opacity: 0.2,
+                  }}
+                />
+
+                {/* Tech nodes */}
+                <div className="flex flex-wrap items-center gap-3">
+                  {layer.nodes.map((tech, nodeIdx) => {
+                    const key = getNodeKey(layerIdx, nodeIdx);
+                    const isHovered = hoveredNode === key;
+                    return (
+                      <div
+                        key={tech}
+                        ref={(el) => {
+                          if (el) nodeRefs.current.set(key, el);
+                        }}
+                        className="stack-node flex items-center gap-2"
+                        style={{ cursor: "none" }}
+                        onMouseEnter={() => setHoveredNode(key)}
+                        onMouseLeave={() => setHoveredNode(null)}
+                      >
+                        {/* Node dot */}
+                        <div
+                          style={{
+                            width: isHovered ? 10 : 6,
+                            height: isHovered ? 10 : 6,
+                            borderRadius: "50%",
+                            backgroundColor: layer.color,
+                            opacity: isHovered ? 1 : 0.5,
+                            boxShadow: isHovered
+                              ? `0 0 12px ${layer.color}`
+                              : "none",
+                            transition:
+                              "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                          }}
+                        />
+                        {/* Node label */}
+                        <span
+                          style={{
+                            fontFamily: "var(--font-mono)",
+                            fontSize: "0.7rem",
+                            letterSpacing: "0.04em",
+                            color: isHovered
+                              ? "var(--color-text-primary)"
+                              : "var(--color-text-secondary)",
+                            transition: "color 0.3s",
+                          }}
+                        >
+                          {tech}
+                        </span>
+
+                        {/* Horizontal connector to next node */}
+                        {nodeIdx < layer.nodes.length - 1 && (
+                          <div
+                            className="hidden md:block"
+                            style={{
+                              width: 16,
+                              height: 1,
+                              backgroundColor: layer.color,
+                              opacity: 0.15,
+                            }}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}
           </div>
-        ) : (
-          // Desktop: pinned
-          <div ref={pinContainerRef} className="h-screen flex items-center">
-            <div className="flex w-full gap-12">
-              {/* Left nav dots */}
-              <div className="flex flex-col items-center justify-center gap-4 w-[5%]">
-                {expertiseContent.pillars.map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-2.5 h-2.5 rounded-full transition-colors duration-300"
-                    style={{
-                      backgroundColor:
-                        i === activePillar
-                          ? "var(--color-accent)"
-                          : "var(--color-text-ghost)",
-                    }}
-                  />
-                ))}
-              </div>
+        </div>
 
-              {/* Right content */}
-              <div className="flex-1 relative">
-                <div
-                  className="absolute -top-8 -left-4 pointer-events-none select-none"
-                  style={{
-                    color: "var(--color-text-ghost)",
-                    fontFamily: "var(--font-display)",
-                    fontSize: "clamp(8rem, 15vw, 16rem)",
-                    fontWeight: 700,
-                    lineHeight: 1,
-                  }}
-                >
-                  {String(activePillar + 1).padStart(2, "0")}
-                </div>
-
-                <div className="relative z-10 pt-16">
-                  <h3 className="text-display mb-6">{pillar.title}</h3>
-                  <p
-                    className="text-body mb-8 max-w-2xl"
-                    style={{ color: "var(--color-text-secondary)" }}
-                  >
-                    {pillar.description}
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    {pillar.tags.map((tag) => (
-                      <PillTag key={tag} label={tag} />
-                    ))}
-                  </div>
-                </div>
-              </div>
+        {/* Pillar descriptions */}
+        <div className="pillar-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+          {expertiseContent.pillars.map((pillar) => (
+            <div
+              key={pillar.id}
+              className="pillar-card"
+              style={{
+                padding: "1.5rem",
+                border: "1px solid var(--color-border)",
+                borderRadius: "0.5rem",
+                backgroundColor: "var(--color-bg-elevated)",
+              }}
+            >
+              <h3
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(1.1rem, 1.5vw, 1.4rem)",
+                  fontWeight: 500,
+                  marginBottom: "0.5rem",
+                }}
+                data-code-comment={
+                  pillar.id === "architecture"
+                    ? "// go build -race ./systems"
+                    : pillar.id === "engineering"
+                      ? "// for range languages { ship() }"
+                      : pillar.id === "ai"
+                        ? "// import \"mit/ai-strategy\""
+                        : "// go run startup.go // x2"
+                }
+              >
+                {pillar.title}
+              </h3>
+              <p
+                className="text-small"
+                style={{ color: "var(--color-text-tertiary)" }}
+              >
+                {pillar.description}
+              </p>
             </div>
-          </div>
-        )}
+          ))}
+        </div>
       </div>
     </section>
   );

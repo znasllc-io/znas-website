@@ -32,10 +32,14 @@ export default function Testimonials() {
     gsap.from(quoteRef.current, {
       opacity: 0,
       y: 20,
-      duration: 0.6,
+      duration: 0.5,
       ease: "power3.out",
     });
   }, [activeIndex]);
+
+  const prev = () =>
+    setActiveIndex((i) => (i - 1 + quotes.length) % quotes.length);
+  const next = () => setActiveIndex((i) => (i + 1) % quotes.length);
 
   const quote = quotes[activeIndex];
 
@@ -58,7 +62,7 @@ export default function Testimonials() {
             className="reveal-up select-none"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(6rem, 12vw, 12rem)",
+              fontSize: "clamp(4rem, 6vw, 6rem)",
               lineHeight: 0.6,
               color: "var(--color-text-ghost)",
             }}
@@ -68,11 +72,14 @@ export default function Testimonials() {
 
           <div ref={quoteRef} className="mt-4">
             <blockquote
-              className="text-display reveal-up"
+              className="reveal-up"
               style={{
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontWeight: 400,
+                fontSize: "clamp(1.25rem, 2vw, 1.875rem)",
+                lineHeight: 1.5,
+                letterSpacing: "-0.01em",
               }}
             >
               {quote.text}
@@ -81,30 +88,109 @@ export default function Testimonials() {
             <p
               className="mt-8 text-micro reveal-up"
               style={{ color: "var(--color-text-tertiary)" }}
+              data-code-comment="// via linkedin.Recommend()"
             >
               — {quote.author}, {quote.role}
             </p>
           </div>
 
-          {/* Dot pagination */}
-          {quotes.length > 1 && (
-            <div className="flex justify-center gap-3 mt-12 reveal-up">
+          {/* Carousel controls */}
+          <div className="flex items-center justify-center gap-6 mt-12 reveal-up">
+            {/* Prev */}
+            <button
+              onClick={prev}
+              aria-label="Previous quote"
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                border: "1px solid var(--color-border)",
+                background: "transparent",
+                color: "var(--color-text-tertiary)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1.1rem",
+                transition: "border-color 0.3s, color 0.3s",
+                flexShrink: 0,
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.borderColor = "var(--color-accent)";
+                el.style.color = "var(--color-accent)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.borderColor = "var(--color-border)";
+                el.style.color = "var(--color-text-tertiary)";
+              }}
+            >
+              ←
+            </button>
+
+            {/* Dots */}
+            <div className="flex gap-3">
               {quotes.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveIndex(i)}
-                  className="w-2 h-2 rounded-full transition-colors duration-300"
+                  aria-label={`Quote ${i + 1}`}
                   style={{
-                    backgroundColor:
+                    width: i === activeIndex ? 24 : 8,
+                    height: 8,
+                    borderRadius: 9999,
+                    border: "none",
+                    background:
                       i === activeIndex
                         ? "var(--color-accent)"
                         : "var(--color-text-ghost)",
+                    transition: "width 0.3s var(--ease-reveal), background-color 0.3s",
+                    padding: 0,
                   }}
-                  aria-label={`Quote ${i + 1}`}
                 />
               ))}
             </div>
-          )}
+
+            {/* Next */}
+            <button
+              onClick={next}
+              aria-label="Next quote"
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                border: "1px solid var(--color-border)",
+                background: "transparent",
+                color: "var(--color-text-tertiary)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1.1rem",
+                transition: "border-color 0.3s, color 0.3s",
+                flexShrink: 0,
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.borderColor = "var(--color-accent)";
+                el.style.color = "var(--color-accent)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.borderColor = "var(--color-border)";
+                el.style.color = "var(--color-text-tertiary)";
+              }}
+            >
+              →
+            </button>
+          </div>
+
+          {/* Counter */}
+          <p
+            className="mt-4 text-micro reveal-up"
+            style={{ color: "var(--color-text-ghost)" }}
+          >
+            {String(activeIndex + 1).padStart(2, "0")} / {String(quotes.length).padStart(2, "0")}
+          </p>
         </div>
       </div>
     </section>

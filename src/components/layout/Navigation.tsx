@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap-config";
 import { ScrollTrigger } from "@/lib/gsap-config";
 import { navLinks, siteConfig } from "@/data/content";
+import { useTheme } from "@/hooks/useTheme";
 
 interface NavigationProps {
   visible: boolean;
@@ -16,6 +17,7 @@ export default function Navigation({ visible }: NavigationProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileLinksRef = useRef<HTMLAnchorElement[]>([]);
+  const { resolved, cycle } = useTheme();
 
   useEffect(() => {
     if (!visible) return;
@@ -94,9 +96,50 @@ export default function Navigation({ visible }: NavigationProps) {
           >
             {siteConfig.name}
           </a>
+          <div className="hidden md:flex items-center gap-1.5 ml-3">
+            <span className="status-dot" />
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.55rem",
+                letterSpacing: "0.1em",
+                color: "var(--color-text-tertiary)",
+                textTransform: "uppercase",
+              }}
+            >
+              Available
+            </span>
+          </div>
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-8">
+            {/* Theme Toggle */}
+            <button
+              onClick={cycle}
+              aria-label={`Switch to ${resolved === "dark" ? "light" : "dark"} mode`}
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.7rem",
+                letterSpacing: "0.1em",
+                color: "var(--color-text-tertiary)",
+                background: "none",
+                border: "1px solid var(--color-border)",
+                borderRadius: "4px",
+                padding: "0.25rem 0.5rem",
+                transition: "color 0.3s, border-color 0.3s",
+                cursor: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "var(--color-text-primary)";
+                e.currentTarget.style.borderColor = "var(--color-border-hover)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "var(--color-text-tertiary)";
+                e.currentTarget.style.borderColor = "var(--color-border)";
+              }}
+            >
+              {resolved === "dark" ? "☀" : "☾"}
+            </button>
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -172,6 +215,21 @@ export default function Navigation({ visible }: NavigationProps) {
               {link.label}
             </a>
           ))}
+          <button
+            onClick={cycle}
+            className="text-heading mt-4"
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.85rem",
+              letterSpacing: "0.1em",
+              color: "var(--color-text-tertiary)",
+              background: "none",
+              border: "none",
+              textAlign: "left",
+            }}
+          >
+            {resolved === "dark" ? "☀ Light" : "☾ Dark"}
+          </button>
         </div>
       )}
     </>

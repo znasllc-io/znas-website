@@ -22,8 +22,14 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       return;
     }
 
+    // Fallback: force-complete if rAF is throttled (background tabs, headless)
+    const fallback = setTimeout(() => {
+      tl.progress(1, false);
+    }, 3500);
+
     const tl = gsap.timeline({
       onComplete: () => {
+        clearTimeout(fallback);
         if (containerRef.current) {
           containerRef.current.style.pointerEvents = "none";
         }

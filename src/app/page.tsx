@@ -9,6 +9,7 @@ import CustomCursor from "@/components/layout/CustomCursor";
 import GrainOverlay from "@/components/layout/GrainOverlay";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
+import Marquee from "@/components/sections/Marquee";
 import Expertise from "@/components/sections/Expertise";
 import Journey from "@/components/sections/Journey";
 import Work from "@/components/sections/Work";
@@ -35,6 +36,7 @@ export default function Home() {
       <main>
         <Hero preloaderDone={preloaderDone} />
         <About />
+        <Marquee />
         <Expertise />
         <Journey />
         <Work />
