@@ -35,6 +35,9 @@
 .logo-img {
   mix-blend-mode: screen;
   width: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
 }
 
 .logo-hero {

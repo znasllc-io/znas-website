@@ -18,6 +18,23 @@ export default function Navigation({ visible }: NavigationProps) {
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileLinksRef = useRef<HTMLAnchorElement[]>([]);
   const { resolved, cycle } = useTheme();
+  const [statusOpen, setStatusOpen] = useState(false);
+
+  // TODO: Replace with real API/system later
+  const isAvailable = true;
+
+  // Close status popup on outside click
+  useEffect(() => {
+    if (!statusOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".status-badge") && !target.closest("[data-status-popup]")) {
+        setStatusOpen(false);
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, [statusOpen]);
 
   useEffect(() => {
     if (!visible) return;
@@ -103,19 +120,119 @@ export default function Navigation({ visible }: NavigationProps) {
               style={{ height: "32px", width: "auto" }}
             />
           </a>
-          <div className="hidden md:flex items-center gap-1.5 ml-3">
-            <span className="status-dot" />
-            <span
+          <div className="hidden md:flex items-center ml-3 relative">
+            <button
+              onClick={() => setStatusOpen(!statusOpen)}
+              className="status-badge"
               style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
                 fontFamily: "var(--font-mono)",
-                fontSize: "0.55rem",
-                letterSpacing: "0.1em",
-                color: "var(--color-text-tertiary)",
+                fontSize: "0.65rem",
+                letterSpacing: "0.08em",
                 textTransform: "uppercase",
+                color: isAvailable ? "#34D399" : "#F87171",
+                background: isAvailable
+                  ? "rgba(52, 211, 153, 0.08)"
+                  : "rgba(248, 113, 113, 0.08)",
+                border: `1px solid ${isAvailable ? "rgba(52, 211, 153, 0.25)" : "rgba(248, 113, 113, 0.25)"}`,
+                borderRadius: "9999px",
+                padding: "0.35rem 0.85rem",
+                cursor: "none",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = isAvailable
+                  ? "rgba(52, 211, 153, 0.15)"
+                  : "rgba(248, 113, 113, 0.15)";
+                e.currentTarget.style.borderColor = isAvailable
+                  ? "rgba(52, 211, 153, 0.5)"
+                  : "rgba(248, 113, 113, 0.5)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = isAvailable
+                  ? "rgba(52, 211, 153, 0.08)"
+                  : "rgba(248, 113, 113, 0.08)";
+                e.currentTarget.style.borderColor = isAvailable
+                  ? "rgba(52, 211, 153, 0.25)"
+                  : "rgba(248, 113, 113, 0.25)";
               }}
             >
-              Available
-            </span>
+              <span
+                className="status-dot"
+                style={{
+                  backgroundColor: isAvailable ? "#34D399" : "#F87171",
+                }}
+              />
+              {isAvailable ? "Available this week" : "Unavailable"}
+            </button>
+
+            {/* Status popup */}
+            {statusOpen && (
+              <div
+                data-status-popup
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 0.75rem)",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  background: "var(--color-bg-elevated)",
+                  border: "1px solid var(--color-border)",
+                  borderRadius: "12px",
+                  padding: "1.25rem 1.5rem",
+                  minWidth: "260px",
+                  boxShadow: "0 12px 40px rgba(0,0,0,0.25)",
+                  zIndex: 100,
+                  fontFamily: "var(--font-mono)",
+                  backdropFilter: "blur(12px)",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    marginBottom: "0.75rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      backgroundColor: isAvailable ? "#34D399" : "#F87171",
+                      boxShadow: isAvailable
+                        ? "0 0 8px rgba(52, 211, 153, 0.5)"
+                        : "0 0 8px rgba(248, 113, 113, 0.5)",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: "0.8rem",
+                      fontWeight: 600,
+                      color: "var(--color-text-primary)",
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    {isAvailable ? "Open for Projects" : "Currently Booked"}
+                  </span>
+                </div>
+                <p
+                  style={{
+                    fontSize: "0.7rem",
+                    color: "var(--color-text-secondary)",
+                    lineHeight: 1.6,
+                    margin: 0,
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {isAvailable
+                    ? "Jose is accepting new consulting and architecture engagements this week."
+                    : "Jose is currently focused on existing projects. Check back soon."}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Desktop Links */}
