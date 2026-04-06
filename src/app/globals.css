@@ -31,6 +31,29 @@
   --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ── Logo ── */
+.logo-img {
+  mix-blend-mode: screen;
+  width: auto;
+}
+
+.logo-hero {
+  height: 100px;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .logo-hero {
+    height: 60px;
+  }
+}
+
+[data-theme="light"] .logo-img {
+  mix-blend-mode: multiply;
+  filter: invert(1);
+}
+
 /* ── Light Theme Overrides ── */
 [data-theme="light"] {
   --color-bg-void: #F5F5F7;

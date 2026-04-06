@@ -87,14 +87,21 @@ export default function Navigation({ visible }: NavigationProps) {
         <div className="container flex items-center justify-between">
           <a
             href="#"
-            className="text-micro tracking-[0.2em]"
+            aria-label={`${siteConfig.name} — return to top`}
             style={{
-              fontFamily: "var(--font-mono)",
-              color: "var(--color-text-primary)",
               textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              minWidth: "44px",
+              minHeight: "44px",
             }}
           >
-            {siteConfig.name}
+            <img
+              src="/logo.png"
+              alt=""
+              className="logo-img"
+              style={{ height: "32px", width: "auto" }}
+            />
           </a>
           <div className="hidden md:flex items-center gap-1.5 ml-3">
             <span className="status-dot" />

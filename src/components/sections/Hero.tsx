@@ -46,6 +46,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const taglineRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLImageElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
@@ -85,11 +86,18 @@ export default function Hero({ preloaderDone }: HeroProps) {
         "-=0.9"
       );
 
+      // 3. Logo mark fades in
+      tl.fromTo(logoRef.current,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+        "-=0.5"
+      );
+
       // 3a. Tagline fades in
       tl.fromTo(taglineRef.current,
         { y: 15, opacity: 0 },
         { y: 0, opacity: 0.7, duration: 0.6, ease: "power3.out" },
-        "-=0.6"
+        "-=0.3"
       );
 
       // 3b. Headline chars compile in
@@ -318,6 +326,14 @@ export default function Hero({ preloaderDone }: HeroProps) {
 
       {/* Hero content */}
       <div className="hero-content container relative pb-16 md:pb-24" style={{ zIndex: 5, willChange: "transform", opacity: 0 }}>
+        {/* Logo mark */}
+        <img
+          ref={logoRef}
+          src="/logo.png"
+          alt=""
+          className="logo-img logo-hero"
+        />
+
         {/* Tagline */}
         <div
           ref={taglineRef}

@@ -117,16 +117,25 @@ export default function Contact() {
           className="mt-24 pt-8 flex items-center justify-between reveal-up"
           style={{ borderTop: "1px solid var(--color-border)" }}
         >
-          <span
-            className="text-micro"
-            style={{
-              fontFamily: "var(--font-mono)",
-              color: "var(--color-text-tertiary)",
-              letterSpacing: "0.2em",
-            }}
-          >
-            {siteConfig.name}
-          </span>
+          <div className="flex flex-col gap-1">
+            <img
+              src="/logo.png"
+              alt=""
+              className="logo-img"
+              style={{ height: "48px", width: "auto", opacity: 0.6 }}
+            />
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.6rem",
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "var(--color-text-tertiary)",
+              }}
+            >
+              {siteConfig.name} LLC
+            </span>
+          </div>
           <span
             className="text-micro"
             style={{
