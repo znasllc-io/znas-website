@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap-config";
 import { ScrollTrigger } from "@/lib/gsap-config";
 import { navLinks, siteConfig } from "@/data/content";
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme, ACCENT_COLORS } from "@/hooks/useTheme";
 
 interface NavigationProps {
   visible: boolean;
@@ -17,7 +17,7 @@ export default function Navigation({ visible }: NavigationProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileLinksRef = useRef<HTMLAnchorElement[]>([]);
-  const { resolved, cycle } = useTheme();
+  const { resolved, cycle, accent, setAccent } = useTheme();
   const [statusOpen, setStatusOpen] = useState(false);
 
   // TODO: Replace with real API/system later
@@ -264,6 +264,33 @@ export default function Navigation({ visible }: NavigationProps) {
             >
               {resolved === "dark" ? "☀" : "☾"}
             </button>
+
+            {/* Accent Color Picker */}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+              {ACCENT_COLORS.map((color) => (
+                <button
+                  key={color.id}
+                  onClick={() => setAccent(color.id)}
+                  aria-label={`Switch accent to ${color.label}`}
+                  style={{
+                    width: accent === color.id ? "14px" : "10px",
+                    height: accent === color.id ? "14px" : "10px",
+                    borderRadius: "50%",
+                    backgroundColor: color.swatch,
+                    border: accent === color.id
+                      ? "2px solid var(--color-text-primary)"
+                      : "1px solid transparent",
+                    cursor: "none",
+                    transition: "all 0.2s ease",
+                    padding: 0,
+                    boxShadow: accent === color.id
+                      ? `0 0 8px ${color.swatch}60`
+                      : "none",
+                  }}
+                />
+              ))}
+            </div>
+
             {navLinks.map((link) => (
               <a
                 key={link.href}
