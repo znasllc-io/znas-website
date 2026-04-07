@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap, SplitText, DrawSVGPlugin } from "@/lib/gsap-config";
-import { heroContent } from "@/data/content";
+import { heroContent, siteConfig } from "@/data/content";
 
 // Architecture diagram nodes — positioned as % of viewport
 const NODES = [
@@ -47,6 +47,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
+  const logoTextRef = useRef<HTMLSpanElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
@@ -93,7 +94,14 @@ export default function Hero({ preloaderDone }: HeroProps) {
         "-=0.5"
       );
 
-      // 3a. Tagline fades in
+      // 3a. Brand text fades in
+      tl.fromTo(logoTextRef.current,
+        { y: 8, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" },
+        "-=0.3"
+      );
+
+      // 3b. Tagline fades in
       tl.fromTo(taglineRef.current,
         { y: 15, opacity: 0 },
         { y: 0, opacity: 0.7, duration: 0.6, ease: "power3.out" },
@@ -193,8 +201,12 @@ export default function Hero({ preloaderDone }: HeroProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen flex items-end overflow-hidden"
-      style={{ backgroundColor: "var(--color-bg-void)", paddingTop: "15vh" }}
+      className="relative flex items-end overflow-hidden"
+      style={{
+        backgroundColor: "var(--color-bg-void)",
+        paddingTop: "15vh",
+        minHeight: "100svh",
+      }}
     >
       {/* Ambient glow */}
       <div
@@ -333,6 +345,13 @@ export default function Hero({ preloaderDone }: HeroProps) {
           alt=""
           className="logo-img logo-hero"
         />
+        <span
+          ref={logoTextRef}
+          className="logo-lockup-text logo-lockup-text--hero"
+          style={{ opacity: 0 }}
+        >
+          {siteConfig.name} LLC
+        </span>
 
         {/* Tagline */}
         <div

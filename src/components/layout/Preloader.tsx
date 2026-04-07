@@ -11,6 +11,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const logoTextRef = useRef<HTMLSpanElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -46,6 +47,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       { opacity: 0, scale: 0.9 },
       { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }
     )
+      .fromTo(logoTextRef.current,
+        { opacity: 0, y: 5 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
+        "-=0.3"
+      )
       .fromTo(glowRef.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.8, ease: "sine.inOut" },
@@ -75,7 +81,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       )
       // Everything fades out, panels split
       .to(
-        [logoRef.current, glowRef.current, lineRef.current, counterRef.current],
+        [logoRef.current, logoTextRef.current, glowRef.current, lineRef.current, counterRef.current],
         {
           opacity: 0,
           duration: 0.3,
@@ -126,8 +132,15 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           src="/logo.png"
           alt=""
           className="logo-img"
-          style={{ height: "120px", width: "auto", opacity: 0, marginBottom: "2rem" }}
+          style={{ height: "120px", width: "auto", opacity: 0, marginBottom: "0.75rem" }}
         />
+        <span
+          ref={logoTextRef}
+          className="logo-lockup-text"
+          style={{ opacity: 0, marginBottom: "1.5rem" }}
+        >
+          ZNAS LLC
+        </span>
       </div>
       <div
         ref={lineRef}

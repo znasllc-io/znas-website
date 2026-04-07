@@ -382,6 +382,47 @@ export default function Navigation({ visible }: NavigationProps) {
           >
             {resolved === "dark" ? "☀ Light" : "☾ Dark"}
           </button>
+
+          {/* Mobile Accent Color Picker */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+            role="group"
+            aria-label="Accent color"
+          >
+            {ACCENT_COLORS.map((color) => (
+              <div
+                key={color.id}
+                style={{ padding: "10px" }}
+              >
+                <button
+                  onClick={() => setAccent(color.id)}
+                  aria-label={`Switch accent to ${color.label}`}
+                  style={{
+                    width: accent === color.id ? "18px" : "14px",
+                    height: accent === color.id ? "18px" : "14px",
+                    borderRadius: "50%",
+                    backgroundColor: color.swatch,
+                    border: accent === color.id
+                      ? "2px solid var(--color-text-primary)"
+                      : "1px solid transparent",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    padding: 0,
+                    display: "block",
+                    boxShadow: accent === color.id
+                      ? `0 0 10px ${color.swatch}70`
+                      : "none",
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </>

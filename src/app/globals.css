@@ -52,6 +52,32 @@
   }
 }
 
+/* ── Brand Text Lockup ── */
+.logo-lockup-text {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  line-height: 1;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.logo-lockup-text--hero {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  margin-top: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+
+[data-theme="light"] .logo-lockup-text--hero {
+  color: var(--color-text-tertiary);
+}
+
 [data-theme="light"] .logo-img {
   mix-blend-mode: multiply;
   filter: invert(1);
@@ -582,5 +608,34 @@ body {
 
   .timeline-node {
     left: 1rem;
+  }
+}
+
+/* ── Mobile Landscape Fixes ── */
+@media (max-height: 500px) and (orientation: landscape) {
+  /* Shrink hero logo in landscape so content fits */
+  .logo-hero {
+    height: 40px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Give hero content room to breathe */
+  .hero-content {
+    padding-bottom: 1rem !important;
+  }
+
+  /* Reduce section padding so sections aren't taller than viewport */
+  .section-padding {
+    padding-top: clamp(3rem, 8vh, 6rem);
+    padding-bottom: clamp(3rem, 8vh, 6rem);
+  }
+
+  /* Mobile menu: make it scrollable so all links + color picker are reachable */
+  .mobile-menu {
+    overflow-y: auto;
+    justify-content: flex-start;
+    padding: 5rem 1.5rem 2rem;
+    gap: 1.25rem;
   }
 }
