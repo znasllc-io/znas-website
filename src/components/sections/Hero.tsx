@@ -4,6 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { gsap, SplitText } from "@/lib/gsap-config";
 import { heroContent, siteConfig } from "@/data/content";
 
+// Synapse connections — subset of backbone connections for neural firing effect
+const SYNAPSE_CONNECTIONS: [string, string][] = [
+  ["client", "gateway"],
+  ["gateway", "services"],
+  ["services", "data"],
+  ["data", "cache"],
+  ["queue", "monitor"],
+  ["auth", "data"],
+];
+
 // Architecture diagram nodes — positioned as % of viewport
 const NODES = [
   { id: "client", x: 6, y: 12, label: "Client Layer", desc: "React, Next.js, React Native" },
@@ -49,6 +59,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const logoRef = useRef<HTMLImageElement>(null);
   const logoTextRef = useRef<HTMLSpanElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const owlLayerRef = useRef<HTMLDivElement>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
   useEffect(() => {
@@ -139,7 +150,28 @@ export default function Hero({ preloaderDone }: HeroProps) {
         delay: tl.duration() + 0.5,
       });
 
-      // 7. Register parallax exit on scroll after entry completes
+      // 7. Synapse neural firing — dots travel along connection lines
+      const synapseDots = sectionRef.current?.querySelectorAll(".synapse-dot");
+      if (synapseDots && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        SYNAPSE_CONNECTIONS.forEach((conn, i) => {
+          const fromNode = getNode(conn[0]);
+          const toNode = getNode(conn[1]);
+          const delay = tl.duration() + 1 + (i * 2.5);
+          const dot = synapseDots[i];
+
+          const fireSynapse = () => {
+            const fireTl = gsap.timeline({ repeat: -1, repeatDelay: 12 + (i * 1.5) });
+            fireTl.set(dot, { attr: { cx: fromNode.x + "%", cy: fromNode.y + "%" }, opacity: 0 });
+            fireTl.to(dot, { opacity: 0.7, duration: 0.3, ease: "power2.out" });
+            fireTl.to(dot, { attr: { cx: toNode.x + "%", cy: toNode.y + "%" }, duration: 1.8, ease: "power1.inOut" }, "-=0.1");
+            fireTl.to(dot, { opacity: 0, duration: 0.3, ease: "power2.in" }, "-=0.3");
+          };
+
+          gsap.delayedCall(delay, fireSynapse);
+        });
+      }
+
+      // 8. Register parallax exit on scroll after entry completes
       tl.call(() => {
         gsap.to(".hero-content", {
           y: -80,
@@ -155,6 +187,19 @@ export default function Hero({ preloaderDone }: HeroProps) {
         gsap.to(".hero-diagram", {
           y: -50,
           scale: 0.95,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "20% top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+        // Owl parallax — moves slower than diagram for depth
+        gsap.to(owlLayerRef.current, {
+          y: -20,
+          scale: 0.98,
           opacity: 0,
           ease: "none",
           scrollTrigger: {
@@ -211,31 +256,48 @@ export default function Hero({ preloaderDone }: HeroProps) {
         }}
       />
 
-      {/* Architecture diagram wrapper for parallax */}
-      <div className="hero-diagram absolute inset-0" style={{ willChange: "transform", opacity: 0 }}>
-      {/* Night owl watermark behind architecture diagram */}
+      {/* Owl parallax layer — independent depth, moves slower than diagram */}
       <div
-        className="hero-owl-watermark"
+        ref={owlLayerRef}
+        className="hero-owl-watermark absolute inset-0"
         style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "clamp(300px, 40vw, 600px)",
-          height: "clamp(300px, 40vw, 600px)",
-          backgroundImage: "url(/logo.png)",
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          opacity: 0.06,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           pointerEvents: "none",
-          zIndex: 0,
+          zIndex: 1,
+          willChange: "transform",
         }}
-      />
+      >
+        <div
+          style={{
+            width: "clamp(300px, 40vw, 600px)",
+            height: "clamp(300px, 40vw, 600px)",
+            backgroundImage: "url(/logo.png)",
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            opacity: 0.06,
+          }}
+        />
+      </div>
+
+      {/* Architecture diagram wrapper for parallax */}
+      <div className="hero-diagram absolute inset-0" style={{ willChange: "transform", opacity: 0, zIndex: 2 }}>
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
         style={{ zIndex: 1 }}
       >
+        {/* Glow filter for synapse dots */}
+        <defs>
+          <filter id="synapse-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
         {CONNECTIONS.map(([fromId, toId], i) => {
           const from = getNode(fromId);
           const to = getNode(toId);
@@ -256,6 +318,19 @@ export default function Hero({ preloaderDone }: HeroProps) {
             />
           );
         })}
+        {/* Synapse dots — travel along connections like neurons firing */}
+        {SYNAPSE_CONNECTIONS.map((_, i) => (
+          <circle
+            key={`synapse-${i}`}
+            className="synapse-dot"
+            r="2"
+            fill="var(--color-accent)"
+            filter="url(#synapse-glow)"
+            opacity="0"
+            cx="0%"
+            cy="0%"
+          />
+        ))}
       </svg>
 
       {/* Architecture nodes */}

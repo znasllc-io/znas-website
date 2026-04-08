@@ -53,21 +53,32 @@
 }
 
 /* ── Hero Owl Watermark ── */
-.hero-owl-watermark {
+.hero-owl-watermark > div {
   mix-blend-mode: screen;
   filter: blur(1px);
 }
 
-[data-theme="light"] .hero-owl-watermark {
+[data-theme="light"] .hero-owl-watermark > div {
   mix-blend-mode: multiply;
   filter: invert(1) blur(1px);
   opacity: 0.04 !important;
 }
 
 @media (max-width: 768px) {
-  .hero-owl-watermark {
+  .hero-owl-watermark > div {
     width: clamp(200px, 60vw, 350px) !important;
     height: clamp(200px, 60vw, 350px) !important;
+  }
+}
+
+/* ── Synapse Dots ── */
+.synapse-dot {
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .synapse-dot {
+    display: none;
   }
 }
 
