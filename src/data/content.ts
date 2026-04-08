@@ -186,6 +186,11 @@ export const testimonialsContent = {
   label: "Testimonials",
   quotes: [
     {
+      text: "[Joel Gaines testimonial — to be filled in by Jose]",
+      author: "Joel Gaines",
+      role: "First Developer Opportunity Provider",
+    },
+    {
       text: "Jose is an extremely competent AI developer. In a very short time, he put together architectural documentation, determined which components each team member could take on and quickly delegated work. After development was complete, he also jumped into presenting to a group of software developers as part of the AI Trailblazers developer workshop series.",
       author: "Aaron Eden",
       role: "AI Process Automation, Intuit",

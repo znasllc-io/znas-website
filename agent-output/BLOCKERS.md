@@ -19,5 +19,8 @@ Industries count updated to 7, but only 3 of 7 industries are confirmed:
 
 **Note**: The site copy elsewhere references Healthcare, Airlines, Finance, and Telecom (4 industries). Jose to provide the remaining 3 to reach 7, or confirm which 7 he means.
 
+## B2: Joel Gaines Testimonial — Placeholder Text
+Joel Gaines has been added as a testimonial entry with placeholder text "[Joel Gaines testimonial — to be filled in by Jose]". Jose must provide the actual quote before production deploy.
+
 ## A3: Amadeus NDA Copy — Legal Review Needed
 The Amadeus work experience entry has been rewritten to remove internal system names. Now references PNR monitoring, U.S. government agencies, and elevated security clearance. Jose should review this copy with legal/compliance before production deploy to confirm it does not violate NDA terms.
