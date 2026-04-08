@@ -156,11 +156,11 @@ export default function Hero({ preloaderDone }: HeroProps) {
         SYNAPSE_CONNECTIONS.forEach((conn, i) => {
           const fromNode = getNode(conn[0]);
           const toNode = getNode(conn[1]);
-          const delay = tl.duration() + 1 + (i * 2.5);
+          const delay = tl.duration() + 1 + (i * 1.2);
           const dot = synapseDots[i];
 
           const fireSynapse = () => {
-            const fireTl = gsap.timeline({ repeat: -1, repeatDelay: 12 + (i * 1.5) });
+            const fireTl = gsap.timeline({ repeat: -1, repeatDelay: 5 + (i * 0.8) });
             fireTl.set(dot, { attr: { cx: fromNode.x + "%", cy: fromNode.y + "%" }, opacity: 0 });
             fireTl.to(dot, { opacity: 0.7, duration: 0.3, ease: "power2.out" });
             fireTl.to(dot, { attr: { cx: toNode.x + "%", cy: toNode.y + "%" }, duration: 1.8, ease: "power1.inOut" }, "-=0.1");
@@ -196,10 +196,10 @@ export default function Hero({ preloaderDone }: HeroProps) {
             scrub: true,
           },
         });
-        // Owl parallax — moves slower than diagram for depth
+        // Owl parallax — moves slower than diagram for depth (10x visible movement)
         gsap.to(owlLayerRef.current, {
-          y: -20,
-          scale: 0.98,
+          y: -200,
+          scale: 0.92,
           opacity: 0,
           ease: "none",
           scrollTrigger: {
