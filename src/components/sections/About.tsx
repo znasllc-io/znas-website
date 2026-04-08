@@ -131,7 +131,7 @@ export default function About() {
             >
               {[
                 { value: "17+", label: "Years Engineering", target: 17, suffix: "+", pad: 0, comment: "// time.Since(2008)" },
-                { value: "04", label: "Industries", target: 4, suffix: "", pad: 2, comment: "// len(industries)" },
+                { value: "07", label: "Industries", target: 7, suffix: "", pad: 2, comment: "// len(industries)" },
                 { value: "02", label: "Companies Founded", target: 2, suffix: "", pad: 2, comment: "// make([]Company, 2)" },
                 { value: "MIT", label: "AI Certified", target: null, suffix: "", pad: 0, comment: "// import \"ai/strategy\"" },
                 { value: "EN/ES", label: "Bilingual", target: null, suffix: "", pad: 0, comment: "// locale: [2]string" },
