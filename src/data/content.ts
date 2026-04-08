@@ -178,6 +178,26 @@ export const workContent = {
         "Production systems supporting major airlines worldwide with high-availability service infrastructure.",
       tags: ["Mobile", "WCF Services", ".NET", "Airlines"],
     },
+    {
+      title: "MemQL",
+      challenge:
+        "Modern systems lack a purpose-built store for immutable, time-ordered graph data with full auditability.",
+      approach:
+        "An immutable time-series graph database built for systems that demand auditability, speed, and relational depth.",
+      impact:
+        "Open-source database engine enabling tamper-proof audit trails and fast temporal queries over connected data.",
+      tags: ["Go", "Graph Database", "Time-Series", "Open Source"],
+    },
+    {
+      title: "CoPresent",
+      challenge:
+        "Team communication tools lack contextual awareness, forcing manual coordination across fragmented workflows.",
+      approach:
+        "An AI-powered workplace agent and communication platform that brings context-aware automation into team collaboration.",
+      impact:
+        "Startup product shipping at Visionarys — bridging AI agents with real-time team workflows.",
+      tags: ["AI", "Real-Time", "Platform", "Visionarys"],
+    },
   ],
 };
 

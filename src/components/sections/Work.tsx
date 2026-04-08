@@ -125,7 +125,9 @@ export default function Work() {
                     i === 0 ? "// go generate ./asyncapi/..."
                     : i === 1 ? "// tags > tree // obviously"
                     : i === 2 ? "// 12yr monolith.Decompose()"
-                    : "// amadeus.Fly(ctx, global)"
+                    : i === 3 ? "// amadeus.Fly(ctx, global)"
+                    : i === 4 ? "// memql.Query(ctx, time.Now())"
+                    : "// copresent.Agent.Listen(ctx)"
                   }
                 >
                   {project.title}

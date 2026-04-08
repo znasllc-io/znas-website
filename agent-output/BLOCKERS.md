@@ -22,5 +22,8 @@ Industries count updated to 7, but only 3 of 7 industries are confirmed:
 ## B2: Joel Gaines Testimonial — Placeholder Text
 Joel Gaines has been added as a testimonial entry with placeholder text "[Joel Gaines testimonial — to be filled in by Jose]". Jose must provide the actual quote before production deploy.
 
+## A2: MemQL and CoPresent URLs — Placeholder
+Both MemQL and CoPresent project cards have null/placeholder URLs. They show as "Private project — no public repository" in the modal. Jose to provide final URLs when ready.
+
 ## A3: Amadeus NDA Copy — Legal Review Needed
 The Amadeus work experience entry has been rewritten to remove internal system names. Now references PNR monitoring, U.S. government agencies, and elevated security clearance. Jose should review this copy with legal/compliance before production deploy to confirm it does not violate NDA terms.
