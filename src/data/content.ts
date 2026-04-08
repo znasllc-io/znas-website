@@ -9,7 +9,7 @@ export const siteConfig = {
 export const heroContent = {
   headline: ["Software", "Architect"],
   subtitle:
-    "17 years engineering systems at scale — from call centers to airlines to language platforms. Tucson, AZ.",
+    "17 years engineering systems at scale and helping small to large businesses with their technology goals.",
   scrollCta: "Scroll to explore",
 };
 
