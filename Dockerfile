@@ -1,9 +1,9 @@
 FROM node:20-slim AS builder
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm ci
-# Force-install Linux lightningcss binary (lockfile has macOS binary)
-RUN npm install --no-save lightningcss-linux-x64-gnu 2>/dev/null || true
+COPY package.json ./
+# Fresh install inside Linux container — avoids macOS lockfile binary mismatch
+# for lightningcss, tailwindcss-oxide, and other platform-specific packages
+RUN npm install
 COPY . .
 RUN npm run build
 
