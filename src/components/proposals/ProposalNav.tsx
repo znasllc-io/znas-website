@@ -77,39 +77,69 @@ export default function ProposalNav({ title }: ProposalNavProps) {
           )}
         </a>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {/* Theme Toggle */}
           <button
             onClick={cycle}
             aria-label={resolved === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             style={{
               fontFamily: "var(--font-mono)",
-              fontSize: "1rem",
-              letterSpacing: "0.1em",
-              color: "var(--color-text-tertiary)",
-              background: "none",
+              fontSize: "1.15rem",
+              color: "var(--color-text-secondary)",
+              background: "var(--color-bg-surface)",
               border: "1px solid var(--color-border)",
-              borderRadius: "4px",
-              padding: "0.5rem 0.65rem",
-              minWidth: "36px",
-              minHeight: "36px",
+              borderRadius: "6px",
+              padding: "0.55rem 0.85rem",
+              minWidth: "44px",
+              minHeight: "44px",
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              transition: "color 0.3s, border-color 0.3s",
+              transition: "all 0.3s ease",
               cursor: "none",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "var(--color-text-primary)";
-              e.currentTarget.style.borderColor = "var(--color-border-hover)";
+              e.currentTarget.style.borderColor = "var(--color-accent)";
+              e.currentTarget.style.backgroundColor = "var(--color-bg-elevated)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = "var(--color-text-tertiary)";
+              e.currentTarget.style.color = "var(--color-text-secondary)";
               e.currentTarget.style.borderColor = "var(--color-border)";
+              e.currentTarget.style.backgroundColor = "var(--color-bg-surface)";
             }}
           >
             {resolved === "dark" ? "☀" : "☾"}
           </button>
+
+          {/* Back to homepage */}
+          <a
+            href="/"
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.65rem",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--color-accent)",
+              textDecoration: "none",
+              border: "1px solid var(--color-accent)",
+              borderRadius: "2px",
+              padding: "0.4rem 0.9rem",
+              transition: "all 0.3s ease",
+              cursor: "none",
+              whiteSpace: "nowrap",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--color-accent)";
+              e.currentTarget.style.color = "var(--color-bg-void)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "transparent";
+              e.currentTarget.style.color = "var(--color-accent)";
+            }}
+          >
+            ← Back
+          </a>
         </div>
       </div>
     </nav>
