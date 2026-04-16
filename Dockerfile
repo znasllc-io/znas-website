@@ -1,12 +1,23 @@
 FROM node:20-slim AS builder
 WORKDIR /app
-COPY package.json ./
-RUN npm install
+COPY package.json package-lock.json* ./
+RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine
-COPY --from=builder /app/out /usr/share/nginx/html
-RUN printf 'server {\n  listen 8080;\n  root /usr/share/nginx/html;\n  index index.html;\n  location / {\n    try_files $uri $uri/ $uri.html /index.html;\n  }\n}\n' > /etc/nginx/conf.d/default.conf
+FROM node:20-slim AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+
+# Copy standalone server + static assets + public files
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+
+# Copy proposal data (read at runtime by API routes)
+COPY --from=builder /app/data ./data
+
 EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+ENV PORT=8080
+ENV HOSTNAME="0.0.0.0"
+CMD ["node", "server.js"]

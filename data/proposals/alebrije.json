@@ -1,0 +1,161 @@
+{
+  "slug": "alebrije",
+  "clientName": "Alebrije Padel — Jose Delgado",
+  "projectTitle": "Fractional CTO Engagement: Technology Transformation & AI Readiness",
+  "password": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "active",
+  "pdfFilename": "alebrije-proposal.pdf",
+  "sections": {
+    "summary": {
+      "headline": "From Courts to Code: Building the Technology Backbone for Mexico's Next-Generation Padel Experience",
+      "body": "Alebrije Padel is positioned at a unique inflection point. The padel industry in Mexico is experiencing explosive growth, yet the vast majority of clubs still operate on fragmented, manual processes—paper reservation books, disconnected payment systems, and zero visibility into facility utilization. By engaging ZNAS as your Fractional CTO, you gain an experienced technology leadership team at a fraction of the cost of a full-time hire, purpose-built for the pace and constraints of the Mexican market.\n\nOur engagement begins with a comprehensive technology audit and team assessment, then moves rapidly into a 1-year strategic roadmap that prioritizes the highest-impact systems first: a modern court reservation platform, integrated payment processing with Mexican banking rails, and a camera-based occupancy detection system that gives you real-time visibility into every court. Each phase is designed to deliver measurable ROI within 60–90 days, not vaporware roadmaps that collect dust.\n\nBeyond the immediate infrastructure, we will position Alebrije Padel for the AI-driven future of sports facility management. From predictive maintenance scheduling to dynamic pricing powered by demand forecasting, the technical foundation we build today becomes the competitive moat that separates Alebrije from every other club in Zapopan and the broader Jalisco region. This is not just a technology upgrade—it is a strategic repositioning that turns your facility into a data-driven, future-proof operation.",
+      "highlights": [
+        "Dedicated Fractional CTO with deep experience in Mexican market technology deployments",
+        "Complete technology audit and team capability assessment within the first 30 days",
+        "Court reservation system with integrated Mexican payment rails (SPEI, CoDi, card processing)",
+        "Camera-based real-time occupancy detection and utilization analytics",
+        "AI readiness positioning: predictive maintenance, dynamic pricing, demand forecasting",
+        "1-year strategic technology roadmap with quarterly milestone reviews",
+        "Speed advantage: move from concept to production faster than hiring and onboarding a full-time CTO"
+      ]
+    },
+    "roadmap": [
+      {
+        "phase": "Phase 1 — Discovery & Technology Audit",
+        "description": "A thorough assessment of Alebrije Padel's current technology landscape, operational workflows, team capabilities, and infrastructure readiness. This phase establishes the baseline from which every subsequent decision is made.",
+        "deliverables": [
+          "Complete inventory of existing software systems, hardware, and network infrastructure",
+          "Team skills assessment and gap analysis for technical staff",
+          "Vendor and contract review for all current technology providers",
+          "Security posture evaluation including PCI compliance readiness for payment processing",
+          "Operational workflow mapping across reservations, payments, coaching, and facility management",
+          "Executive summary report with prioritized findings and quick-win recommendations"
+        ]
+      },
+      {
+        "phase": "Phase 2 — Strategic Roadmap & Architecture Design",
+        "description": "Translating audit findings into a concrete, phased 1-year technology roadmap with clear milestones, budget allocations, and success metrics. This phase defines the target architecture and sequencing that maximizes value delivery.",
+        "deliverables": [
+          "1-year technology roadmap document with quarterly milestones and KPIs",
+          "Target system architecture diagrams covering reservation, payment, analytics, and IoT layers",
+          "Technology stack selection with vendor evaluation scorecards",
+          "Data architecture design including privacy compliance with Mexican LFPDPPP regulations",
+          "Build-vs-buy analysis for each major system component",
+          "Budget forecast and resource allocation plan for the full engagement period"
+        ]
+      },
+      {
+        "phase": "Phase 3 — Court Reservation System",
+        "description": "Design, development, and deployment of a modern court reservation platform tailored to padel club operations. The system supports online booking, walk-in management, recurring reservations, coaching session scheduling, and integration with Mexican payment processors.",
+        "deliverables": [
+          "Web and mobile-responsive reservation interface for members and walk-in guests",
+          "Admin dashboard with real-time court availability, booking management, and conflict resolution",
+          "Integration with SPEI, CoDi, and card payment processing via Mexican banking rails",
+          "Recurring reservation and membership tier management module",
+          "Automated confirmation, reminder, and cancellation notification system (SMS + WhatsApp)",
+          "Coaching and class scheduling module with instructor availability management"
+        ]
+      },
+      {
+        "phase": "Phase 4 — Camera-Based Occupancy Detection",
+        "description": "Installation and integration of a computer-vision-powered occupancy detection system that provides real-time court utilization data, enabling data-driven decisions on scheduling, staffing, and facility expansion.",
+        "deliverables": [
+          "Camera hardware specification, procurement guidance, and installation oversight",
+          "Edge computing setup for on-premise video processing with privacy-preserving analytics",
+          "Real-time occupancy dashboard showing per-court utilization rates",
+          "Historical utilization analytics with peak/off-peak trend analysis",
+          "Integration with the reservation system for automated no-show detection"
+        ]
+      },
+      {
+        "phase": "Phase 5 — AI Readiness & Future-Proofing",
+        "description": "Laying the data and infrastructure foundation for AI-powered features that will define the next generation of padel club operations—dynamic pricing, predictive maintenance, and personalized member experiences.",
+        "deliverables": [
+          "Data pipeline architecture for aggregating reservation, occupancy, payment, and member data",
+          "Predictive maintenance model prototype for court surfaces and lighting systems",
+          "Dynamic pricing engine specification based on demand patterns and utilization data",
+          "Member behavior analytics framework for personalized engagement and retention",
+          "AI feature prioritization matrix with expected ROI and implementation complexity scores",
+          "Technology partnership recommendations for ongoing AI/ML capability development"
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "milestone": "Engagement Kickoff & Discovery Sprint",
+        "date": "2026-05-01",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "Technology Audit Report Delivered",
+        "date": "2026-05-30",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "1-Year Strategic Roadmap Approved",
+        "date": "2026-06-20",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "Reservation System MVP Launch",
+        "date": "2026-08-15",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "Payment Integration Go-Live (SPEI + CoDi + Cards)",
+        "date": "2026-09-15",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "Camera Occupancy System Pilot (2 Courts)",
+        "date": "2026-10-30",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "Full Occupancy System Rollout & Analytics Dashboard",
+        "date": "2026-12-15",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "AI Readiness Assessment & Phase 5 Kickoff",
+        "date": "2027-02-01",
+        "status": "upcoming"
+      }
+    ],
+    "investment": {
+      "description": "Our engagement model is designed to deliver maximum strategic impact at a fraction of the cost of a full-time CTO hire. Both tiers include direct access to senior technical leadership, weekly strategy sessions, and hands-on oversight of all technology initiatives. The Full Service tier adds implementation management, vendor negotiations, and direct team mentorship for your technical staff.",
+      "tiers": [
+        {
+          "name": "Full Service — Fractional CTO",
+          "price": "$57,000 MXN/mo",
+          "description": "Complete technology leadership including strategy, architecture, implementation oversight, vendor management, and team development. This is the recommended tier for organizations that need both strategic direction and hands-on execution management.",
+          "includes": [
+            "Weekly 90-minute strategy and progress review sessions",
+            "Full technology audit and 1-year roadmap development",
+            "Architecture design, code review, and technical decision-making",
+            "Vendor evaluation, negotiation, and contract management",
+            "Direct oversight of development teams and external contractors",
+            "Team mentorship and technical skill development programs",
+            "24/7 availability for critical technical escalations",
+            "Monthly executive technology briefing for stakeholders"
+          ],
+          "recommended": true
+        },
+        {
+          "name": "Technical Direction Only",
+          "price": "$42,000–$45,000 MXN/mo",
+          "description": "Strategic technology leadership focused on architecture decisions, roadmap guidance, and advisory support. Ideal for organizations that already have capable technical staff but need senior-level direction and decision-making.",
+          "includes": [
+            "Bi-weekly 90-minute strategy and advisory sessions",
+            "Technology audit and strategic roadmap development",
+            "Architecture review and technical decision guidance",
+            "Vendor evaluation recommendations and procurement advice",
+            "Asynchronous technical Q&A and decision support",
+            "Monthly executive technology briefing for stakeholders"
+          ],
+          "recommended": false
+        }
+      ]
+    }
+  }
+}
