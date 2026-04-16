@@ -1,159 +1,124 @@
 {
   "slug": "alebrije",
-  "clientName": "Alebrije Padel — Jose Delgado",
-  "projectTitle": "Fractional CTO Engagement: Technology Transformation & AI Readiness",
+  "clientName": "Alebrije 741 Wellness Padel Club",
+  "projectTitle": "Fractional CTO & Digital Transformation",
   "password": "550e8400-e29b-41d4-a716-446655440000",
   "status": "active",
   "pdfFilename": "alebrije-proposal.pdf",
   "sections": {
     "summary": {
-      "headline": "From Courts to Code: Building the Technology Backbone for Mexico's Next-Generation Padel Experience",
-      "body": "Alebrije Padel is positioned at a unique inflection point. The padel industry in Mexico is experiencing explosive growth, yet the vast majority of clubs still operate on fragmented, manual processes—paper reservation books, disconnected payment systems, and zero visibility into facility utilization. By engaging ZNAS as your Fractional CTO, you gain an experienced technology leadership team at a fraction of the cost of a full-time hire, purpose-built for the pace and constraints of the Mexican market.\n\nOur engagement begins with a comprehensive technology audit and team assessment, then moves rapidly into a 1-year strategic roadmap that prioritizes the highest-impact systems first: a modern court reservation platform, integrated payment processing with Mexican banking rails, and a camera-based occupancy detection system that gives you real-time visibility into every court. Each phase is designed to deliver measurable ROI within 60–90 days, not vaporware roadmaps that collect dust.\n\nBeyond the immediate infrastructure, we will position Alebrije Padel for the AI-driven future of sports facility management. From predictive maintenance scheduling to dynamic pricing powered by demand forecasting, the technical foundation we build today becomes the competitive moat that separates Alebrije from every other club in Zapopan and the broader Jalisco region. This is not just a technology upgrade—it is a strategic repositioning that turns your facility into a data-driven, future-proof operation.",
+      "headline": "Alebrije has a solid business. This proposal is about what it can become.",
+      "body": "You know Alebrije better than anyone. 13 courts, a restaurant, a café, a bar, a sports academy, an active client base. The business works, but it's operating below its potential because it doesn't yet have the digital infrastructure to see, understand, and act on what's really happening in its operations.\n\nToday, the global sports industry is undergoing a transformation. Clubs adopting technology and artificial intelligence aren't just operating more efficiently—they're creating experiences their clients can't find anywhere else, making decisions based on real data instead of intuition, and positioning themselves years ahead of their competitors. In Mexico, that transformation is just beginning. And therein lies the opportunity.\n\nWhat José Sanz proposes for Alebrije is a comprehensive technological restructuring for the age of digitalization and artificial intelligence. It's not about installing software or hiring a programmer. It's about rethinking how the club operates from the ground up: building the infrastructure that gives full visibility into internal operations and client relationships, implementing intelligent systems that work proactively—not waiting for instructions—and creating a future-proof technology strategy that positions Alebrije as a benchmark in the Mexican market; additionally, a proprietary technology product, an asset that belongs to the club, that differentiates it from any competitor, and that is replicable.\n\nBeing one of the first premium clubs in Mexico to execute this transformation correctly doesn't just improve operations—it positions Alebrije with a 2–3 year competitive advantage over competitors who still aren't moving. In a market growing as fast as padel in Mexico, that window won't stay open forever.",
       "highlights": [
-        "Dedicated Fractional CTO with deep experience in Mexican market technology deployments",
-        "Complete technology audit and team capability assessment within the first 30 days",
-        "Court reservation system with integrated Mexican payment rails (SPEI, CoDi, card processing)",
-        "Camera-based real-time occupancy detection and utilization analytics",
-        "AI readiness positioning: predictive maintenance, dynamic pricing, demand forecasting",
-        "1-year strategic technology roadmap with quarterly milestone reviews",
-        "Speed advantage: move from concept to production faster than hiring and onboarding a full-time CTO"
+        "A comprehensive technology restructuring plan and headstart, designed specifically for Alebrije based on a diagnosis of its actual operations and desired outcomes",
+        "A proprietary optimization algorithm that belongs 100% to Alebrije—the intelligent engine behind the integrated system, replicable, and the differentiator no competitor has",
+        "CRM, analytics, automated marketing, intelligent bookings, and a 12-month strategy—all built in collaboration with José Delgado",
+        "AI-powered teams achieve development speeds up to 10x faster at half the cost (McKinsey, April 2026)",
+        "2–3 year competitive advantage over competitors who still aren't moving on technology and AI",
+        "Full intellectual property ownership—Alebrije doesn't walk away with just new tools, it walks away with its own IP"
       ]
     },
     "roadmap": [
       {
-        "phase": "Phase 1 — Discovery & Technology Audit",
-        "description": "A thorough assessment of Alebrije Padel's current technology landscape, operational workflows, team capabilities, and infrastructure readiness. This phase establishes the baseline from which every subsequent decision is made.",
+        "phase": "Phase 1 — Comprehensive Diagnosis",
+        "description": "Before proposing anything, José needs to understand your business in depth. This phase establishes the baseline from which every subsequent decision is made.",
         "deliverables": [
-          "Complete inventory of existing software systems, hardware, and network infrastructure",
-          "Team skills assessment and gap analysis for technical staff",
-          "Vendor and contract review for all current technology providers",
-          "Security posture evaluation including PCI compliance readiness for payment processing",
-          "Operational workflow mapping across reservations, payments, coaching, and facility management",
-          "Executive summary report with prioritized findings and quick-win recommendations"
+          "Complete technology audit of everything Alebrije uses today",
+          "Interviews with your key operational team",
+          "Workflow analysis for each business unit",
+          "Data evaluation—what exists and what should exist but doesn't",
+          "Benchmarking against competitors and global references",
+          "AI maturity assessment and technology platform recommendations, evaluated transparently and compared against market alternatives"
         ]
       },
       {
-        "phase": "Phase 2 — Strategic Roadmap & Architecture Design",
-        "description": "Translating audit findings into a concrete, phased 1-year technology roadmap with clear milestones, budget allocations, and success metrics. This phase defines the target architecture and sequencing that maximizes value delivery.",
+        "phase": "Phase 2 — Digital Transformation Plan",
+        "description": "With the diagnosis in hand, José Sanz delivers the complete vision. Short term: highest-ROI quick wins, functional website with SEO, CRM implemented, first proprietary client data. Medium term: mature CRM with automation, AI implementations, real-time dashboard, AI-powered integrated operating system, and Alebrije's proprietary algorithm as the optimization engine.",
         "deliverables": [
-          "1-year technology roadmap document with quarterly milestones and KPIs",
-          "Target system architecture diagrams covering reservation, payment, analytics, and IoT layers",
-          "Technology stack selection with vendor evaluation scorecards",
-          "Data architecture design including privacy compliance with Mexican LFPDPPP regulations",
-          "Build-vs-buy analysis for each major system component",
-          "Budget forecast and resource allocation plan for the full engagement period"
+          "Alebrije 2026–2027 Digital Transformation Plan",
+          "Short-term quick wins with highest ROI identified and prioritized",
+          "Functional website with SEO strategy",
+          "CRM implementation plan with automation roadmap",
+          "AI implementation strategy: customer service agent, predictive analytics, dynamic pricing",
+          "Real-time dashboard specification and architecture",
+          "Proprietary algorithm design included in the 12-month roadmap"
         ]
       },
       {
-        "phase": "Phase 3 — Court Reservation System",
-        "description": "Design, development, and deployment of a modern court reservation platform tailored to padel club operations. The system supports online booking, walk-in management, recurring reservations, coaching session scheduling, and integration with Mexican payment processors.",
+        "phase": "Phase 3 — Implementation & Launch",
+        "description": "The highest-impact projects are selected and executed directly. Projects running in production plus documentation, team training, and a Continuity Plan for months 4–12.",
         "deliverables": [
-          "Web and mobile-responsive reservation interface for members and walk-in guests",
-          "Admin dashboard with real-time court availability, booking management, and conflict resolution",
-          "Integration with SPEI, CoDi, and card payment processing via Mexican banking rails",
-          "Recurring reservation and membership tier management module",
-          "Automated confirmation, reminder, and cancellation notification system (SMS + WhatsApp)",
-          "Coaching and class scheduling module with instructor availability management"
-        ]
-      },
-      {
-        "phase": "Phase 4 — Camera-Based Occupancy Detection",
-        "description": "Installation and integration of a computer-vision-powered occupancy detection system that provides real-time court utilization data, enabling data-driven decisions on scheduling, staffing, and facility expansion.",
-        "deliverables": [
-          "Camera hardware specification, procurement guidance, and installation oversight",
-          "Edge computing setup for on-premise video processing with privacy-preserving analytics",
-          "Real-time occupancy dashboard showing per-court utilization rates",
-          "Historical utilization analytics with peak/off-peak trend analysis",
-          "Integration with the reservation system for automated no-show detection"
-        ]
-      },
-      {
-        "phase": "Phase 5 — AI Readiness & Future-Proofing",
-        "description": "Laying the data and infrastructure foundation for AI-powered features that will define the next generation of padel club operations—dynamic pricing, predictive maintenance, and personalized member experiences.",
-        "deliverables": [
-          "Data pipeline architecture for aggregating reservation, occupancy, payment, and member data",
-          "Predictive maintenance model prototype for court surfaces and lighting systems",
-          "Dynamic pricing engine specification based on demand patterns and utilization data",
-          "Member behavior analytics framework for personalized engagement and retention",
-          "AI feature prioritization matrix with expected ROI and implementation complexity scores",
-          "Technology partnership recommendations for ongoing AI/ML capability development"
+          "Intelligent booking system—conversational WhatsApp agent that confirms, charges, and books in seconds",
+          "CRM with a real client database—know who your most valuable clients are and when they're at risk of leaving",
+          "AI-powered metrics dashboard—occupancy, revenue, retention, trends, all in real time",
+          "Digitally optimized website—functional web presence with SEO",
+          "Automated marketing—personalized communication based on actual client behavior",
+          "Design and initial development of Alebrije's proprietary algorithm",
+          "AI-integrated operating system—single platform where all operations converge with a proactive AI layer"
         ]
       }
     ],
     "timeline": [
       {
-        "milestone": "Engagement Kickoff & Discovery Sprint",
+        "milestone": "Months 1–3: Headstart",
         "date": "2026-05-01",
         "status": "upcoming"
       },
       {
-        "milestone": "Technology Audit Report Delivered",
-        "date": "2026-05-30",
+        "milestone": "Diagnosis + Digital Transformation Plan + first projects implemented + proprietary algorithm design",
+        "date": "2026-07-31",
         "status": "upcoming"
       },
       {
-        "milestone": "1-Year Strategic Roadmap Approved",
-        "date": "2026-06-20",
+        "milestone": "Months 4–6: Quick wins + consolidated CRM + proprietary algorithm in development",
+        "date": "2026-10-31",
         "status": "upcoming"
       },
       {
-        "milestone": "Reservation System MVP Launch",
-        "date": "2026-08-15",
+        "milestone": "Months 7–9: Algorithm in production + advanced AI implementations + platform independence",
+        "date": "2027-01-31",
         "status": "upcoming"
       },
       {
-        "milestone": "Payment Integration Go-Live (SPEI + CoDi + Cards)",
-        "date": "2026-09-15",
-        "status": "upcoming"
-      },
-      {
-        "milestone": "Camera Occupancy System Pilot (2 Courts)",
-        "date": "2026-10-30",
-        "status": "upcoming"
-      },
-      {
-        "milestone": "Full Occupancy System Rollout & Analytics Dashboard",
-        "date": "2026-12-15",
-        "status": "upcoming"
-      },
-      {
-        "milestone": "AI Readiness Assessment & Phase 5 Kickoff",
-        "date": "2027-02-01",
+        "milestone": "Months 10–12: Integrated system at full capacity + continuous optimization + Alebrije operating autonomously",
+        "date": "2027-04-30",
         "status": "upcoming"
       }
     ],
     "investment": {
-      "description": "Our engagement model is designed to deliver maximum strategic impact at a fraction of the cost of a full-time CTO hire. Both tiers include direct access to senior technical leadership, weekly strategy sessions, and hands-on oversight of all technology initiatives. The Full Service tier adds implementation management, vendor negotiations, and direct team mentorship for your technical staff.",
+      "description": "The final outcome is the same in any scenario: Alebrije technologically restructured with its proprietary algorithm running. What changes drastically is how long it takes to get there—and in a market where speed defines who leads, that changes everything.",
       "tiers": [
         {
-          "name": "Full Service — Fractional CTO",
-          "price": "$57,000 MXN/mo",
-          "description": "Complete technology leadership including strategy, architecture, implementation oversight, vendor management, and team development. This is the recommended tier for organizations that need both strategic direction and hands-on execution management.",
+          "name": "Option 1 — Fractional CTO",
+          "price": "$45,000 USD / 3 months",
+          "description": "José Sanz as dedicated CTO, 25 hours per week. Progress across all 3 project phases: Diagnosis → Plan → Implementation. Alebrije provides a development team for José to lead during Phase 3.",
           "includes": [
-            "Weekly 90-minute strategy and progress review sessions",
-            "Full technology audit and 1-year roadmap development",
-            "Architecture design, code review, and technical decision-making",
-            "Vendor evaluation, negotiation, and contract management",
-            "Direct oversight of development teams and external contractors",
-            "Team mentorship and technical skill development programs",
-            "24/7 availability for critical technical escalations",
-            "Monthly executive technology briefing for stakeholders"
-          ],
-          "recommended": true
-        },
-        {
-          "name": "Technical Direction Only",
-          "price": "$42,000–$45,000 MXN/mo",
-          "description": "Strategic technology leadership focused on architecture decisions, roadmap guidance, and advisory support. Ideal for organizations that already have capable technical staff but need senior-level direction and decision-making.",
-          "includes": [
-            "Bi-weekly 90-minute strategy and advisory sessions",
-            "Technology audit and strategic roadmap development",
-            "Architecture review and technical decision guidance",
-            "Vendor evaluation recommendations and procurement advice",
-            "Asynchronous technical Q&A and decision support",
-            "Monthly executive technology briefing for stakeholders"
+            "José Sanz as dedicated CTO, 25 hrs/week",
+            "Diagnosis → Plan → Implementation across all 3 phases",
+            "12-month roadmap + documentation + training + continuity plan",
+            "Up to 2 in-person visits/month to Guadalajara",
+            "Proprietary algorithm (longer timeline)",
+            "Full project timeline: ~18–24 months",
+            "1–2 projects implemented in the 3-month headstart"
           ],
           "recommended": false
+        },
+        {
+          "name": "Option 2 — CTO + ZNAS Team",
+          "price": "$58,000 USD / 3 months",
+          "description": "Everything in Option 1, plus the ZNAS development team—AI orchestrators already integrated with José, with zero learning curve. Significantly faster execution with more projects implemented, higher quality, and lower risk.",
+          "includes": [
+            "José Sanz as dedicated CTO, 25 hrs/week",
+            "ZNAS development team—AI orchestrators, zero learning curve",
+            "Dedicated Account Manager—always-available point of contact",
+            "Diagnosis → Plan → Implementation across all 3 phases",
+            "12-month roadmap + documentation + training + continuity plan",
+            "Up to 2 in-person visits/month to Guadalajara",
+            "Proprietary algorithm (accelerated timeline)",
+            "Full project timeline: ~12 months",
+            "3–4+ projects implemented in the 3-month headstart"
+          ],
+          "recommended": true
         }
       ]
     }
