@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import { gsap } from "@/lib/gsap-config";
 import { workContent } from "@/data/content";
 import SectionLabel from "@/components/ui/SectionLabel";
 import PillTag from "@/components/ui/PillTag";
 import ProjectModal, { getProjectUrl } from "@/components/ui/ProjectModal";
 
-export default function Work() {
+function Work() {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const [selectedProject, setSelectedProject] = useState<{
@@ -224,3 +224,5 @@ export default function Work() {
     </section>
   );
 }
+
+export default memo(Work);

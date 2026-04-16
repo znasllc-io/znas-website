@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { journeyContent } from "@/data/content";
 import SectionLabel from "@/components/ui/SectionLabel";
 
-export default function Journey() {
+function Journey() {
   const sectionRef = useRef<HTMLElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -177,3 +177,5 @@ export default function Journey() {
     </section>
   );
 }
+
+export default memo(Journey);

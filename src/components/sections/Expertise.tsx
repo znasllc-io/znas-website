@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { expertiseContent } from "@/data/content";
 import SectionLabel from "@/components/ui/SectionLabel";
@@ -33,7 +33,7 @@ const STACK_LAYERS = [
   },
 ];
 
-export default function Expertise() {
+function Expertise() {
   const sectionRef = useRef<HTMLElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
@@ -246,3 +246,5 @@ export default function Expertise() {
     </section>
   );
 }
+
+export default memo(Expertise);

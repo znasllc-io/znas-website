@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 
-export default function ScrollProgress() {
+function ScrollProgress() {
   const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,3 +29,5 @@ export default function ScrollProgress() {
     />
   );
 }
+
+export default memo(ScrollProgress);
