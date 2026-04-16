@@ -7,11 +7,23 @@ export const siteConfig = {
 };
 
 export const heroContent = {
-  headline: ["Software", "Architect"],
+  headline: ["Freelance"],
   subtitle:
     "17 years engineering systems at scale and helping small to large businesses with their technology goals.",
   scrollCta: "Scroll to explore",
 };
+
+export const cyclingTitles = [
+  "Software Architect",
+  "AI Engineer",
+  "Web Designer",
+  "Systems Engineer",
+  "Mobile Developer",
+  "Open Source Builder",
+  "Application Developer",
+  "Tech Consultant",
+  "Language Solutions",
+];
 
 export const aboutContent = {
   number: ".01",
@@ -61,7 +73,7 @@ export const expertiseContent = {
       id: "ai",
       title: "AI & Emerging Tech",
       description:
-        "MIT-certified in AI Business Strategy. Building AI-powered applications and developer tooling. Led the AI Trailblazers developer workshop series at CyraCom.",
+        "MIT-certified in AI Business Strategy. Building AI-powered applications, intelligent agents, and developer tooling. Passionate about bridging the gap between cutting-edge AI research and real-world product engineering.",
       tags: [
         "AI Integration",
         "LLMs",
@@ -133,6 +145,26 @@ export const workContent = {
   label: "Work",
   projects: [
     {
+      title: "CoPresent",
+      challenge:
+        "Team communication tools lack contextual awareness, forcing manual coordination across fragmented workflows.",
+      approach:
+        "An AI-powered workplace agent and communication platform that brings context-aware automation into team collaboration.",
+      impact:
+        "Startup product shipping at Visionarys — bridging AI agents with real-time team workflows.",
+      tags: ["AI", "Real-Time", "Platform", "Visionarys"],
+    },
+    {
+      title: "MemQL",
+      challenge:
+        "Modern systems lack a purpose-built store for immutable, time-ordered graph data with full auditability.",
+      approach:
+        "An immutable time-series graph database built for systems that demand auditability, speed, and relational depth.",
+      impact:
+        "Open-source database engine enabling tamper-proof audit trails and fast temporal queries over connected data.",
+      tags: ["Go", "Graph Database", "Time-Series", "Open Source"],
+    },
+    {
       title: "asyncapi-codegen",
       challenge:
         "Distributed systems teams waste weeks hand-writing async messaging boilerplate for every new service.",
@@ -178,26 +210,6 @@ export const workContent = {
         "Production systems supporting major airlines worldwide with high-availability service infrastructure.",
       tags: ["Mobile", "WCF Services", ".NET", "Airlines"],
     },
-    {
-      title: "MemQL",
-      challenge:
-        "Modern systems lack a purpose-built store for immutable, time-ordered graph data with full auditability.",
-      approach:
-        "An immutable time-series graph database built for systems that demand auditability, speed, and relational depth.",
-      impact:
-        "Open-source database engine enabling tamper-proof audit trails and fast temporal queries over connected data.",
-      tags: ["Go", "Graph Database", "Time-Series", "Open Source"],
-    },
-    {
-      title: "CoPresent",
-      challenge:
-        "Team communication tools lack contextual awareness, forcing manual coordination across fragmented workflows.",
-      approach:
-        "An AI-powered workplace agent and communication platform that brings context-aware automation into team collaboration.",
-      impact:
-        "Startup product shipping at Visionarys — bridging AI agents with real-time team workflows.",
-      tags: ["AI", "Real-Time", "Platform", "Visionarys"],
-    },
   ],
 };
 
@@ -206,7 +218,7 @@ export const testimonialsContent = {
   label: "Testimonials",
   quotes: [
     {
-      text: "Jose is an extremely competent AI developer. In a very short time, he put together architectural documentation, determined which components each team member could take on and quickly delegated work. After development was complete, he also jumped into presenting to a group of software developers as part of the AI Trailblazers developer workshop series.",
+      text: "Jose is an extremely competent AI developer. In a very short time, he put together architectural documentation, determined which components each team member could take on and quickly delegated work. After development was complete, he also jumped into presenting to a community of software developers and technologists as part of an AI-focused workshop series.",
       author: "Aaron Eden",
       role: "AI Process Automation, Intuit",
     },

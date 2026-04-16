@@ -2,47 +2,49 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap, SplitText } from "@/lib/gsap-config";
-import { heroContent, siteConfig } from "@/data/content";
+import FlipClock from "@/components/ui/FlipClock";
+import { heroContent, siteConfig, cyclingTitles } from "@/data/content";
 
 // Synapse connections — subset of backbone connections for neural firing effect
 const SYNAPSE_CONNECTIONS: [string, string][] = [
-  ["client", "gateway"],
-  ["gateway", "services"],
-  ["services", "data"],
-  ["data", "cache"],
-  ["queue", "monitor"],
-  ["auth", "data"],
+  ["discovery", "architecture"],
+  ["development", "testing"],
+  ["testing", "integration"],
+  ["optimization", "deployment"],
+  ["monitoring", "delivery"],
+  ["testing", "development"],
 ];
 
 // Architecture diagram nodes — positioned as % of viewport
 const NODES = [
-  { id: "client", x: 6, y: 12, label: "Client Layer", desc: "React, Next.js, React Native" },
-  { id: "gateway", x: 24, y: 8, label: "API Gateway", desc: "Routing, auth, rate limiting" },
-  { id: "services", x: 48, y: 15, label: "Microservices", desc: "Distributed service mesh" },
-  { id: "queue", x: 72, y: 10, label: "Event Bus", desc: "Async processing, CQRS" },
-  { id: "auth", x: 36, y: 32, label: "Auth", desc: "Identity, tokens, SSO" },
-  { id: "data", x: 60, y: 36, label: "Data Layer", desc: "PostgreSQL, Redis, caching" },
-  { id: "infra", x: 88, y: 28, label: "Infrastructure", desc: "CI/CD, Docker, monitoring" },
-  { id: "mobile", x: 14, y: 35, label: "Mobile", desc: "iOS, Android, cross-platform" },
-  { id: "cache", x: 80, y: 42, label: "Cache", desc: "Redis, CDN, edge caching" },
-  { id: "monitor", x: 92, y: 14, label: "Observability", desc: "Logs, metrics, tracing" },
+  { id: "discovery",     x: 6,  y: 14, label: "Discovery",      desc: "Requirements, research, stakeholder alignment" },
+  { id: "architecture",  x: 20, y: 10, label: "Architecture",    desc: "System design, data modeling, API contracts" },
+  { id: "prototype",     x: 34, y: 30, label: "Prototype",       desc: "Proof of concept, rapid iteration" },
+  { id: "development",   x: 48, y: 12, label: "Development",     desc: "Full-stack implementation, code reviews" },
+  { id: "testing",       x: 58, y: 34, label: "Testing",         desc: "Unit, integration, load, security" },
+  { id: "integration",   x: 68, y: 16, label: "Integration",     desc: "CI/CD pipelines, staging environments" },
+  { id: "optimization",  x: 78, y: 32, label: "Optimization",    desc: "Performance tuning, caching, monitoring" },
+  { id: "deployment",    x: 88, y: 12, label: "Deployment",      desc: "Production release, zero-downtime rollout" },
+  { id: "monitoring",    x: 92, y: 28, label: "Observability",   desc: "Logs, metrics, alerting, SLOs" },
+  { id: "delivery",      x: 96, y: 18, label: "Delivery",        desc: "Handoff, documentation, support" },
 ];
 
 const CONNECTIONS: [string, string][] = [
-  ["client", "gateway"],
-  ["gateway", "services"],
-  ["gateway", "auth"],
-  ["services", "queue"],
-  ["services", "data"],
-  ["queue", "infra"],
-  ["data", "infra"],
-  ["client", "mobile"],
-  ["mobile", "auth"],
-  ["auth", "data"],
-  ["infra", "cache"],
-  ["data", "cache"],
-  ["queue", "monitor"],
-  ["infra", "monitor"],
+  // Main flow (left to right)
+  ["discovery", "architecture"],
+  ["architecture", "prototype"],
+  ["prototype", "development"],
+  ["development", "testing"],
+  ["testing", "integration"],
+  ["integration", "optimization"],
+  ["optimization", "deployment"],
+  ["deployment", "monitoring"],
+  ["monitoring", "delivery"],
+  // Iterative cross-links
+  ["testing", "development"],
+  ["architecture", "development"],
+  ["monitoring", "optimization"],
+  ["prototype", "architecture"],
 ];
 
 interface HeroProps {
@@ -60,7 +62,11 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const logoTextRef = useRef<HTMLSpanElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const owlLayerRef = useRef<HTMLDivElement>(null);
+  const flipClockRef = useRef<HTMLDivElement>(null);
+  const diagramRef = useRef<HTMLDivElement>(null);
+  const nodeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [flipClockActive, setFlipClockActive] = useState(false);
 
   useEffect(() => {
     if (!preloaderDone) return;
@@ -68,7 +74,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
     const ctx = gsap.context(() => {
       // SplitText setup
       const splits: InstanceType<typeof SplitText>[] = [];
-      [line1Ref, line2Ref].forEach((ref) => {
+      [line1Ref].forEach((ref) => {
         if (!ref.current) return;
         const split = SplitText.create(ref.current, {
           type: "chars",
@@ -125,6 +131,13 @@ export default function Hero({ preloaderDone }: HeroProps) {
         "-=0.3"
       );
 
+      // 3c. FlipClock title fades in
+      tl.fromTo(flipClockRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
+        "-=0.4"
+      );
+
       // 4. Subtitle streams in
       tl.fromTo(subtitleRef.current,
         { y: 30, opacity: 0 },
@@ -173,6 +186,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
 
       // 8. Register parallax exit on scroll after entry completes
       tl.call(() => {
+        setFlipClockActive(true);
         gsap.to(".hero-content", {
           y: -80,
           opacity: 0,
@@ -229,6 +243,77 @@ export default function Hero({ preloaderDone }: HeroProps) {
     return () => { tween.kill(); };
   }, []);
 
+  // Magnetic node attraction
+  useEffect(() => {
+    if (!preloaderDone) return;
+
+    const hasFine = window.matchMedia("(pointer: fine)").matches;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!hasFine || prefersReducedMotion) return;
+
+    const diagram = diagramRef.current;
+    if (!diagram) return;
+
+    const MAGNETIC_RADIUS = 80;
+    const MAGNETIC_STRENGTH = 0.4;
+
+    // Setup quickTo for each node
+    const quickTos = new Map<string, { x: ReturnType<typeof gsap.quickTo>; y: ReturnType<typeof gsap.quickTo> }>();
+
+    NODES.forEach(node => {
+      const el = nodeRefs.current.get(node.id);
+      if (!el) return;
+      quickTos.set(node.id, {
+        x: gsap.quickTo(el, "x", { duration: 0.3, ease: "power3.out" }),
+        y: gsap.quickTo(el, "y", { duration: 0.3, ease: "power3.out" }),
+      });
+    });
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = diagram.getBoundingClientRect();
+
+      NODES.forEach(node => {
+        const quickTo = quickTos.get(node.id);
+        if (!quickTo) return;
+
+        // Node center position in viewport coordinates
+        const nodeCenterX = rect.left + (node.x / 100) * rect.width;
+        const nodeCenterY = rect.top + (node.y / 100) * rect.height;
+
+        const dx = e.clientX - nodeCenterX;
+        const dy = e.clientY - nodeCenterY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < MAGNETIC_RADIUS) {
+          const strength = (1 - distance / MAGNETIC_RADIUS) * MAGNETIC_STRENGTH;
+          quickTo.x(dx * strength);
+          quickTo.y(dy * strength);
+        } else {
+          quickTo.x(0);
+          quickTo.y(0);
+        }
+      });
+    };
+
+    const handleMouseLeave = () => {
+      NODES.forEach(node => {
+        const quickTo = quickTos.get(node.id);
+        if (quickTo) {
+          quickTo.x(0);
+          quickTo.y(0);
+        }
+      });
+    };
+
+    diagram.addEventListener("mousemove", handleMouseMove);
+    diagram.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      diagram.removeEventListener("mousemove", handleMouseMove);
+      diagram.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [preloaderDone]);
+
   const getNode = (id: string) => NODES.find((n) => n.id === id)!;
 
   return (
@@ -283,7 +368,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
       </div>
 
       {/* Architecture diagram wrapper for parallax */}
-      <div className="hero-diagram absolute inset-0" style={{ willChange: "transform", opacity: 0, zIndex: 2 }}>
+      <div ref={diagramRef} className="hero-diagram absolute inset-0" style={{ willChange: "transform", opacity: 0, zIndex: 2 }}>
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
         style={{ zIndex: 1 }}
@@ -347,26 +432,35 @@ export default function Hero({ preloaderDone }: HeroProps) {
           return (
             <div
               key={node.id}
+              ref={(el) => { if (el) nodeRefs.current.set(node.id, el); }}
               className="arch-node absolute"
               style={{
                 left: `${node.x}%`,
                 top: `${node.y}%`,
                 transform: "translate(-50%, -50%)",
                 zIndex: isHovered ? 10 : 1,
+                willChange: "transform",
+                /* Larger hit area via transparent border — no padding/margin shift */
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 48,
+                height: 48,
+                cursor: "none",
               }}
               onMouseEnter={() => setHoveredNode(node.id)}
               onMouseLeave={() => setHoveredNode(null)}
             >
-              {/* Node dot */}
+              {/* Node dot — centered in the 48px hit area */}
               <div
                 className={
-                  ["services", "data", "gateway", "monitor"].includes(node.id)
+                  ["development", "testing", "deployment", "monitoring"].includes(node.id)
                     ? "arch-node-pulse"
                     : undefined
                 }
                 style={{
-                  width: isHovered ? 14 : 8,
-                  height: isHovered ? 14 : 8,
+                  width: isHovered ? 22 : 12,
+                  height: isHovered ? 22 : 12,
                   borderRadius: "50%",
                   backgroundColor: isHovered
                     ? "var(--color-accent)"
@@ -378,7 +472,8 @@ export default function Hero({ preloaderDone }: HeroProps) {
                     ? "0 0 24px var(--color-accent-glow)"
                     : "none",
                   transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-                  cursor: "none",
+                  pointerEvents: "none",
+                  flexShrink: 0,
                 }}
               />
               {/* Tooltip */}
@@ -386,7 +481,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
                 <div
                   className="absolute whitespace-nowrap"
                   style={{
-                    top: "calc(100% + 8px)",
+                    top: "calc(100% + 4px)",
                     left: "50%",
                     transform: "translateX(-50%)",
                     fontFamily: "var(--font-mono)",
@@ -454,9 +549,16 @@ export default function Hero({ preloaderDone }: HeroProps) {
           Jose Sanz &mdash; Tucson, AZ
         </div>
 
-        <h1 className="text-hero">
-          <div ref={line1Ref}>{heroContent.headline[0]}</div>
-          <div ref={line2Ref}>{heroContent.headline[1]}</div>
+        <h1 className="text-hero-inline" style={{ whiteSpace: "nowrap" }}>
+          <span ref={line1Ref} style={{ verticalAlign: "baseline" }}>{heroContent.headline[0]}</span>{" "}
+          <span ref={flipClockRef} style={{ opacity: 0, verticalAlign: "baseline" }}>
+            <FlipClock
+              titles={cyclingTitles}
+              intervalMs={2000}
+              staggerMs={20}
+              paused={!flipClockActive}
+            />
+          </span>
         </h1>
 
         <p

@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
-import { contactContent, siteConfig } from "@/data/content";
+import { contactContent, siteConfig, cyclingTitles } from "@/data/content";
+import FlipClock from "@/components/ui/FlipClock";
 import SectionLabel from "@/components/ui/SectionLabel";
 
 export default function Contact() {
@@ -74,6 +75,25 @@ export default function Contact() {
           >
             {contactContent.email}
           </a>
+
+          <div className="mt-6 reveal-up">
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "clamp(0.75rem, 1.5vw, 1rem)",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "var(--color-text-tertiary)",
+              }}
+            >
+              Freelance{" "}
+            </span>
+            <FlipClock
+              titles={cyclingTitles}
+              className="flip-clock-contact"
+              intervalMs={4000}
+            />
+          </div>
 
           <div className="flex gap-4 mt-10 reveal-up">
             {contactContent.socials.map((social) => (
