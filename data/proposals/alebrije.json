@@ -1,0 +1,126 @@
+{
+  "slug": "alebrije",
+  "clientName": "Alebrije 741 Wellness Padel Club",
+  "projectTitle": "Fractional CTO & Digital Transformation",
+  "password": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "active",
+  "pdfFilename": "alebrije-proposal.pdf",
+  "sections": {
+    "summary": {
+      "headline": "Alebrije has a solid business. This proposal is about what it can become.",
+      "body": "You know Alebrije better than anyone. 13 courts, a restaurant, a café, a bar, a sports academy, an active client base. The business works, but it's operating below its potential because it doesn't yet have the digital infrastructure to see, understand, and act on what's really happening in its operations.\n\nToday, the global sports industry is undergoing a transformation. Clubs adopting technology and artificial intelligence aren't just operating more efficiently—they're creating experiences their clients can't find anywhere else, making decisions based on real data instead of intuition, and positioning themselves years ahead of their competitors. In Mexico, that transformation is just beginning. And therein lies the opportunity.\n\nWhat José Sanz proposes for Alebrije is a comprehensive technological restructuring for the age of digitalization and artificial intelligence. It's not about installing software or hiring a programmer. It's about rethinking how the club operates from the ground up: building the infrastructure that gives full visibility into internal operations and client relationships, implementing intelligent systems that work proactively—not waiting for instructions—and creating a future-proof technology strategy that positions Alebrije as a benchmark in the Mexican market; additionally, a proprietary technology product, an asset that belongs to the club, that differentiates it from any competitor, and that is replicable.\n\nBeing one of the first premium clubs in Mexico to execute this transformation correctly doesn't just improve operations—it positions Alebrije with a 2–3 year competitive advantage over competitors who still aren't moving. In a market growing as fast as padel in Mexico, that window won't stay open forever.",
+      "highlights": [
+        "A comprehensive technology restructuring plan and headstart, designed specifically for Alebrije based on a diagnosis of its actual operations and desired outcomes",
+        "A proprietary optimization algorithm that belongs 100% to Alebrije—the intelligent engine behind the integrated system, replicable, and the differentiator no competitor has",
+        "CRM, analytics, automated marketing, intelligent bookings, and a 12-month strategy—all built in collaboration with José Delgado",
+        "AI-powered teams achieve development speeds up to 10x faster at half the cost (McKinsey, April 2026)",
+        "2–3 year competitive advantage over competitors who still aren't moving on technology and AI",
+        "Full intellectual property ownership—Alebrije doesn't walk away with just new tools, it walks away with its own IP"
+      ]
+    },
+    "roadmap": [
+      {
+        "phase": "Phase 1 — Comprehensive Diagnosis",
+        "description": "Before proposing anything, José needs to understand your business in depth. This phase establishes the baseline from which every subsequent decision is made.",
+        "deliverables": [
+          "Complete technology audit of everything Alebrije uses today",
+          "Interviews with your key operational team",
+          "Workflow analysis for each business unit",
+          "Data evaluation—what exists and what should exist but doesn't",
+          "Benchmarking against competitors and global references",
+          "AI maturity assessment and technology platform recommendations, evaluated transparently and compared against market alternatives"
+        ]
+      },
+      {
+        "phase": "Phase 2 — Digital Transformation Plan",
+        "description": "With the diagnosis in hand, José Sanz delivers the complete vision. Short term: highest-ROI quick wins, functional website with SEO, CRM implemented, first proprietary client data. Medium term: mature CRM with automation, AI implementations, real-time dashboard, AI-powered integrated operating system, and Alebrije's proprietary algorithm as the optimization engine.",
+        "deliverables": [
+          "Alebrije 2026–2027 Digital Transformation Plan",
+          "Short-term quick wins with highest ROI identified and prioritized",
+          "Functional website with SEO strategy",
+          "CRM implementation plan with automation roadmap",
+          "AI implementation strategy: customer service agent, predictive analytics, dynamic pricing",
+          "Real-time dashboard specification and architecture",
+          "Proprietary algorithm design included in the 12-month roadmap"
+        ]
+      },
+      {
+        "phase": "Phase 3 — Implementation & Launch",
+        "description": "The highest-impact projects are selected and executed directly. Projects running in production plus documentation, team training, and a Continuity Plan for months 4–12.",
+        "deliverables": [
+          "Intelligent booking system—conversational WhatsApp agent that confirms, charges, and books in seconds",
+          "CRM with a real client database—know who your most valuable clients are and when they're at risk of leaving",
+          "AI-powered metrics dashboard—occupancy, revenue, retention, trends, all in real time",
+          "Digitally optimized website—functional web presence with SEO",
+          "Automated marketing—personalized communication based on actual client behavior",
+          "Design and initial development of Alebrije's proprietary algorithm",
+          "AI-integrated operating system—single platform where all operations converge with a proactive AI layer"
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "milestone": "Months 1–3: Headstart",
+        "date": "2026-05-01",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "Diagnosis + Digital Transformation Plan + first projects implemented + proprietary algorithm design",
+        "date": "2026-07-31",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "Months 4–6: Quick wins + consolidated CRM + proprietary algorithm in development",
+        "date": "2026-10-31",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "Months 7–9: Algorithm in production + advanced AI implementations + platform independence",
+        "date": "2027-01-31",
+        "status": "upcoming"
+      },
+      {
+        "milestone": "Months 10–12: Integrated system at full capacity + continuous optimization + Alebrije operating autonomously",
+        "date": "2027-04-30",
+        "status": "upcoming"
+      }
+    ],
+    "investment": {
+      "description": "The final outcome is the same in any scenario: Alebrije technologically restructured with its proprietary algorithm running. What changes drastically is how long it takes to get there—and in a market where speed defines who leads, that changes everything.",
+      "tiers": [
+        {
+          "name": "Option 1 — Fractional CTO",
+          "price": "$45,000 USD / 3 months",
+          "description": "José Sanz as dedicated CTO, 25 hours per week. Progress across all 3 project phases: Diagnosis → Plan → Implementation. Alebrije provides a development team for José to lead during Phase 3.",
+          "includes": [
+            "José Sanz as dedicated CTO, 25 hrs/week",
+            "Diagnosis → Plan → Implementation across all 3 phases",
+            "12-month roadmap + documentation + training + continuity plan",
+            "Up to 2 in-person visits/month to Guadalajara",
+            "Proprietary algorithm (longer timeline)",
+            "Full project timeline: ~18–24 months",
+            "1–2 projects implemented in the 3-month headstart"
+          ],
+          "recommended": false
+        },
+        {
+          "name": "Option 2 — CTO + ZNAS Team",
+          "price": "$58,000 USD / 3 months",
+          "description": "Everything in Option 1, plus the ZNAS development team—AI orchestrators already integrated with José, with zero learning curve. Significantly faster execution with more projects implemented, higher quality, and lower risk.",
+          "includes": [
+            "José Sanz as dedicated CTO, 25 hrs/week",
+            "ZNAS development team—AI orchestrators, zero learning curve",
+            "Dedicated Account Manager—always-available point of contact",
+            "Diagnosis → Plan → Implementation across all 3 phases",
+            "12-month roadmap + documentation + training + continuity plan",
+            "Up to 2 in-person visits/month to Guadalajara",
+            "Proprietary algorithm (accelerated timeline)",
+            "Full project timeline: ~12 months",
+            "3–4+ projects implemented in the 3-month headstart"
+          ],
+          "recommended": true
+        }
+      ]
+    }
+  }
+}

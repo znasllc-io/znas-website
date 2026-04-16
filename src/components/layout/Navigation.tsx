@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { navLinks, siteConfig } from "@/data/content";
 import { useTheme, ACCENT_COLORS } from "@/hooks/useTheme";
+import PageTransition from "@/components/layout/PageTransition";
 
 interface NavigationProps {
   visible: boolean;
@@ -18,6 +19,7 @@ export default function Navigation({ visible }: NavigationProps) {
   const mobileLinksRef = useRef<HTMLAnchorElement[]>([]);
   const { resolved, cycle, accent, setAccent } = useTheme();
   const [statusOpen, setStatusOpen] = useState(false);
+  const triggerExitRef = useRef<((href: string) => void) | null>(null);
 
   // TODO: Replace with real API/system later
   const isAvailable = true;
@@ -287,6 +289,43 @@ export default function Navigation({ visible }: NavigationProps) {
               </a>
             ))}
 
+            {/* Proposals — framed CTA, distinct from scroll links */}
+            <a
+              href="/proposals"
+              onClick={(e) => {
+                e.preventDefault();
+                if (triggerExitRef.current) {
+                  triggerExitRef.current("/proposals");
+                } else {
+                  window.location.href = "/proposals";
+                }
+              }}
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.65rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--color-accent)",
+                textDecoration: "none",
+                border: "1px solid var(--color-accent)",
+                borderRadius: "2px",
+                padding: "0.4rem 0.9rem",
+                transition: "all 0.3s ease",
+                cursor: "none",
+                whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--color-accent)";
+                e.currentTarget.style.color = "var(--color-bg-void)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.color = "var(--color-accent)";
+              }}
+            >
+              Proposals
+            </a>
+
             {/* Theme Toggle — far right, larger */}
             <button
               onClick={cycle}
@@ -403,6 +442,19 @@ export default function Navigation({ visible }: NavigationProps) {
               {link.label}
             </a>
           ))}
+          {/* Proposals link — mobile */}
+          <a
+            href="/proposals"
+            className="text-heading"
+            style={{
+              color: "var(--color-accent)",
+              textDecoration: "none",
+              marginTop: "0.5rem",
+            }}
+          >
+            Proposals
+          </a>
+
           <button
             onClick={cycle}
             className="text-heading mt-4"
@@ -461,6 +513,7 @@ export default function Navigation({ visible }: NavigationProps) {
           </div>
         </div>
       )}
+      <PageTransition onReady={(fn) => { triggerExitRef.current = fn; }} />
     </>
   );
 }
