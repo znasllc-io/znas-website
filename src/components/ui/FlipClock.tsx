@@ -22,45 +22,67 @@ export default function FlipClock({
   const currentIndexRef = useRef(0);
   const isFlippingRef = useRef(false);
   const delayedCallRef = useRef<gsap.core.Tween | null>(null);
+  const activeTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
-  // Split a title into words for word-level wrapping
-  const splitWords = (title: string) => title.split(" ");
-
-  const buildDOM = useCallback(
-    (title: string) => {
+  /**
+   * Build DOM for a title using DocumentFragment (single reflow).
+   * Returns the inner <span> elements for animation targeting.
+   */
+  const buildTitle = useCallback(
+    (title: string): HTMLSpanElement[] => {
       const container = containerRef.current;
-      if (!container) return;
-      container.innerHTML = "";
+      if (!container) return [];
 
-      const words = splitWords(title);
+      const fragment = document.createDocumentFragment();
+      const innerSpans: HTMLSpanElement[] = [];
+      const words = title.split(" ");
+
       words.forEach((word, wi) => {
-        // Word wrapper — stays together as a unit, prevents mid-word breaks
-        const wordDiv = document.createElement("span");
-        wordDiv.className = "flip-clock-word";
-        wordDiv.style.display = "inline-block";
-        wordDiv.style.whiteSpace = "nowrap";
-        wordDiv.style.verticalAlign = "top";
+        const wordEl = document.createElement("span");
+        wordEl.className = "flip-clock-word";
+        wordEl.style.display = "inline-block";
+        wordEl.style.whiteSpace = "nowrap";
+        wordEl.style.verticalAlign = "top";
 
         for (let ci = 0; ci < word.length; ci++) {
-          const charSpan = document.createElement("span");
-          charSpan.className = "flip-clock-char";
+          const charEl = document.createElement("span");
+          charEl.className = "flip-clock-char";
           const inner = document.createElement("span");
           inner.textContent = word[ci];
-          charSpan.appendChild(inner);
-          wordDiv.appendChild(charSpan);
+          charEl.appendChild(inner);
+          wordEl.appendChild(charEl);
+          innerSpans.push(inner);
         }
 
-        container.appendChild(wordDiv);
+        fragment.appendChild(wordEl);
 
-        // Add a regular breaking space between words (not after last word)
         if (wi < words.length - 1) {
-          const space = document.createTextNode(" ");
-          container.appendChild(space);
+          fragment.appendChild(document.createTextNode(" "));
         }
       });
+
+      // Single DOM operation: clear + append
+      container.textContent = "";
+      container.appendChild(fragment);
+
+      return innerSpans;
     },
     []
   );
+
+  const killScheduled = useCallback(() => {
+    if (delayedCallRef.current) {
+      delayedCallRef.current.kill();
+      delayedCallRef.current = null;
+    }
+  }, []);
+
+  const killActiveTimeline = useCallback(() => {
+    if (activeTimelineRef.current) {
+      activeTimelineRef.current.kill();
+      activeTimelineRef.current = null;
+    }
+  }, []);
 
   const flipTo = useCallback(
     (nextIndex: number) => {
@@ -68,73 +90,50 @@ export default function FlipClock({
       if (!container || isFlippingRef.current) return;
 
       isFlippingRef.current = true;
+      killActiveTimeline();
 
-      const currentTitle = titles[currentIndexRef.current];
       const nextTitle = titles[nextIndex];
+      const staggerSec = staggerMs / 1000;
 
       const prefersReducedMotion =
         typeof window !== "undefined" &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       if (prefersReducedMotion) {
-        // Simple crossfade
         const tl = gsap.timeline({
           onComplete: () => {
             currentIndexRef.current = nextIndex;
             isFlippingRef.current = false;
           },
         });
+        activeTimelineRef.current = tl;
         tl.to(container, {
           opacity: 0,
           duration: 0.3,
-          onComplete: () => buildDOM(nextTitle),
+          onComplete: () => { buildTitle(nextTitle); },
         });
         tl.to(container, { opacity: 1, duration: 0.3 });
         return;
       }
 
-      // Get all current char spans for the flip-out
-      const currentChars = container.querySelectorAll<HTMLSpanElement>(
-        ".flip-clock-char > span"
+      // Get current chars for flip-out
+      const currentChars = Array.from(
+        container.querySelectorAll<HTMLSpanElement>(".flip-clock-char > span")
       );
 
-      // Phase 1: Flip out all current characters
-      const staggerSec = staggerMs / 1000;
-      const outTl = gsap.timeline({
+      // Single timeline for the full out→rebuild→in sequence
+      const tl = gsap.timeline({
         onComplete: () => {
-          // Rebuild DOM with new title
-          buildDOM(nextTitle);
-
-          // Phase 2: Flip in new characters
-          const newChars = container.querySelectorAll<HTMLSpanElement>(
-            ".flip-clock-char > span"
-          );
-
-          const inTl = gsap.timeline({
-            onComplete: () => {
-              currentIndexRef.current = nextIndex;
-              isFlippingRef.current = false;
-            },
-          });
-
-          newChars.forEach((span, i) => {
-            gsap.set(span, { rotationX: 90, opacity: 0 });
-            inTl.to(
-              span,
-              {
-                rotationX: 0,
-                opacity: 1,
-                duration: 0.3,
-                ease: "power2.out",
-              },
-              i * staggerSec
-            );
-          });
+          currentIndexRef.current = nextIndex;
+          isFlippingRef.current = false;
+          activeTimelineRef.current = null;
         },
       });
+      activeTimelineRef.current = tl;
 
+      // Phase 1: Flip out current chars
       currentChars.forEach((span, i) => {
-        outTl.to(
+        tl.to(
           span,
           {
             rotationX: -90,
@@ -146,52 +145,73 @@ export default function FlipClock({
           i * staggerSec
         );
       });
+
+      // Phase 2: At the end of flip-out, rebuild DOM and flip in
+      const outDuration = currentChars.length * staggerSec + 0.25;
+      // Phase 2: Rebuild DOM at end of flip-out, then flip in new chars
+      tl.add(() => {
+        const newSpans = buildTitle(nextTitle);
+
+        // Set initial state for flip-in
+        newSpans.forEach((span) => {
+          gsap.set(span, { rotationX: 90, opacity: 0 });
+        });
+
+        // Phase 3: Flip in new chars
+        newSpans.forEach((span, i) => {
+          tl.to(
+            span,
+            {
+              rotationX: 0,
+              opacity: 1,
+              duration: 0.3,
+              ease: "power2.out",
+            },
+            outDuration + 0.05 + i * staggerSec
+          );
+        });
+      }, outDuration);
     },
-    [titles, staggerMs, buildDOM]
+    [titles, staggerMs, buildTitle, killActiveTimeline]
   );
 
   const scheduleNext = useCallback(() => {
-    if (delayedCallRef.current) {
-      delayedCallRef.current.kill();
-      delayedCallRef.current = null;
-    }
+    killScheduled();
 
     delayedCallRef.current = gsap.delayedCall(intervalMs / 1000, () => {
+      delayedCallRef.current = null;
       const nextIndex = (currentIndexRef.current + 1) % titles.length;
       flipTo(nextIndex);
 
-      // Schedule next after flip completes (~1s max)
+      // Schedule next after flip completes
       const maxChars = Math.max(...titles.map((t) => t.length));
-      const flipDuration = 0.55 + (maxChars * staggerMs) / 1000;
+      const flipDuration = 0.6 + (maxChars * staggerMs) / 1000;
+
       delayedCallRef.current = gsap.delayedCall(flipDuration, () => {
-        if (!paused) {
-          scheduleNext();
-        }
+        delayedCallRef.current = null;
+        if (!paused) scheduleNext();
       });
     });
-  }, [intervalMs, titles, flipTo, staggerMs, paused]);
+  }, [intervalMs, titles, flipTo, staggerMs, paused, killScheduled]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Render initial title
-    buildDOM(titles[0]);
+    // Initial render
+    buildTitle(titles[0]);
     currentIndexRef.current = 0;
     isFlippingRef.current = false;
 
-    // Start cycling if not paused
     if (!paused && titles.length > 1) {
       scheduleNext();
     }
 
     return () => {
-      if (delayedCallRef.current) {
-        delayedCallRef.current.kill();
-        delayedCallRef.current = null;
-      }
+      killScheduled();
+      killActiveTimeline();
     };
-  }, [titles, paused, buildDOM, scheduleNext]);
+  }, [titles, paused, buildTitle, scheduleNext, killScheduled, killActiveTimeline]);
 
   return (
     <span

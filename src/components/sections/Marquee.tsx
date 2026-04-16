@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import { gsap } from "@/lib/gsap-config";
 import { marqueeText } from "@/data/content";
 
-export default function Marquee() {
+function Marquee() {
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -71,3 +71,5 @@ export default function Marquee() {
     </section>
   );
 }
+
+export default memo(Marquee);

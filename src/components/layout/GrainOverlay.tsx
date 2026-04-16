@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import { gsap } from "@/lib/gsap-config";
 
-export default function GrainOverlay() {
+function GrainOverlay() {
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -35,3 +35,5 @@ export default function GrainOverlay() {
     </svg>
   );
 }
+
+export default memo(GrainOverlay);

@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import { gsap, SplitText } from "@/lib/gsap-config";
 import { ScrollTrigger } from "@/lib/gsap-config";
 import { aboutContent } from "@/data/content";
 import SectionLabel from "@/components/ui/SectionLabel";
 
-export default function About() {
+function About() {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -180,3 +180,5 @@ export default function About() {
     </section>
   );
 }
+
+export default memo(About);
