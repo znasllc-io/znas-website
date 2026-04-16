@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { testimonialsContent } from "@/data/content";
 import SectionLabel from "@/components/ui/SectionLabel";
 
-export default function Testimonials() {
+function Testimonials() {
   const sectionRef = useRef<HTMLElement>(null);
   const quoteRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -200,3 +200,5 @@ export default function Testimonials() {
     </section>
   );
 }
+
+export default memo(Testimonials);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import { gsap } from "@/lib/gsap-config";
 
 function AnnotationHint() {
@@ -35,7 +35,7 @@ function AnnotationHint() {
   );
 }
 
-export default function CustomCursor() {
+function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -195,3 +195,5 @@ export default function CustomCursor() {
     </>
   );
 }
+
+export default memo(CustomCursor);

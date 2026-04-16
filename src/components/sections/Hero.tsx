@@ -67,6 +67,9 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const nodeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [flipClockActive, setFlipClockActive] = useState(false);
+  const synapseTimelinesRef = useRef<gsap.core.Timeline[]>([]);
+  const synapseDelaysRef = useRef<gsap.core.Tween[]>([]);
+  const pulseTweenRef = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     if (!preloaderDone) return;
@@ -153,7 +156,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
       );
 
       // 6. Pulse 3 key nodes to show the diagram is alive
-      gsap.to(".arch-node-pulse", {
+      pulseTweenRef.current = gsap.to(".arch-node-pulse", {
         scale: 1.15,
         duration: 2.5,
         ease: "sine.inOut",
@@ -178,9 +181,11 @@ export default function Hero({ preloaderDone }: HeroProps) {
             fireTl.to(dot, { opacity: 0.7, duration: 0.3, ease: "power2.out" });
             fireTl.to(dot, { attr: { cx: toNode.x + "%", cy: toNode.y + "%" }, duration: 1.8, ease: "power1.inOut" }, "-=0.1");
             fireTl.to(dot, { opacity: 0, duration: 0.3, ease: "power2.in" }, "-=0.3");
+            synapseTimelinesRef.current.push(fireTl);
           };
 
-          gsap.delayedCall(delay, fireSynapse);
+          const delayCall = gsap.delayedCall(delay, fireSynapse);
+          synapseDelaysRef.current.push(delayCall);
         });
       }
 
@@ -226,7 +231,15 @@ export default function Hero({ preloaderDone }: HeroProps) {
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      pulseTweenRef.current?.kill();
+      pulseTweenRef.current = null;
+      synapseDelaysRef.current.forEach(d => d.kill());
+      synapseTimelinesRef.current.forEach(t => t.kill());
+      synapseDelaysRef.current = [];
+      synapseTimelinesRef.current = [];
+      ctx.revert();
+    };
   }, [preloaderDone]);
 
   // Floating glow

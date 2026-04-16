@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { contactContent, siteConfig, cyclingTitles } from "@/data/content";
 import FlipClock from "@/components/ui/FlipClock";
 import SectionLabel from "@/components/ui/SectionLabel";
 
-export default function Contact() {
+function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -173,3 +173,5 @@ export default function Contact() {
     </section>
   );
 }
+
+export default memo(Contact);

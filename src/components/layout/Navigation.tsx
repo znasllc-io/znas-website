@@ -245,43 +245,6 @@ export default function Navigation({ visible }: NavigationProps) {
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-8">
-            {/* Theme Toggle */}
-            <button
-              onClick={cycle}
-              aria-label={
-                resolved === "dark"
-                  ? "Switch to light mode"
-                  : "Switch to dark mode"
-              }
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "1rem",
-                letterSpacing: "0.1em",
-                color: "var(--color-text-tertiary)",
-                background: "none",
-                border: "1px solid var(--color-border)",
-                borderRadius: "4px",
-                padding: "0.5rem 0.65rem",
-                minWidth: "36px",
-                minHeight: "36px",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "color 0.3s, border-color 0.3s",
-                cursor: "none",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "var(--color-text-primary)";
-                e.currentTarget.style.borderColor = "var(--color-border-hover)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "var(--color-text-tertiary)";
-                e.currentTarget.style.borderColor = "var(--color-border)";
-              }}
-            >
-              {resolved === "dark" ? "☀" : "☾"}
-            </button>
-
             {/* Accent Color Picker */}
             <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
               {ACCENT_COLORS.map((color) => (
@@ -362,6 +325,45 @@ export default function Navigation({ visible }: NavigationProps) {
             >
               Proposals
             </a>
+
+            {/* Theme Toggle — far right, larger */}
+            <button
+              onClick={cycle}
+              aria-label={
+                resolved === "dark"
+                  ? "Switch to light mode"
+                  : "Switch to dark mode"
+              }
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "1.15rem",
+                color: "var(--color-text-secondary)",
+                background: "var(--color-bg-surface)",
+                border: "1px solid var(--color-border)",
+                borderRadius: "6px",
+                padding: "0.55rem 0.85rem",
+                minWidth: "44px",
+                minHeight: "44px",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.3s ease",
+                cursor: "none",
+                marginLeft: "0.5rem",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "var(--color-text-primary)";
+                e.currentTarget.style.borderColor = "var(--color-accent)";
+                e.currentTarget.style.backgroundColor = "var(--color-bg-elevated)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "var(--color-text-secondary)";
+                e.currentTarget.style.borderColor = "var(--color-border)";
+                e.currentTarget.style.backgroundColor = "var(--color-bg-surface)";
+              }}
+            >
+              {resolved === "dark" ? "☀" : "☾"}
+            </button>
           </div>
 
           {/* Hamburger / Close X */}
