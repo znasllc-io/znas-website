@@ -15,6 +15,7 @@ import Journey from "@/components/sections/Journey";
 import Work from "@/components/sections/Work";
 import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
+import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   const [preloaderDone, setPreloaderDone] = useState(false);
@@ -42,6 +43,7 @@ export default function Home() {
         <Work />
         <Testimonials />
         <Contact />
+        <Footer />
       </main>
     </>
   );

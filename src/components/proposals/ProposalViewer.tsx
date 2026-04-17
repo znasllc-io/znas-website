@@ -87,6 +87,7 @@ export default function ProposalViewer({
 
       {/* ── Roadmap ── */}
       <section
+        id="roadmap"
         className="section-padding"
         style={{ backgroundColor: "var(--color-bg-void)" }}
       >
@@ -98,6 +99,7 @@ export default function ProposalViewer({
 
       {/* ── Timeline ── */}
       <section
+        id="timeline"
         style={{ backgroundColor: "var(--color-bg-primary)" }}
       >
         <div className="container" style={{ paddingTop: "clamp(6rem, 12vh, 12rem)" }}>
@@ -108,6 +110,7 @@ export default function ProposalViewer({
 
       {/* ── Investment ── */}
       <section
+        id="investment"
         className="section-padding"
         style={{ backgroundColor: "var(--color-bg-void)" }}
       >
@@ -122,52 +125,6 @@ export default function ProposalViewer({
 
       {/* ── Download CTA ── */}
       <DownloadSection onDownload={onDownload} />
-
-      {/* ── Footer ── */}
-      <footer
-        style={{
-          backgroundColor: "var(--color-bg-primary)",
-          borderTop: "1px solid var(--color-border)",
-          padding: "2rem 0",
-        }}
-      >
-        <div className="container flex items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <img
-              src="/logo.png"
-              alt=""
-              className="logo-img"
-              style={{
-                height: "48px",
-                width: "auto",
-                opacity: 0.9,
-                objectFit: "contain",
-                flexShrink: 0,
-              }}
-            />
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.6rem",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--color-text-tertiary)",
-              }}
-            >
-              ZNAS LLC
-            </span>
-          </div>
-          <span
-            className="text-micro"
-            style={{
-              fontFamily: "var(--font-mono)",
-              color: "var(--color-text-tertiary)",
-            }}
-          >
-            Confidential
-          </span>
-        </div>
-      </footer>
     </div>
   );
 }
@@ -205,6 +162,7 @@ function SummarySection({
 
   return (
     <section
+      id="summary"
       ref={sectionRef}
       className="section-padding"
       style={{ backgroundColor: "var(--color-bg-primary)" }}

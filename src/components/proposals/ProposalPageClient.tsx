@@ -2,7 +2,8 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import type { SafeProposal } from "@/lib/proposals";
-import ProposalNav from "./ProposalNav";
+import Navigation from "@/components/layout/Navigation";
+import Footer from "@/components/layout/Footer";
 import PasswordGate from "./PasswordGate";
 import ProposalViewer from "./ProposalViewer";
 import CustomCursor from "@/components/layout/CustomCursor";
@@ -20,10 +21,22 @@ export default function ProposalPageClient({
   const [proposal, setProposal] = useState<SafeProposal | null>(null);
   const passwordRef = useRef<string>("");
 
+  // Check sessionStorage for pre-auth from inline code entry
+  useEffect(() => {
+    const stored = sessionStorage.getItem(`znas-proposal-${slug}`);
+    if (stored) {
+      try {
+        const { proposal: data, password } = JSON.parse(stored);
+        setProposal(data);
+        passwordRef.current = password;
+      } catch { /* ignore parse errors */ }
+      sessionStorage.removeItem(`znas-proposal-${slug}`);
+    }
+  }, [slug]);
+
   const handleSuccess = useCallback(
     (data: SafeProposal, password: string) => {
       passwordRef.current = password;
-      // Small delay to let the exit animation complete
       setTimeout(() => setProposal(data), 600);
     },
     []
@@ -56,7 +69,7 @@ export default function ProposalPageClient({
     }
   }, [slug]);
 
-  // Security: clear proposal data on unmount (browser history/back nav)
+  // Security: clear proposal data on unmount
   useEffect(() => {
     return () => {
       setProposal(null);
@@ -77,8 +90,18 @@ export default function ProposalPageClient({
         />
       ) : (
         <>
-          <ProposalNav title="Proposal" />
+          <Navigation
+            navOverride={[
+              { label: "Summary", href: "#summary" },
+              { label: "Roadmap", href: "#roadmap" },
+              { label: "Timeline", href: "#timeline" },
+              { label: "Investment", href: "#investment" },
+            ]}
+            backHref="/proposals"
+            backLabel="Back"
+          />
           <ProposalViewer proposal={proposal} onDownload={handleDownload} />
+          <Footer />
         </>
       )}
     </>

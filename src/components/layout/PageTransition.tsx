@@ -38,6 +38,7 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
     sessionStorage.setItem("znas-page-transition", "1");
 
     const tl = gsap.timeline({
+      defaults: { force3D: true },
       onComplete: () => {
         window.location.href = href;
       },
@@ -60,10 +61,10 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
       sessionStorage.removeItem("znas-page-transition");
 
       // Start covering, then split apart
-      gsap.set(top, { yPercent: 0 });
-      gsap.set(bottom, { yPercent: 0 });
+      gsap.set(top, { yPercent: 0, force3D: true });
+      gsap.set(bottom, { yPercent: 0, force3D: true });
 
-      const tl = gsap.timeline();
+      const tl = gsap.timeline({ defaults: { force3D: true } });
       tl.to(top, { yPercent: -100, duration: 0.6, ease: "power3.inOut" });
       tl.to(bottom, { yPercent: 100, duration: 0.6, ease: "power3.inOut" }, "<");
     } else {
@@ -89,6 +90,8 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
           backgroundColor: "var(--color-bg-void)",
           zIndex: 99998,
           pointerEvents: "none",
+          willChange: "transform",
+          transform: "translateZ(0)",
         }}
       />
       <div
@@ -102,6 +105,8 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
           backgroundColor: "var(--color-bg-void)",
           zIndex: 99998,
           pointerEvents: "none",
+          willChange: "transform",
+          transform: "translateZ(0)",
         }}
       />
     </>

@@ -135,40 +135,6 @@ function Contact() {
           </div>
         </div>
 
-        {/* Footer */}
-        <div
-          className="mt-24 pt-8 flex items-center justify-between reveal-up"
-          style={{ borderTop: "1px solid var(--color-border)" }}
-        >
-          <div className="flex flex-col gap-1">
-            <img
-              src="/logo.png"
-              alt=""
-              className="logo-img"
-              style={{ height: "48px", width: "auto", opacity: 0.9, objectFit: "contain", flexShrink: 0 }}
-            />
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.6rem",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--color-text-tertiary)",
-              }}
-            >
-              {siteConfig.name} LLC
-            </span>
-          </div>
-          <span
-            className="text-micro"
-            style={{
-              fontFamily: "var(--font-mono)",
-              color: "var(--color-text-tertiary)",
-            }}
-          >
-            © 2026
-          </span>
-        </div>
       </div>
     </section>
   );
