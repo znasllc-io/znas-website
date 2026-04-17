@@ -63,7 +63,7 @@ export default function ProposalPageClient({
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${slug}-proposal.pdf`;
+      a.download = lang === "es" ? "Alebrijes_ES.pdf" : "Alebrijes_EN.pdf";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
