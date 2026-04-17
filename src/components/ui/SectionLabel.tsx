@@ -70,7 +70,7 @@ export default function SectionLabel({ number, label }: SectionLabelProps) {
         className="text-micro"
         style={{ color: "var(--color-text-tertiary)" }}
       >
-        — {label}
+        / {label}
       </span>
       <div
         ref={ruleRef}

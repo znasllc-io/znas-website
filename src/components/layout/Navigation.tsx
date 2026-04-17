@@ -111,7 +111,7 @@ export default function Navigation({ visible }: NavigationProps) {
         <div className="container flex items-center justify-between">
           <a
             href="#"
-            aria-label={`${siteConfig.name} — return to top`}
+            aria-label={`${siteConfig.name}, return to top`}
             style={{
               textDecoration: "none",
               display: "inline-flex",
@@ -173,7 +173,7 @@ export default function Navigation({ visible }: NavigationProps) {
                 }}
               />
               {/* ALTERNATE COPY (pending Jose confirmation): "Available part-time — currently founding Visionarys.io" */}
-              {isAvailable ? "Available — Part-Time" : "Unavailable"}
+              {isAvailable ? "Available | Part-Time" : "Unavailable"}
             </button>
 
             {/* Status popup */}

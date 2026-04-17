@@ -19,10 +19,16 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const [prefersReduced, setPrefersReduced] = useState(false);
 
   useEffect(() => {
+    // Skip preloader on back/forward navigation (bfcache restore)
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) onComplete();
+    };
+    window.addEventListener("pageshow", handlePageShow);
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setPrefersReduced(true);
       onComplete();
-      return;
+      return () => window.removeEventListener("pageshow", handlePageShow);
     }
 
     const tl = gsap.timeline({
@@ -106,6 +112,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     return () => {
       clearTimeout(fallback);
       tl.kill();
+      window.removeEventListener("pageshow", handlePageShow);
     };
   }, [onComplete]);
 

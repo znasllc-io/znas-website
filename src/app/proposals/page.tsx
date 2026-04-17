@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import ProposalListClient from "@/components/proposals/ProposalListClient";
 
 export const metadata: Metadata = {
-  title: "Proposals — ZNAS",
+  title: "Proposals | ZNAS",
   description: "Access your ZNAS project proposal.",
 };
 

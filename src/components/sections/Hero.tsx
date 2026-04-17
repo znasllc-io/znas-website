@@ -1,19 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap, SplitText } from "@/lib/gsap-config";
 import FlipClock from "@/components/ui/FlipClock";
 import { heroContent, siteConfig, cyclingTitles } from "@/data/content";
-
-// Synapse connections — subset of backbone connections for neural firing effect
-const SYNAPSE_CONNECTIONS: [string, string][] = [
-  ["client", "gateway"],
-  ["gateway", "services"],
-  ["services", "data"],
-  ["data", "cache"],
-  ["queue", "monitor"],
-  ["auth", "data"],
-];
 
 // Architecture diagram nodes — positioned as % of viewport
 const NODES = [
@@ -63,11 +53,41 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const flipClockRef = useRef<HTMLDivElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const lineRefs = useRef<Map<number, SVGLineElement>>(new Map());
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [flipClockActive, setFlipClockActive] = useState(false);
-  const synapseTimelinesRef = useRef<gsap.core.Timeline[]>([]);
-  const synapseDelaysRef = useRef<gsap.core.Tween[]>([]);
   const pulseTweenRef = useRef<gsap.core.Tween | null>(null);
+  // Track magnetic offsets in px for each node (used to update SVG lines)
+  const nodeOffsetsRef = useRef<Map<string, { x: number; y: number }>>(new Map());
+
+  // Update SVG line endpoints to follow node offsets
+  const updateLines = useCallback(() => {
+    const diagram = diagramRef.current;
+    if (!diagram) return;
+    const rect = diagram.getBoundingClientRect();
+    if (rect.width === 0) return;
+
+    CONNECTIONS.forEach(([fromId, toId], i) => {
+      const line = lineRefs.current.get(i);
+      if (!line) return;
+
+      const fromNode = NODES.find((n) => n.id === fromId)!;
+      const toNode = NODES.find((n) => n.id === toId)!;
+      const fromOffset = nodeOffsetsRef.current.get(fromId) || { x: 0, y: 0 };
+      const toOffset = nodeOffsetsRef.current.get(toId) || { x: 0, y: 0 };
+
+      // Convert px offset to percentage of container
+      const fromOffsetPctX = (fromOffset.x / rect.width) * 100;
+      const fromOffsetPctY = (fromOffset.y / rect.height) * 100;
+      const toOffsetPctX = (toOffset.x / rect.width) * 100;
+      const toOffsetPctY = (toOffset.y / rect.height) * 100;
+
+      line.setAttribute("x1", `${fromNode.x + fromOffsetPctX}%`);
+      line.setAttribute("y1", `${fromNode.y + fromOffsetPctY}%`);
+      line.setAttribute("x2", `${toNode.x + toOffsetPctX}%`);
+      line.setAttribute("y2", `${toNode.y + toOffsetPctY}%`);
+    });
+  }, []);
 
   useEffect(() => {
     if (!preloaderDone) return;
@@ -153,7 +173,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
         "-=0.5"
       );
 
-      // 6. Pulse 3 key nodes to show the diagram is alive
+      // 6. Pulse key nodes to show the diagram is alive
       pulseTweenRef.current = gsap.to(".arch-node-pulse", {
         scale: 1.15,
         duration: 2.5,
@@ -164,30 +184,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
         delay: tl.duration() + 0.5,
       });
 
-      // 7. Synapse neural firing — dots travel along connection lines
-      const synapseDots = sectionRef.current?.querySelectorAll(".synapse-dot");
-      if (synapseDots && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        SYNAPSE_CONNECTIONS.forEach((conn, i) => {
-          const fromNode = getNode(conn[0]);
-          const toNode = getNode(conn[1]);
-          const delay = tl.duration() + 1 + (i * 1.2);
-          const dot = synapseDots[i];
-
-          const fireSynapse = () => {
-            const fireTl = gsap.timeline({ repeat: -1, repeatDelay: 5 + (i * 0.8) });
-            fireTl.set(dot, { attr: { cx: fromNode.x + "%", cy: fromNode.y + "%" }, opacity: 0 });
-            fireTl.to(dot, { opacity: 0.7, duration: 0.3, ease: "power2.out" });
-            fireTl.to(dot, { attr: { cx: toNode.x + "%", cy: toNode.y + "%" }, duration: 1.8, ease: "power1.inOut" }, "-=0.1");
-            fireTl.to(dot, { opacity: 0, duration: 0.3, ease: "power2.in" }, "-=0.3");
-            synapseTimelinesRef.current.push(fireTl);
-          };
-
-          const delayCall = gsap.delayedCall(delay, fireSynapse);
-          synapseDelaysRef.current.push(delayCall);
-        });
-      }
-
-      // 8. Register parallax exit on scroll after entry completes
+      // 7. Register parallax exit on scroll after entry completes
       tl.call(() => {
         setFlipClockActive(true);
         gsap.to(".hero-content", {
@@ -219,10 +216,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
     return () => {
       pulseTweenRef.current?.kill();
       pulseTweenRef.current = null;
-      synapseDelaysRef.current.forEach(d => d.kill());
-      synapseTimelinesRef.current.forEach(t => t.kill());
-      synapseDelaysRef.current = [];
-      synapseTimelinesRef.current = [];
       ctx.revert();
     };
   }, [preloaderDone]);
@@ -241,7 +234,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
     return () => { tween.kill(); };
   }, []);
 
-  // Magnetic node attraction
+  // Magnetic node attraction — nodes AND lines move together
   useEffect(() => {
     if (!preloaderDone) return;
 
@@ -255,15 +248,38 @@ export default function Hero({ preloaderDone }: HeroProps) {
     const MAGNETIC_RADIUS = 80;
     const MAGNETIC_STRENGTH = 0.4;
 
-    // Setup quickTo for each node
+    // Initialize offsets
+    NODES.forEach(node => {
+      nodeOffsetsRef.current.set(node.id, { x: 0, y: 0 });
+    });
+
+    // Setup quickTo for each node — with onUpdate to track offsets and update lines
     const quickTos = new Map<string, { x: ReturnType<typeof gsap.quickTo>; y: ReturnType<typeof gsap.quickTo> }>();
 
     NODES.forEach(node => {
       const el = nodeRefs.current.get(node.id);
       if (!el) return;
       quickTos.set(node.id, {
-        x: gsap.quickTo(el, "x", { duration: 0.3, ease: "power3.out" }),
-        y: gsap.quickTo(el, "y", { duration: 0.3, ease: "power3.out" }),
+        x: gsap.quickTo(el, "x", {
+          duration: 0.3,
+          ease: "power3.out",
+          onUpdate: () => {
+            const transform = gsap.getProperty(el, "x") as number;
+            const offset = nodeOffsetsRef.current.get(node.id);
+            if (offset) offset.x = transform;
+            updateLines();
+          },
+        }),
+        y: gsap.quickTo(el, "y", {
+          duration: 0.3,
+          ease: "power3.out",
+          onUpdate: () => {
+            const transform = gsap.getProperty(el, "y") as number;
+            const offset = nodeOffsetsRef.current.get(node.id);
+            if (offset) offset.y = transform;
+            updateLines();
+          },
+        }),
       });
     });
 
@@ -274,7 +290,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
         const quickTo = quickTos.get(node.id);
         if (!quickTo) return;
 
-        // Node center position in viewport coordinates
         const nodeCenterX = rect.left + (node.x / 100) * rect.width;
         const nodeCenterY = rect.top + (node.y / 100) * rect.height;
 
@@ -310,7 +325,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
       diagram.removeEventListener("mousemove", handleMouseMove);
       diagram.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [preloaderDone]);
+  }, [preloaderDone, updateLines]);
 
   const getNode = (id: string) => NODES.find((n) => n.id === id)!;
 
@@ -345,16 +360,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
         className="absolute inset-0 w-full h-full pointer-events-none"
         style={{ zIndex: 1 }}
       >
-        {/* Glow filter for synapse dots */}
-        <defs>
-          <filter id="synapse-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="2" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
         {CONNECTIONS.map(([fromId, toId], i) => {
           const from = getNode(fromId);
           const to = getNode(toId);
@@ -363,6 +368,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
           return (
             <line
               key={i}
+              ref={(el) => { if (el) lineRefs.current.set(i, el); }}
               className="arch-line"
               x1={`${from.x}%`}
               y1={`${from.y}%`}
@@ -375,19 +381,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
             />
           );
         })}
-        {/* Synapse dots — travel along connections like neurons firing */}
-        {SYNAPSE_CONNECTIONS.map((_, i) => (
-          <circle
-            key={`synapse-${i}`}
-            className="synapse-dot"
-            r="2"
-            fill="var(--color-accent)"
-            filter="url(#synapse-glow)"
-            opacity="0"
-            cx="0%"
-            cy="0%"
-          />
-        ))}
       </svg>
 
       {/* Architecture nodes */}
@@ -412,7 +405,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
                 transform: "translate(-50%, -50%)",
                 zIndex: isHovered ? 10 : 1,
                 willChange: "transform",
-                /* Larger hit area via transparent border — no padding/margin shift */
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -423,7 +415,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
               onMouseEnter={() => setHoveredNode(node.id)}
               onMouseLeave={() => setHoveredNode(null)}
             >
-              {/* Node dot — centered in the 48px hit area */}
+              {/* Node dot */}
               <div
                 className={
                   ["services", "data", "gateway", "monitor"].includes(node.id)
@@ -434,11 +426,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
                   width: isHovered ? 14 : 8,
                   height: isHovered ? 14 : 8,
                   borderRadius: "50%",
-                  backgroundColor: isHovered
-                    ? "var(--color-accent)"
-                    : isConnected
-                      ? "var(--color-accent)"
-                      : "var(--color-accent)",
+                  backgroundColor: "var(--color-accent)",
                   opacity: isHovered ? 0.9 : isConnected ? 0.5 : 0.35,
                   boxShadow: isHovered
                     ? "0 0 20px var(--color-accent-glow)"

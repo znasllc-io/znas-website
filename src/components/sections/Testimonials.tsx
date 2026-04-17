@@ -94,7 +94,7 @@ function Testimonials() {
               style={{ color: "var(--color-text-tertiary)" }}
               data-code-comment="// via linkedin.Recommend()"
             >
-              — {quote.author}, {quote.role}
+              {quote.author}, {quote.role}
             </p>
           </div>
 

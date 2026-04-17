@@ -224,8 +224,8 @@ export default function InvestmentCards({
               <div
                 style={{
                   position: "absolute",
-                  top: "-1px",
-                  right: "1.5rem",
+                  top: "0.75rem",
+                  right: "0.75rem",
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.6rem",
                   letterSpacing: "0.15em",
@@ -234,7 +234,7 @@ export default function InvestmentCards({
                   backgroundColor: "var(--color-bg-surface)",
                   border: "1px solid var(--color-accent)",
                   padding: "0.25rem 0.75rem",
-                  transform: "translateY(-50%)",
+                  zIndex: 1,
                 }}
               >
                 Recommended

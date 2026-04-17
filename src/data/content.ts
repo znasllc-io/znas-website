@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "ZNAS",
-  title: "Jose Sanz — Software Architect & Consultant | ZNAS",
+  title: "Jose Sanz | Software Architect & Consultant | ZNAS",
   description:
     "Jose Sanz is a Software Architect with 17 years building distributed systems across healthcare, airlines, finance, and telecom. MIT-certified in AI Strategy. Founder of Znas LLC. Based in Tucson, AZ.",
   url: "https://znas.io",
@@ -27,7 +27,7 @@ export const aboutContent = {
   label: "About",
   statement: "I build the systems that organizations depend on to operate.",
   paragraphs: [
-    "I'm Jose Sanz — founder of Znas LLC and co-founder of Visionarys. For over 17 years I've engineered and architected production software across healthcare, airlines, finance, and telecommunications.",
+    "I'm Jose Sanz, founder of Znas LLC and co-founder of Visionarys. For over 17 years I've engineered and architected production software across healthcare, airlines, finance, and telecommunications.",
     "My career has taken me from call center workflow systems at Afni, to airline technology at Amadeus IT Group, to a 12-year run at CyraCom where I grew from Software Developer to Junior Software Architect leading distributed systems and mobile platforms.",
     "I'm MIT-certified in AI Business Strategy and actively building AI-powered tools and developer infrastructure through Znas LLC. Fluent in English and Spanish. Based in Tucson, AZ.",
   ],
@@ -100,35 +100,35 @@ export const journeyContent = {
   label: "Journey",
   milestones: [
     {
-      year: "2008 — 2011",
+      year: "2008 to 2011",
       role: "Software Engineer",
       company: "Afni",
       description:
         "Started my career building user-friendly applications for call center workflows. Engineered OOP-based software frameworks, conducted research on emerging technologies, and developed proofs of concept for new systems.",
     },
     {
-      year: "2011 — 2013",
+      year: "2011 to 2013",
       role: "Applications Developer",
       company: "Amadeus IT Group",
       description:
         "Built enterprise applications within the global airline distribution and passenger data ecosystem at a leading GDS provider. Worked across high-compliance environments supporting both commercial aviation and regulated government data requirements, delivering production systems on distributed .NET platforms.",
     },
     {
-      year: "2013 — 2025",
+      year: "2013 to 2025",
       role: "Software Developer → Architect",
       company: "CyraCom Language Solutions",
       description:
         "A 12-year career progression from Software Developer through Senior Developer, Lead Developer, and ultimately Junior Software Architect. Drove innovation across language platform infrastructure, distributed systems, and mobile.",
     },
     {
-      year: "2017 — Present",
+      year: "2017 to Present",
       role: "Founder & CEO",
       company: "Znas LLC",
       description:
         "Founded Znas LLC to bring deep software engineering expertise directly to organizations. Building scalable applications across healthcare, finance, airlines, and telecom. Open-source contributor and developer tooling author.",
     },
     {
-      year: "2025 — Present",
+      year: "2025 to Present",
       role: "Co-Founder & CEO",
       company: "Visionarys",
       description:
@@ -148,7 +148,7 @@ export const workContent = {
       approach:
         "An AI-powered workplace agent and communication platform that brings context-aware automation into team collaboration.",
       impact:
-        "Startup product shipping at Visionarys — bridging AI agents with real-time team workflows.",
+        "Startup product shipping at Visionarys, bridging AI agents with real-time team workflows.",
       tags: ["AI", "Real-Time", "Platform", "Visionarys"],
     },
     {
@@ -168,11 +168,11 @@ export const workContent = {
       approach:
         "Go code generator that reads AsyncAPI specs and produces production-ready client and server code automatically.",
       impact:
-        "Open-source tool eliminating manual boilerplate — shipping messaging infrastructure 10x faster.",
+        "Open-source tool eliminating manual boilerplate. Ships messaging infrastructure 10x faster.",
       tags: ["Go", "AsyncAPI", "Distributed Systems", "Open Source"],
     },
     {
-      title: "t4t — Tag-based Filesystem",
+      title: "t4t: Tag-based Filesystem",
       challenge:
         "Hierarchical folder structures break down as projects and contexts multiply across a developer's filesystem.",
       approach:
@@ -194,7 +194,7 @@ export const testimonialsContent = {
       role: "AI Process Automation, Intuit",
     },
     {
-      text: "I can't say enough good things about Jose. He did not disappoint — his technical skills are top notch, but more than that, he has a firm grasp of the soft skills necessary to help a team work better together. If you need a software developer to lead your team who also has a firm grasp of the business side, Jose is your guy.",
+      text: "I can't say enough good things about Jose. He did not disappoint. His technical skills are top notch, but more than that, he has a firm grasp of the soft skills necessary to help a team work better together. If you need a software developer to lead your team who also has a firm grasp of the business side, Jose is your guy.",
       author: "Allen Trevethan",
       role: "Technologist & Entrepreneur",
     },

@@ -11,6 +11,7 @@ export interface ProposalMilestone {
   milestone: string;
   date: string;
   status: "upcoming" | "in-progress" | "complete";
+  description?: string;
 }
 
 export interface ProposalTier {
