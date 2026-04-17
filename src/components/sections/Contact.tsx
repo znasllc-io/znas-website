@@ -76,12 +76,12 @@ function Contact() {
             {contactContent.email}
           </a>
 
-          <div className="mt-6 reveal-up">
+          <div className="mt-6 reveal-up" style={{ overflow: "hidden" }}>
             <span
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "clamp(0.75rem, 1.5vw, 1rem)",
-                letterSpacing: "0.15em",
+                fontSize: "clamp(0.65rem, 1.5vw, 1rem)",
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 color: "var(--color-text-tertiary)",
               }}

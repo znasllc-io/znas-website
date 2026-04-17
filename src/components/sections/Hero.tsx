@@ -479,7 +479,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
           Jose Sanz | Tucson, AZ
         </div>
 
-        <h1 className="text-hero-inline" style={{ whiteSpace: "nowrap" }}>
+        <h1 className="text-hero-inline">
           <span ref={line1Ref} style={{ verticalAlign: "baseline" }}>{heroContent.headline[0]}</span>{" "}
           <span ref={flipClockRef} style={{ opacity: 0, verticalAlign: "baseline" }}>
             <FlipClock
@@ -502,7 +502,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
 
         <div
           ref={ctaRef}
-          className="mt-10 flex items-center gap-6"
+          className="mt-10 flex items-center gap-4 flex-wrap"
         >
           <a
             href="#contact"
@@ -515,6 +515,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
               fontSize: "0.75rem",
               letterSpacing: "0.08em",
               textTransform: "uppercase" as const,
+              whiteSpace: "nowrap",
               color: "var(--color-accent)",
               border: "1px solid var(--color-accent)",
               borderRadius: "2px",
