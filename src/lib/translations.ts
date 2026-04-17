@@ -18,7 +18,13 @@ export interface ProposalViewerStrings {
   label: string;
   preparedFor: string;
   sections: { executiveSummary: string; roadmap: string; timeline: string; investment: string };
-  download: { headline: string; subtitle: string; button: string };
+  download: {
+    headline: string;
+    subtitle: string;
+    button: string;
+    errorRefresh: string;
+    errorFailed: string;
+  };
   nav: { summary: string; roadmap: string; timeline: string; investment: string };
 }
 
@@ -43,6 +49,8 @@ export interface LangStrings {
     availabilityDesc: string;
     unavailabilityDesc: string;
     langButton: string;
+    lightLabel: string;
+    darkLabel: string;
   };
   hero: {
     tagline: string;
@@ -111,6 +119,8 @@ export const translations: Record<Lang, LangStrings> = {
       unavailabilityDesc:
         "Jose is currently focused on existing projects. Check back soon.",
       langButton: "ES",
+      lightLabel: "Light",
+      darkLabel: "Dark",
     },
     hero: {
       tagline: "Jose Sanz | Arizona, USA",
@@ -271,6 +281,8 @@ export const translations: Record<Lang, LangStrings> = {
           headline: "Ready to move forward?",
           subtitle: "Download the full proposal document for your records.",
           button: "Download Full Proposal",
+          errorRefresh: "Unable to download. Please refresh and try again.",
+          errorFailed: "Download failed. Please try again.",
         },
         nav: {
           summary: "Summary",
@@ -321,62 +333,64 @@ export const translations: Record<Lang, LangStrings> = {
       availablePartTime: "Disponible Medio Tiempo",
       currentlyBooked: "Actualmente Reservado",
       availabilityDesc:
-        "Jose esta disponible 25 horas/semana para consultorias y proyectos de arquitectura. 2 clientes actualmente en lista.",
+        "José está disponible 25 horas/semana para consultorías y proyectos de arquitectura. 2 clientes actualmente en lista.",
       unavailabilityDesc:
-        "Jose esta enfocado en proyectos existentes. Vuelve pronto.",
+        "José está enfocado en proyectos existentes. Vuelve pronto.",
       langButton: "EN",
+      lightLabel: "Claro",
+      darkLabel: "Oscuro",
     },
     hero: {
-      tagline: "Jose Sanz | Arizona, EE.UU.",
+      tagline: "José Sanz | Arizona, EE.UU.",
       subtitle:
-        "17 anos diseñando sistemas a escala y ayudando a empresas de todos los tamaños con sus objetivos tecnologicos.",
+        "17 años diseñando sistemas a escala y ayudando a empresas de todos los tamaños con sus objetivos tecnológicos.",
       cta: "Iniciar un proyecto →",
       scrollCta: "Desplaza para explorar",
       cyclingTitles: [
         "Arquitecto de Software",
         "Ingeniero de IA",
         "Ingeniero de Sistemas",
-        "Desarrollador Movil",
+        "Desarrollador Móvil",
         "Desarrollador de Aplicaciones",
-        "Consultor Tecnologico",
+        "Consultor Tecnológico",
       ],
     },
     about: {
       label: "Acerca",
       statement: "Construyo los sistemas que las organizaciones necesitan para operar.",
-      bio: "Soy Jose Sanz, fundador de Znas LLC y cofundador de Visionarys. Durante mas de 17 anos he disenado y arquitectado software de produccion en salud, aerolineas, finanzas y telecomunicaciones.",
+      bio: "Soy José Sanz, fundador de Znas LLC y cofundador de Visionarys. Durante más de 17 años he diseñado y arquitectado software de producción en salud, aerolíneas, finanzas y telecomunicaciones.",
       statLabels: [
-        "Anos de Experiencia",
+        "Años de Experiencia",
         "Industrias",
         "Empresas Fundadas",
         "Certificado en IA",
-        "Bilingue",
+        "Bilingüe",
         "Arizona, EE.UU.",
       ],
     },
     expertise: {
       label: "Experiencia",
-      stackLayerLabels: ["Sistemas", "Ingenieria", "Infraestructura", "IA y Estrategia"],
+      stackLayerLabels: ["Sistemas", "Ingeniería", "Infraestructura", "IA y Estrategia"],
       pillars: [
         {
           title: "Arquitectura de Sistemas",
           description:
-            "Diseno de sistemas distribuidos, microservicios y APIs publicas que manejan carga real en produccion. Del whiteboard al despliegue en salud, aerolineas, finanzas y telecomunicaciones.",
+            "Diseño de sistemas distribuidos, microservicios y APIs públicas que manejan carga real en producción. Del whiteboard al despliegue en salud, aerolíneas, finanzas y telecomunicaciones.",
         },
         {
-          title: "Ingenieria Full-Stack",
+          title: "Ingeniería Full-Stack",
           description:
-            "Desarrollo integral en movil, web, IoT y blockchain. 17 anos enviando software de produccion en multiples stacks e industrias.",
+            "Desarrollo integral en móvil, web, IoT y blockchain. 17 años enviando software de producción en múltiples stacks e industrias.",
         },
         {
-          title: "IA y Tecnologia Emergente",
+          title: "IA y Tecnología Emergente",
           description:
-            "Certificado por MIT en Estrategia de Negocios con IA. Construyendo aplicaciones impulsadas por IA, agentes inteligentes y herramientas para desarrolladores. Apasionado por cerrar la brecha entre la investigacion de IA de vanguardia y la ingenieria de productos real.",
+            "Certificado por MIT en Estrategia de Negocios con IA. Construyendo aplicaciones impulsadas por IA, agentes inteligentes y herramientas para desarrolladores. Apasionado por cerrar la brecha entre la investigación de IA de vanguardia y la ingeniería de productos real.",
         },
         {
           title: "Liderazgo de Startups",
           description:
-            "Fundador de Znas LLC (2017) y Cofundador de Visionarys (2025). Experiencia en arquitectar equipos, delegar trabajo tecnico y conectar ingenieria con estrategia de negocio.",
+            "Fundador de Znas LLC (2017) y Cofundador de Visionarys (2025). Experiencia en arquitectar equipos, delegar trabajo técnico y conectar ingeniería con estrategia de negocio.",
         },
       ],
     },
@@ -386,68 +400,68 @@ export const translations: Record<Lang, LangStrings> = {
         {
           role: "Ingeniero de Software",
           description:
-            "Comence mi carrera desarrollando aplicaciones para flujos de trabajo de centros de llamadas. Disene frameworks de software basados en POO, realize investigacion sobre tecnologias emergentes y desarrolle pruebas de concepto para nuevos sistemas.",
+            "Comencé mi carrera desarrollando aplicaciones para flujos de trabajo de centros de llamadas. Diseñé frameworks de software basados en POO, realicé investigación sobre tecnologías emergentes y desarrollé pruebas de concepto para nuevos sistemas.",
         },
         {
           role: "Desarrollador de Aplicaciones",
           description:
-            "Construi aplicaciones empresariales dentro del ecosistema global de distribucion aerea y datos de pasajeros en un proveedor GDS lider. Trabaje en entornos de alto cumplimiento que soportaban aviacion comercial y requerimientos regulatorios gubernamentales, entregando sistemas en produccion sobre plataformas .NET distribuidas.",
+            "Construí aplicaciones empresariales dentro del ecosistema global de distribución aérea y datos de pasajeros en un proveedor GDS líder. Trabajé en entornos de alto cumplimiento que soportaban aviación comercial y requerimientos regulatorios gubernamentales, entregando sistemas en producción sobre plataformas .NET distribuidas.",
         },
         {
           role: "Desarrollador de Software → Arquitecto",
           description:
-            "Una progresion de 12 anos desde Desarrollador de Software hasta Desarrollador Senior, Lider de Desarrollo y finalmente Arquitecto de Software Junior. Impulse la innovacion en infraestructura de plataforma de idiomas, sistemas distribuidos y movil.",
+            "Una progresión de 12 años desde Desarrollador de Software hasta Desarrollador Senior, Líder de Desarrollo y finalmente Arquitecto de Software Junior. Impulsé la innovación en infraestructura de plataforma de idiomas, sistemas distribuidos y móvil.",
         },
         {
           role: "Fundador y CEO",
           description:
-            "Funde Znas LLC para llevar experiencia profunda en ingenieria de software directamente a organizaciones. Construyendo aplicaciones escalables en salud, finanzas, aerolineas y telecomunicaciones. Contribuidor de codigo abierto y autor de herramientas para desarrolladores.",
+            "Fundé Znas LLC para llevar experiencia profunda en ingeniería de software directamente a organizaciones. Construyendo aplicaciones escalables en salud, finanzas, aerolíneas y telecomunicaciones. Contribuidor de código abierto y autor de herramientas para desarrolladores.",
         },
         {
           role: "Cofundador y CEO",
           description:
-            "Cofunde Visionarys para perseguir el proximo capitulo en software impulsado por IA y ventures de startups. Combinando 17 anos de profundidad en ingenieria con liderazgo estrategico de producto.",
+            "Cofundé Visionarys para perseguir el próximo capítulo en software impulsado por IA y emprendimientos de startups. Combinando 17 años de profundidad en ingeniería con liderazgo estratégico de producto.",
         },
       ],
     },
     work: {
       label: "Proyectos",
-      challengeLabel: "Desafio",
+      challengeLabel: "Desafío",
       approachLabel: "Enfoque",
       impactLabel: "Impacto",
-      moreLabel: "Y muchos mas →",
+      moreLabel: "Y muchos más →",
       projects: [
         {
           challenge:
-            "Las herramientas de comunicacion en equipo carecen de conciencia contextual, forzando coordinacion manual en flujos de trabajo fragmentados.",
+            "Las herramientas de comunicación en equipo carecen de conciencia contextual, forzando coordinación manual en flujos de trabajo fragmentados.",
           approach:
-            "Un agente de trabajo impulsado por IA y plataforma de comunicacion que lleva automatizacion consciente del contexto a la colaboracion en equipo.",
+            "Un agente de trabajo impulsado por IA y plataforma de comunicación que lleva automatización consciente del contexto a la colaboración en equipo.",
           impact:
-            "Producto de startup en produccion en Visionarys, conectando agentes de IA con flujos de trabajo en tiempo real.",
+            "Producto de startup en producción en Visionarys, conectando agentes de IA con flujos de trabajo en tiempo real.",
         },
         {
           challenge:
-            "Los sistemas modernos carecen de un almacen disenado para datos de grafo inmutables y ordenados en el tiempo con plena auditabilidad.",
+            "Los sistemas modernos carecen de un almacén diseñado para datos de grafo inmutables y ordenados en el tiempo con plena auditabilidad.",
           approach:
             "Una base de datos de grafo de series temporales inmutable construida para sistemas que demandan auditabilidad, velocidad y profundidad relacional.",
           impact:
-            "Motor de base de datos de codigo abierto que permite registros de auditoria a prueba de manipulacion y consultas temporales rapidas sobre datos conectados.",
+            "Motor de base de datos de código abierto que permite registros de auditoría a prueba de manipulación y consultas temporales rápidas sobre datos conectados.",
         },
         {
           challenge:
-            "Los equipos de sistemas distribuidos pierden semanas escribiendo manualmente el boilerplate de mensajeria asincrona para cada nuevo servicio.",
+            "Los equipos de sistemas distribuidos pierden semanas escribiendo manualmente el boilerplate de mensajería asíncrona para cada nuevo servicio.",
           approach:
-            "Generador de codigo en Go que lee especificaciones AsyncAPI y produce automaticamente codigo de cliente y servidor listo para produccion.",
+            "Generador de código en Go que lee especificaciones AsyncAPI y produce automáticamente código de cliente y servidor listo para producción.",
           impact:
-            "Herramienta de codigo abierto que elimina el boilerplate manual. Entrega infraestructura de mensajeria 10x mas rapido.",
+            "Herramienta de código abierto que elimina el boilerplate manual. Entrega infraestructura de mensajería 10x más rápido.",
         },
         {
           challenge:
-            "Las estructuras jerarquicas de carpetas fallan cuando los proyectos y contextos se multiplican en el sistema de archivos de un desarrollador.",
+            "Las estructuras jerárquicas de carpetas fallan cuando los proyectos y contextos se multiplican en el sistema de archivos de un desarrollador.",
           approach:
-            "CLI basado en etiquetas que reemplaza carpetas rigidas con metadatos componibles y buscables. Etiquetas, no arboles.",
+            "CLI basado en etiquetas que reemplaza carpetas rígidas con metadatos componibles y buscables. Etiquetas, no árboles.",
           impact:
-            "Codigo abierto. Permite organizacion transversal sin duplicar ni mover archivos.",
+            "Código abierto. Permite organización transversal sin duplicar ni mover archivos.",
         },
       ],
     },
@@ -457,19 +471,19 @@ export const translations: Record<Lang, LangStrings> = {
       headline: ["Construyamos", "algo real."],
     },
     marquee:
-      "Arquitectura de Software  /  Sistemas Distribuidos  /  Ingenieria Full-Stack  /  Estrategia de IA  /  Codigo Abierto  /  ",
+      "Arquitectura de Software  /  Sistemas Distribuidos  /  Ingeniería Full-Stack  /  Estrategia de IA  /  Código Abierto  /  ",
     proposals: {
       list: {
         title: "Propuestas",
-        subtitle: "Selecciona tu organizacion para acceder a tu propuesta.",
+        subtitle: "Selecciona tu organización para acceder a tu propuesta.",
         viewProposal: "Ver Propuesta →",
         enterKey: "Ingresa tu clave de propuesta",
         access: "Acceder",
         cancel: "Cancelar",
         verifying: "Verificando...",
         noProposals: "No hay propuestas activas en este momento.",
-        invalidKey: "Clave de propuesta invalida. Por favor intenta de nuevo.",
-        networkError: "Error de red. Por favor verifica tu conexion.",
+        invalidKey: "Clave de propuesta inválida. Por favor intenta de nuevo.",
+        networkError: "Error de red. Por favor verifica tu conexión.",
         rateLimitMsg: (s) => `Demasiados intentos. Por favor espera ${s} segundos.`,
       },
       viewer: {
@@ -479,39 +493,41 @@ export const translations: Record<Lang, LangStrings> = {
           executiveSummary: "Resumen Ejecutivo",
           roadmap: "Hoja de Ruta",
           timeline: "Cronograma",
-          investment: "Inversion",
+          investment: "Inversión",
         },
         download: {
-          headline: "Listo para avanzar?",
+          headline: "¿Listo para avanzar?",
           subtitle: "Descarga el documento completo de la propuesta para tus registros.",
           button: "Descargar Propuesta Completa",
+          errorRefresh: "No se pudo descargar. Por favor recarga e intenta de nuevo.",
+          errorFailed: "La descarga falló. Por favor intenta de nuevo.",
         },
         nav: {
           summary: "Resumen",
           roadmap: "Hoja de Ruta",
           timeline: "Cronograma",
-          investment: "Inversion",
+          investment: "Inversión",
         },
       },
       gate: {
         enterKey: "Ingresa tu clave de propuesta",
         access: "Acceder a Propuesta",
         verifying: "Verificando...",
-        invalidKey: "Clave de propuesta invalida. Por favor intenta de nuevo.",
+        invalidKey: "Clave de propuesta inválida. Por favor intenta de nuevo.",
         rateLimitMsg: (s) => `Demasiados intentos. Por favor espera ${s} segundos.`,
-        unexpected: "Algo salio mal. Por favor intenta de nuevo.",
-        networkError: "Error de red. Por favor verifica tu conexion.",
+        unexpected: "Algo salió mal. Por favor intenta de nuevo.",
+        networkError: "Error de red. Por favor verifica tu conexión.",
       },
       investment: { recommended: "Recomendado" },
       timeline: {
         status: {
           complete: "Completado",
           "in-progress": "En progreso",
-          upcoming: "Proximo",
+          upcoming: "Próximo",
         },
       },
       modal: {
-        privateProject: "Proyecto privado — sin repositorio publico",
+        privateProject: "Proyecto privado — sin repositorio público",
         visitGitHub: "Ver en GitHub",
         cancel: "Cancelar",
         close: "Cerrar",

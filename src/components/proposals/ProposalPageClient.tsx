@@ -55,7 +55,7 @@ export default function ProposalPageClient({
       });
 
       if (!res.ok) {
-        alert("Unable to download. Please refresh and try again.");
+        alert(t.proposals.viewer.download.errorRefresh);
         return;
       }
 
@@ -69,7 +69,7 @@ export default function ProposalPageClient({
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch {
-      alert("Download failed. Please try again.");
+      alert(t.proposals.viewer.download.errorFailed);
     }
   }, [slug, lang]);
 

@@ -591,7 +591,7 @@ export default function Navigation({
               textAlign: "left",
             }}
           >
-            {resolved === "dark" ? "☀ Light" : "☾ Dark"}
+            {resolved === "dark" ? `☀ ${t.nav.lightLabel}` : `☾ ${t.nav.darkLabel}`}
           </button>
 
           <button
