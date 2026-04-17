@@ -2,9 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
 import CustomCursor from "@/components/layout/CustomCursor";
-import GrainOverlay from "@/components/layout/GrainOverlay";
 import PageTransition from "@/components/layout/PageTransition";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
@@ -111,7 +109,6 @@ export default function ProposalListClient({
   return (
     <>
       <CustomCursor />
-      <GrainOverlay />
       <Navigation variant="portal" backHref="/" backLabel={t.nav.back} />
       <PageTransition onReady={(fn) => { triggerExitRef.current = fn; }} />
 
@@ -351,7 +348,6 @@ export default function ProposalListClient({
           </div>
         </div>
 
-        <Footer />
       </div>
     </>
   );

@@ -53,7 +53,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const ctaRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
   const logoTextRef = useRef<HTMLSpanElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
   const flipClockRef = useRef<HTMLDivElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -224,20 +223,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
     };
   }, [preloaderDone]);
 
-  // Floating glow
-  useEffect(() => {
-    if (!glowRef.current) return;
-    const tween = gsap.to(glowRef.current, {
-      x: "random(-80, 80)",
-      y: "random(-60, 60)",
-      duration: 20,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-    return () => { tween.kill(); };
-  }, []);
-
   // Magnetic node attraction — nodes AND lines move together
   useEffect(() => {
     if (!preloaderDone) return;
@@ -343,9 +328,8 @@ export default function Hero({ preloaderDone }: HeroProps) {
         minHeight: "100svh",
       }}
     >
-      {/* Ambient glow */}
+      {/* Ambient glow — static (animation removed to eliminate compositor stutter) */}
       <div
-        ref={glowRef}
         className="absolute pointer-events-none"
         style={{
           width: "60vw",

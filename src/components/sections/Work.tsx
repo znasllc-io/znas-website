@@ -173,12 +173,13 @@ function Work() {
                     <div
                       style={{
                         fontFamily: "var(--font-mono)",
-                        fontSize: "0.55rem",
-                        letterSpacing: "0.2em",
+                        fontSize: "0.8rem",
+                        fontWeight: 600,
+                        letterSpacing: "0.18em",
                         textTransform: "uppercase",
                         color: "var(--color-accent)",
-                        marginBottom: "0.35rem",
-                        opacity: 0.7,
+                        marginBottom: "0.5rem",
+                        opacity: 1,
                       }}
                     >
                       {section.label}

@@ -144,22 +144,22 @@ export const workContent = {
     {
       title: "CoPresent",
       challenge:
-        "Team communication tools lack contextual awareness, forcing manual coordination across fragmented workflows.",
+        "Working alongside AI today means bouncing between a chat app, a data tool, and a meeting — agents never share the room, humans never see the data, and context gets lost between tools.",
       approach:
-        "An AI-powered workplace agent and communication platform that brings context-aware automation into team collaboration.",
+        "A real-time workspace where humans and AI agents share one room — voice, video avatars, and an interactive graph canvas on a single presence layer everyone reasons over together.",
       impact:
-        "Startup product shipping at Visionarys, bridging AI agents with real-time team workflows.",
-      tags: ["AI", "Real-Time", "Platform", "Visionarys"],
+        "Teams run mixed human-and-AI sessions — planning, research, data exploration — in a single space where every participant sees the same data and hears the same conversation.",
+      tags: ["React", "AI-Native", "Real-Time", "Voice", "Multi-Agent", "Video Avatars", "Collaboration"],
     },
     {
       title: "MemQL",
       challenge:
-        "Modern systems lack a purpose-built store for immutable, time-ordered graph data with full auditability.",
+        "AI-native applications stitch a database, vector store, workflow engine, AI gateway, and voice stack together by hand — each with its own schema, query language, and failure modes.",
       approach:
-        "An immutable time-series graph database built for systems that demand auditability, speed, and relational depth.",
+        "A distributed time-series memory graph that collapses AI providers, event-driven automations, and real-time voice into one DSL — concepts, queries, mutations, and workflows declared side-by-side and executed across specialized nodes.",
       impact:
-        "Open-source database engine enabling tamper-proof audit trails and fast temporal queries over connected data.",
-      tags: ["Go", "Graph Database", "Time-Series", "Open Source"],
+        "Product teams ship voice agents, cognitive workflows, and multi-agent spaces in weeks instead of quarters because the DSL replaces the integration glue their competitors still hand-write.",
+      tags: ["Go", "Graph Database", "Time-Series", "AI-Native", "Multi-Agent", "Voice", "Open Source"],
     },
     {
       title: "asyncapi-codegen",

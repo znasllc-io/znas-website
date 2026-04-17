@@ -42,7 +42,7 @@ export default function FlipClock({
         wordEl.className = "flip-clock-word";
         wordEl.style.display = "inline-block";
         wordEl.style.whiteSpace = "nowrap";
-        wordEl.style.verticalAlign = "top";
+        wordEl.style.verticalAlign = "baseline";
 
         for (let ci = 0; ci < word.length; ci++) {
           const charEl = document.createElement("span");

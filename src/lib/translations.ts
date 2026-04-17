@@ -94,7 +94,7 @@ export interface LangStrings {
     gate: ProposalGateStrings;
     investment: { recommended: string };
     timeline: { status: { complete: string; "in-progress": string; upcoming: string } };
-    modal: { privateProject: string; visitGitHub: string; cancel: string; close: string };
+    modal: { privateProject: string; visitGitHub: string; visitWebsite: string; cancel: string; close: string };
   };
 }
 
@@ -215,19 +215,19 @@ export const translations: Record<Lang, LangStrings> = {
       projects: [
         {
           challenge:
-            "Team communication tools lack contextual awareness, forcing manual coordination across fragmented workflows.",
+            "Working alongside AI today means bouncing between a chat app, a data tool, and a meeting — agents never share the room, humans never see the data, and context gets lost between tools.",
           approach:
-            "An AI-powered workplace agent and communication platform that brings context-aware automation into team collaboration.",
+            "A real-time workspace where humans and AI agents share one room — voice, video avatars, and an interactive graph canvas on a single presence layer everyone reasons over together.",
           impact:
-            "Startup product shipping at Visionarys, bridging AI agents with real-time team workflows.",
+            "Teams run mixed human-and-AI sessions — planning, research, data exploration — in a single space where every participant sees the same data and hears the same conversation.",
         },
         {
           challenge:
-            "Modern systems lack a purpose-built store for immutable, time-ordered graph data with full auditability.",
+            "AI-native applications stitch a database, vector store, workflow engine, AI gateway, and voice stack together by hand — each with its own schema, query language, and failure modes.",
           approach:
-            "An immutable time-series graph database built for systems that demand auditability, speed, and relational depth.",
+            "A distributed time-series memory graph that collapses AI providers, event-driven automations, and real-time voice into one DSL — concepts, queries, mutations, and workflows declared side-by-side and executed across specialized nodes.",
           impact:
-            "Open-source database engine enabling tamper-proof audit trails and fast temporal queries over connected data.",
+            "Product teams ship voice agents, cognitive workflows, and multi-agent spaces in weeks instead of quarters because the DSL replaces the integration glue their competitors still hand-write.",
         },
         {
           challenge:
@@ -311,6 +311,7 @@ export const translations: Record<Lang, LangStrings> = {
       modal: {
         privateProject: "Private project — no public repository",
         visitGitHub: "Visit on GitHub",
+        visitWebsite: "Visit the website",
         cancel: "Cancel",
         close: "Close",
       },
@@ -433,19 +434,19 @@ export const translations: Record<Lang, LangStrings> = {
       projects: [
         {
           challenge:
-            "Las herramientas de comunicación en equipo carecen de conciencia contextual, forzando coordinación manual en flujos de trabajo fragmentados.",
+            "Trabajar junto a la IA hoy significa saltar entre una app de chat, una herramienta de datos y una reunión — los agentes nunca comparten la sala, los humanos nunca ven los datos, y el contexto se pierde entre herramientas.",
           approach:
-            "Un agente de trabajo impulsado por IA y plataforma de comunicación que lleva automatización consciente del contexto a la colaboración en equipo.",
+            "Un espacio de trabajo en tiempo real donde humanos y agentes de IA comparten una sola sala — voz, avatares de video y un canvas de grafo interactivo sobre una única capa de presencia donde todos razonan juntos.",
           impact:
-            "Producto de startup en producción en Visionarys, conectando agentes de IA con flujos de trabajo en tiempo real.",
+            "Los equipos ejecutan sesiones mixtas de humanos e IA — planificación, investigación, exploración de datos — en un solo espacio donde cada participante ve los mismos datos y escucha la misma conversación.",
         },
         {
           challenge:
-            "Los sistemas modernos carecen de un almacén diseñado para datos de grafo inmutables y ordenados en el tiempo con plena auditabilidad.",
+            "Las aplicaciones nativas de IA integran a mano una base de datos, un almacén de vectores, un motor de flujos, una pasarela de IA y un stack de voz — cada uno con su propio esquema, lenguaje de consulta y modos de falla.",
           approach:
-            "Una base de datos de grafo de series temporales inmutable construida para sistemas que demandan auditabilidad, velocidad y profundidad relacional.",
+            "Un grafo de memoria distribuido de series temporales que colapsa proveedores de IA, automatizaciones guiadas por eventos y voz en tiempo real en un solo DSL — conceptos, consultas, mutaciones y flujos declarados lado a lado y ejecutados en nodos especializados.",
           impact:
-            "Motor de base de datos de código abierto que permite registros de auditoría a prueba de manipulación y consultas temporales rápidas sobre datos conectados.",
+            "Los equipos de producto lanzan agentes de voz, flujos cognitivos y espacios multi-agente en semanas en lugar de trimestres porque el DSL reemplaza el pegamento de integración que sus competidores todavía escriben a mano.",
         },
         {
           challenge:
@@ -529,6 +530,7 @@ export const translations: Record<Lang, LangStrings> = {
       modal: {
         privateProject: "Proyecto privado — sin repositorio público",
         visitGitHub: "Ver en GitHub",
+        visitWebsite: "Visitar el sitio web",
         cancel: "Cancelar",
         close: "Cerrar",
       },

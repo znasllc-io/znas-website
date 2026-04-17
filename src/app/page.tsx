@@ -6,7 +6,6 @@ import Preloader from "@/components/layout/Preloader";
 import Navigation from "@/components/layout/Navigation";
 import ScrollProgress from "@/components/layout/ScrollProgress";
 import CustomCursor from "@/components/layout/CustomCursor";
-import GrainOverlay from "@/components/layout/GrainOverlay";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import Marquee from "@/components/sections/Marquee";
@@ -32,7 +31,6 @@ export default function Home() {
       <Navigation visible={preloaderDone} />
       <ScrollProgress />
       <CustomCursor />
-      <GrainOverlay />
 
       <main>
         <Hero preloaderDone={preloaderDone} />

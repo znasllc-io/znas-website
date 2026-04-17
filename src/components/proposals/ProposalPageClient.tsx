@@ -7,7 +7,6 @@ import Footer from "@/components/layout/Footer";
 import PasswordGate from "./PasswordGate";
 import ProposalViewer from "./ProposalViewer";
 import CustomCursor from "@/components/layout/CustomCursor";
-import GrainOverlay from "@/components/layout/GrainOverlay";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
 
@@ -84,7 +83,6 @@ export default function ProposalPageClient({
   return (
     <>
       <CustomCursor />
-      <GrainOverlay />
 
       {!proposal ? (
         <PasswordGate

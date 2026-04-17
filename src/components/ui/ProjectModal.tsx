@@ -15,14 +15,14 @@ interface ProjectModalProps {
   } | null;
 }
 
-// Map project titles to GitHub URLs
+// Map project titles to canonical URLs (GitHub repo or product website)
 const PROJECT_URLS: Record<string, string | null> = {
   "asyncapi-codegen": "https://github.com/znas-io/asyncapi-codegen",
   "t4t: Tag-based Filesystem": "https://github.com/znas-io/t4t",
   "Language Platform Infrastructure": null,
   "Airline Technology Systems": null,
   "MemQL": null,
-  "CoPresent": null,
+  "CoPresent": "https://visionarys.io/copresent",
 };
 
 export function getProjectUrl(title: string): string | null {
@@ -118,6 +118,7 @@ export default function ProjectModal({
   if (!isOpen || !project) return null;
 
   const hasUrl = project.url !== null;
+  const isGitHubUrl = !!project.url && project.url.includes("github.com");
 
   return (
     <div
@@ -321,7 +322,7 @@ export default function ProjectModal({
                 el.style.color = "var(--color-bg-void)";
               }}
             >
-              {t.proposals.modal.visitGitHub}
+              {isGitHubUrl ? t.proposals.modal.visitGitHub : t.proposals.modal.visitWebsite}
             </a>
           )}
           <button

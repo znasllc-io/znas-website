@@ -151,13 +151,18 @@ export default function Navigation({
       >
         <div className="container flex items-center justify-between">
           <a
-            href={isPortal && backHref ? backHref : "#"}
-            onClick={isPortal && backHref ? (e: React.MouseEvent) => {
+            href="/"
+            onClick={(e: React.MouseEvent) => {
               e.preventDefault();
-              if (triggerExitRef.current) triggerExitRef.current(backHref!);
-              else window.location.href = backHref!;
-            } : undefined}
-            aria-label={`${siteConfig.name}, return to top`}
+              // On home page: scroll to top; otherwise navigate home
+              if (!isPortal && !hasNavOverride) {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                return;
+              }
+              if (triggerExitRef.current) triggerExitRef.current("/");
+              else window.location.href = "/";
+            }}
+            aria-label={`${siteConfig.name}, go to homepage`}
             style={{
               textDecoration: "none",
               display: "inline-flex",
@@ -423,13 +428,15 @@ export default function Navigation({
               aria-label={resolved === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "1.5rem",
+                fontSize: "1.15rem",
                 lineHeight: 1,
                 color: "var(--color-text-secondary)",
                 background: "var(--color-bg-surface)",
                 border: "1px solid var(--color-border)",
                 borderRadius: "6px",
-                padding: "0.4rem 0.55rem",
+                padding: 0,
+                width: "36px",
+                height: "36px",
                 minWidth: "unset",
                 minHeight: "unset",
                 display: "inline-flex",
@@ -458,14 +465,16 @@ export default function Navigation({
               aria-label={lang === "en" ? "Switch to Spanish" : "Switch to English"}
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "0.65rem",
+                fontSize: "0.75rem",
                 fontWeight: 600,
                 letterSpacing: "0.1em",
                 color: "var(--color-text-secondary)",
                 background: "var(--color-bg-surface)",
                 border: "1px solid var(--color-border)",
                 borderRadius: "6px",
-                padding: "0.4rem 0.55rem",
+                padding: 0,
+                width: "36px",
+                height: "36px",
                 minWidth: "unset",
                 minHeight: "unset",
                 display: "inline-flex",

@@ -29,7 +29,6 @@ export function useLenis() {
       lenis.raf(time * 1000);
     };
     gsap.ticker.add(lenisRaf);
-    gsap.ticker.lagSmoothing(0);
 
     return () => {
       gsap.ticker.remove(lenisRaf);
