@@ -16,7 +16,7 @@ interface ProjectModalProps {
 // Map project titles to GitHub URLs
 const PROJECT_URLS: Record<string, string | null> = {
   "asyncapi-codegen": "https://github.com/znas-io/asyncapi-codegen",
-  "t4t — Tag-based Filesystem": "https://github.com/znas-io/t4t",
+  "t4t: Tag-based Filesystem": "https://github.com/znas-io/t4t",
   "Language Platform Infrastructure": null,
   "Airline Technology Systems": null,
   "MemQL": null,

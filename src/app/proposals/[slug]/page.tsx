@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const meta = getClientMeta(slug);
   return {
-    title: meta ? `${meta.clientName} — Proposal | ZNAS` : "Proposal | ZNAS",
+    title: meta ? `${meta.clientName} | Proposal | ZNAS` : "Proposal | ZNAS",
     description: "Access your ZNAS project proposal.",
   };
 }

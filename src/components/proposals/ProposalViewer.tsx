@@ -98,13 +98,12 @@ export default function ProposalViewer({
 
       {/* ── Timeline ── */}
       <section
-        className="section-padding"
         style={{ backgroundColor: "var(--color-bg-primary)" }}
       >
-        <div className="container">
+        <div className="container" style={{ paddingTop: "clamp(6rem, 12vh, 12rem)" }}>
           <SectionLabel number=".03" label="Timeline" />
-          <MilestoneTimeline milestones={sections.timeline} />
         </div>
+        <MilestoneTimeline milestones={sections.timeline} />
       </section>
 
       {/* ── Investment ── */}
@@ -279,30 +278,8 @@ function SummarySection({
 
 /* ── Download Sub-component ── */
 function DownloadSection({ onDownload }: { onDownload: () => void }) {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (!sectionRef.current) return;
-    const ctx = gsap.context(() => {
-      gsap.from(".download-reveal", {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-      });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       className="section-padding"
       style={{
         backgroundColor: "var(--color-bg-primary)",
@@ -310,45 +287,45 @@ function DownloadSection({ onDownload }: { onDownload: () => void }) {
       }}
     >
       <div className="container">
-        <h2 className="text-heading download-reveal" style={{ marginBottom: "1rem" }}>
+        <h2 className="text-heading" style={{ marginBottom: "1rem" }}>
           Ready to move forward?
         </h2>
         <p
-          className="text-body download-reveal"
+          className="text-body"
           style={{
             color: "var(--color-text-secondary)",
             maxWidth: "500px",
-            margin: "0 auto 2.5rem",
+            margin: "0 auto 3rem",
           }}
         >
           Download the full proposal document for your records.
         </p>
         <button
           onClick={onDownload}
-          className="download-reveal"
           style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "0.75rem",
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            color: "var(--color-accent)",
-            border: "1px solid var(--color-accent)",
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(1rem, 1.5vw, 1.25rem)",
+            fontWeight: 500,
+            letterSpacing: "-0.01em",
+            color: "var(--color-bg-void)",
+            backgroundColor: "var(--color-accent)",
+            border: "2px solid var(--color-accent)",
             borderRadius: "2px",
-            padding: "0.75rem 2rem",
-            background: "transparent",
+            padding: "1.1rem 3rem",
             cursor: "none",
             transition: "all 0.3s ease",
+            display: "inline-block",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "var(--color-accent)";
-            e.currentTarget.style.color = "var(--color-bg-void)";
-          }}
-          onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = "transparent";
             e.currentTarget.style.color = "var(--color-accent)";
           }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--color-accent)";
+            e.currentTarget.style.color = "var(--color-bg-void)";
+          }}
         >
-          Download Proposal PDF →
+          Download Full Proposal
         </button>
       </div>
     </section>

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
   openGraph: {
-    title: "Jose Sanz — Software Architect & Consultant",
+    title: "Jose Sanz | Software Architect & Consultant",
     description:
       "17 years engineering distributed systems at scale. Healthcare, airlines, finance, telecom. MIT AI certified. Founder of Znas LLC.",
     url: "https://znas.io",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jose Sanz — Software Architect & Consultant",
+    title: "Jose Sanz | Software Architect & Consultant",
     description:
       "17 years engineering distributed systems at scale. Founder of Znas LLC.",
   },

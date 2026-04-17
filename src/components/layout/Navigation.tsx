@@ -111,7 +111,7 @@ export default function Navigation({ visible }: NavigationProps) {
         <div className="container flex items-center justify-between">
           <a
             href="#"
-            aria-label={`${siteConfig.name} — return to top`}
+            aria-label={`${siteConfig.name}, return to top`}
             style={{
               textDecoration: "none",
               display: "inline-flex",
@@ -173,7 +173,7 @@ export default function Navigation({ visible }: NavigationProps) {
                 }}
               />
               {/* ALTERNATE COPY (pending Jose confirmation): "Available part-time — currently founding Visionarys.io" */}
-              {isAvailable ? "Available" : "Unavailable"}
+              {isAvailable ? "Available | Part-Time" : "Unavailable"}
             </button>
 
             {/* Status popup */}
@@ -223,7 +223,7 @@ export default function Navigation({ visible }: NavigationProps) {
                       letterSpacing: "0.04em",
                     }}
                   >
-                    {isAvailable ? "Open for Projects" : "Currently Booked"}
+                    {isAvailable ? "Available Part-Time" : "Currently Booked"}
                   </span>
                 </div>
                 <p
@@ -236,7 +236,7 @@ export default function Navigation({ visible }: NavigationProps) {
                   }}
                 >
                   {isAvailable
-                    ? "Jose is accepting new consulting and architecture engagements."
+                    ? "José is available 25 hours/week for consulting and architecture engagements. 2 clients currently in queue."
                     : "Jose is currently focused on existing projects. Check back soon."}
                 </p>
               </div>

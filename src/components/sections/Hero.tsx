@@ -1,50 +1,39 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap, SplitText } from "@/lib/gsap-config";
 import FlipClock from "@/components/ui/FlipClock";
 import { heroContent, siteConfig, cyclingTitles } from "@/data/content";
 
-// Synapse connections — subset of backbone connections for neural firing effect
-const SYNAPSE_CONNECTIONS: [string, string][] = [
-  ["discovery", "architecture"],
-  ["development", "testing"],
-  ["testing", "integration"],
-  ["optimization", "deployment"],
-  ["monitoring", "delivery"],
-  ["testing", "development"],
-];
-
 // Architecture diagram nodes — positioned as % of viewport
 const NODES = [
-  { id: "discovery",     x: 6,  y: 14, label: "Discovery",      desc: "Requirements, research, stakeholder alignment" },
-  { id: "architecture",  x: 20, y: 10, label: "Architecture",    desc: "System design, data modeling, API contracts" },
-  { id: "prototype",     x: 34, y: 30, label: "Prototype",       desc: "Proof of concept, rapid iteration" },
-  { id: "development",   x: 48, y: 12, label: "Development",     desc: "Full-stack implementation, code reviews" },
-  { id: "testing",       x: 58, y: 34, label: "Testing",         desc: "Unit, integration, load, security" },
-  { id: "integration",   x: 68, y: 16, label: "Integration",     desc: "CI/CD pipelines, staging environments" },
-  { id: "optimization",  x: 78, y: 32, label: "Optimization",    desc: "Performance tuning, caching, monitoring" },
-  { id: "deployment",    x: 88, y: 12, label: "Deployment",      desc: "Production release, zero-downtime rollout" },
-  { id: "monitoring",    x: 92, y: 28, label: "Observability",   desc: "Logs, metrics, alerting, SLOs" },
-  { id: "delivery",      x: 96, y: 18, label: "Delivery",        desc: "Handoff, documentation, support" },
+  { id: "client",   x: 6,  y: 12, label: "Client Layer",    desc: "React, Next.js, React Native" },
+  { id: "gateway",  x: 24, y: 8,  label: "API Gateway",     desc: "Routing, auth, rate limiting" },
+  { id: "services", x: 48, y: 15, label: "Microservices",    desc: "Distributed service mesh" },
+  { id: "queue",    x: 72, y: 10, label: "Event Bus",        desc: "Async processing, CQRS" },
+  { id: "auth",     x: 36, y: 32, label: "Auth",             desc: "Identity, tokens, SSO" },
+  { id: "data",     x: 60, y: 36, label: "Data Layer",       desc: "PostgreSQL, Redis, caching" },
+  { id: "infra",    x: 88, y: 28, label: "Infrastructure",   desc: "CI/CD, Docker, monitoring" },
+  { id: "mobile",   x: 14, y: 35, label: "Mobile",           desc: "iOS, Android, cross-platform" },
+  { id: "cache",    x: 80, y: 42, label: "Cache",            desc: "Redis, CDN, edge caching" },
+  { id: "monitor",  x: 92, y: 14, label: "Observability",    desc: "Logs, metrics, tracing" },
 ];
 
 const CONNECTIONS: [string, string][] = [
-  // Main flow (left to right)
-  ["discovery", "architecture"],
-  ["architecture", "prototype"],
-  ["prototype", "development"],
-  ["development", "testing"],
-  ["testing", "integration"],
-  ["integration", "optimization"],
-  ["optimization", "deployment"],
-  ["deployment", "monitoring"],
-  ["monitoring", "delivery"],
-  // Iterative cross-links
-  ["testing", "development"],
-  ["architecture", "development"],
-  ["monitoring", "optimization"],
-  ["prototype", "architecture"],
+  ["client", "gateway"],
+  ["gateway", "services"],
+  ["gateway", "auth"],
+  ["services", "queue"],
+  ["services", "data"],
+  ["queue", "infra"],
+  ["data", "infra"],
+  ["client", "mobile"],
+  ["mobile", "auth"],
+  ["auth", "data"],
+  ["infra", "cache"],
+  ["data", "cache"],
+  ["queue", "monitor"],
+  ["infra", "monitor"],
 ];
 
 interface HeroProps {
@@ -61,15 +50,44 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const logoRef = useRef<HTMLImageElement>(null);
   const logoTextRef = useRef<HTMLSpanElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
-  const owlLayerRef = useRef<HTMLDivElement>(null);
   const flipClockRef = useRef<HTMLDivElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const lineRefs = useRef<Map<number, SVGLineElement>>(new Map());
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [flipClockActive, setFlipClockActive] = useState(false);
-  const synapseTimelinesRef = useRef<gsap.core.Timeline[]>([]);
-  const synapseDelaysRef = useRef<gsap.core.Tween[]>([]);
   const pulseTweenRef = useRef<gsap.core.Tween | null>(null);
+  // Track magnetic offsets in px for each node (used to update SVG lines)
+  const nodeOffsetsRef = useRef<Map<string, { x: number; y: number }>>(new Map());
+
+  // Update SVG line endpoints to follow node offsets
+  const updateLines = useCallback(() => {
+    const diagram = diagramRef.current;
+    if (!diagram) return;
+    const rect = diagram.getBoundingClientRect();
+    if (rect.width === 0) return;
+
+    CONNECTIONS.forEach(([fromId, toId], i) => {
+      const line = lineRefs.current.get(i);
+      if (!line) return;
+
+      const fromNode = NODES.find((n) => n.id === fromId)!;
+      const toNode = NODES.find((n) => n.id === toId)!;
+      const fromOffset = nodeOffsetsRef.current.get(fromId) || { x: 0, y: 0 };
+      const toOffset = nodeOffsetsRef.current.get(toId) || { x: 0, y: 0 };
+
+      // Convert px offset to percentage of container
+      const fromOffsetPctX = (fromOffset.x / rect.width) * 100;
+      const fromOffsetPctY = (fromOffset.y / rect.height) * 100;
+      const toOffsetPctX = (toOffset.x / rect.width) * 100;
+      const toOffsetPctY = (toOffset.y / rect.height) * 100;
+
+      line.setAttribute("x1", `${fromNode.x + fromOffsetPctX}%`);
+      line.setAttribute("y1", `${fromNode.y + fromOffsetPctY}%`);
+      line.setAttribute("x2", `${toNode.x + toOffsetPctX}%`);
+      line.setAttribute("y2", `${toNode.y + toOffsetPctY}%`);
+    });
+  }, []);
 
   useEffect(() => {
     if (!preloaderDone) return;
@@ -155,7 +173,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
         "-=0.5"
       );
 
-      // 6. Pulse 3 key nodes to show the diagram is alive
+      // 6. Pulse key nodes to show the diagram is alive
       pulseTweenRef.current = gsap.to(".arch-node-pulse", {
         scale: 1.15,
         duration: 2.5,
@@ -166,30 +184,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
         delay: tl.duration() + 0.5,
       });
 
-      // 7. Synapse neural firing — dots travel along connection lines
-      const synapseDots = sectionRef.current?.querySelectorAll(".synapse-dot");
-      if (synapseDots && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        SYNAPSE_CONNECTIONS.forEach((conn, i) => {
-          const fromNode = getNode(conn[0]);
-          const toNode = getNode(conn[1]);
-          const delay = tl.duration() + 1 + (i * 1.2);
-          const dot = synapseDots[i];
-
-          const fireSynapse = () => {
-            const fireTl = gsap.timeline({ repeat: -1, repeatDelay: 5 + (i * 0.8) });
-            fireTl.set(dot, { attr: { cx: fromNode.x + "%", cy: fromNode.y + "%" }, opacity: 0 });
-            fireTl.to(dot, { opacity: 0.7, duration: 0.3, ease: "power2.out" });
-            fireTl.to(dot, { attr: { cx: toNode.x + "%", cy: toNode.y + "%" }, duration: 1.8, ease: "power1.inOut" }, "-=0.1");
-            fireTl.to(dot, { opacity: 0, duration: 0.3, ease: "power2.in" }, "-=0.3");
-            synapseTimelinesRef.current.push(fireTl);
-          };
-
-          const delayCall = gsap.delayedCall(delay, fireSynapse);
-          synapseDelaysRef.current.push(delayCall);
-        });
-      }
-
-      // 8. Register parallax exit on scroll after entry completes
+      // 7. Register parallax exit on scroll after entry completes
       tl.call(() => {
         setFlipClockActive(true);
         gsap.to(".hero-content", {
@@ -215,29 +210,12 @@ export default function Hero({ preloaderDone }: HeroProps) {
             scrub: true,
           },
         });
-        // Owl parallax — moves slower than diagram for depth (10x visible movement)
-        gsap.to(owlLayerRef.current, {
-          y: -200,
-          scale: 0.92,
-          opacity: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "20% top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
       });
     }, sectionRef);
 
     return () => {
       pulseTweenRef.current?.kill();
       pulseTweenRef.current = null;
-      synapseDelaysRef.current.forEach(d => d.kill());
-      synapseTimelinesRef.current.forEach(t => t.kill());
-      synapseDelaysRef.current = [];
-      synapseTimelinesRef.current = [];
       ctx.revert();
     };
   }, [preloaderDone]);
@@ -256,7 +234,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
     return () => { tween.kill(); };
   }, []);
 
-  // Magnetic node attraction
+  // Magnetic node attraction — nodes AND lines move together
   useEffect(() => {
     if (!preloaderDone) return;
 
@@ -270,15 +248,38 @@ export default function Hero({ preloaderDone }: HeroProps) {
     const MAGNETIC_RADIUS = 80;
     const MAGNETIC_STRENGTH = 0.4;
 
-    // Setup quickTo for each node
+    // Initialize offsets
+    NODES.forEach(node => {
+      nodeOffsetsRef.current.set(node.id, { x: 0, y: 0 });
+    });
+
+    // Setup quickTo for each node — with onUpdate to track offsets and update lines
     const quickTos = new Map<string, { x: ReturnType<typeof gsap.quickTo>; y: ReturnType<typeof gsap.quickTo> }>();
 
     NODES.forEach(node => {
       const el = nodeRefs.current.get(node.id);
       if (!el) return;
       quickTos.set(node.id, {
-        x: gsap.quickTo(el, "x", { duration: 0.3, ease: "power3.out" }),
-        y: gsap.quickTo(el, "y", { duration: 0.3, ease: "power3.out" }),
+        x: gsap.quickTo(el, "x", {
+          duration: 0.3,
+          ease: "power3.out",
+          onUpdate: () => {
+            const transform = gsap.getProperty(el, "x") as number;
+            const offset = nodeOffsetsRef.current.get(node.id);
+            if (offset) offset.x = transform;
+            updateLines();
+          },
+        }),
+        y: gsap.quickTo(el, "y", {
+          duration: 0.3,
+          ease: "power3.out",
+          onUpdate: () => {
+            const transform = gsap.getProperty(el, "y") as number;
+            const offset = nodeOffsetsRef.current.get(node.id);
+            if (offset) offset.y = transform;
+            updateLines();
+          },
+        }),
       });
     });
 
@@ -289,7 +290,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
         const quickTo = quickTos.get(node.id);
         if (!quickTo) return;
 
-        // Node center position in viewport coordinates
         const nodeCenterX = rect.left + (node.x / 100) * rect.width;
         const nodeCenterY = rect.top + (node.y / 100) * rect.height;
 
@@ -325,7 +325,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
       diagram.removeEventListener("mousemove", handleMouseMove);
       diagram.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [preloaderDone]);
+  }, [preloaderDone, updateLines]);
 
   const getNode = (id: string) => NODES.find((n) => n.id === id)!;
 
@@ -354,48 +354,12 @@ export default function Hero({ preloaderDone }: HeroProps) {
         }}
       />
 
-      {/* Owl parallax layer — independent depth, moves slower than diagram */}
-      <div
-        ref={owlLayerRef}
-        className="hero-owl-watermark absolute inset-0"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          pointerEvents: "none",
-          zIndex: 1,
-          willChange: "transform",
-        }}
-      >
-        <div
-          style={{
-            width: "clamp(300px, 40vw, 600px)",
-            height: "clamp(300px, 40vw, 600px)",
-            backgroundImage: "url(/logo.png)",
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            opacity: 0.06,
-          }}
-        />
-      </div>
-
       {/* Architecture diagram wrapper for parallax */}
       <div ref={diagramRef} className="hero-diagram absolute inset-0" style={{ willChange: "transform", opacity: 0, zIndex: 2 }}>
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
         style={{ zIndex: 1 }}
       >
-        {/* Glow filter for synapse dots */}
-        <defs>
-          <filter id="synapse-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="2" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
         {CONNECTIONS.map(([fromId, toId], i) => {
           const from = getNode(fromId);
           const to = getNode(toId);
@@ -404,31 +368,19 @@ export default function Hero({ preloaderDone }: HeroProps) {
           return (
             <line
               key={i}
+              ref={(el) => { if (el) lineRefs.current.set(i, el); }}
               className="arch-line"
               x1={`${from.x}%`}
               y1={`${from.y}%`}
               x2={`${to.x}%`}
               y2={`${to.y}%`}
               stroke="var(--color-accent)"
-              strokeWidth={isHighlighted ? 1.5 : 0.5}
-              strokeOpacity={isHighlighted ? 0.5 : 0.2}
+              strokeWidth={isHighlighted ? 1.2 : 0.7}
+              strokeOpacity={isHighlighted ? 0.45 : 0.15 + (i * 0.015)}
               style={{ transition: "stroke-opacity 0.3s, stroke-width 0.3s" }}
             />
           );
         })}
-        {/* Synapse dots — travel along connections like neurons firing */}
-        {SYNAPSE_CONNECTIONS.map((_, i) => (
-          <circle
-            key={`synapse-${i}`}
-            className="synapse-dot"
-            r="2"
-            fill="var(--color-accent)"
-            filter="url(#synapse-glow)"
-            opacity="0"
-            cx="0%"
-            cy="0%"
-          />
-        ))}
       </svg>
 
       {/* Architecture nodes */}
@@ -453,7 +405,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
                 transform: "translate(-50%, -50%)",
                 zIndex: isHovered ? 10 : 1,
                 willChange: "transform",
-                /* Larger hit area via transparent border — no padding/margin shift */
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -464,61 +415,27 @@ export default function Hero({ preloaderDone }: HeroProps) {
               onMouseEnter={() => setHoveredNode(node.id)}
               onMouseLeave={() => setHoveredNode(null)}
             >
-              {/* Node dot — centered in the 48px hit area */}
+              {/* Node dot */}
               <div
                 className={
-                  ["development", "testing", "deployment", "monitoring"].includes(node.id)
+                  ["services", "data", "gateway", "monitor"].includes(node.id)
                     ? "arch-node-pulse"
                     : undefined
                 }
                 style={{
-                  width: isHovered ? 22 : 12,
-                  height: isHovered ? 22 : 12,
+                  width: isHovered ? 14 : 8,
+                  height: isHovered ? 14 : 8,
                   borderRadius: "50%",
-                  backgroundColor: isHovered
-                    ? "var(--color-accent)"
-                    : isConnected
-                      ? "var(--color-accent)"
-                      : "var(--color-text-ghost)",
-                  opacity: isHovered ? 1 : isConnected ? 0.7 : 0.55,
+                  backgroundColor: "var(--color-accent)",
+                  opacity: isHovered ? 0.9 : isConnected ? 0.5 : 0.35,
                   boxShadow: isHovered
-                    ? "0 0 24px var(--color-accent-glow)"
+                    ? "0 0 20px var(--color-accent-glow)"
                     : "none",
                   transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
                   pointerEvents: "none",
                   flexShrink: 0,
                 }}
               />
-              {/* Tooltip */}
-              {isHovered && (
-                <div
-                  className="absolute whitespace-nowrap"
-                  style={{
-                    top: "calc(100% + 4px)",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "var(--color-accent)",
-                    pointerEvents: "none",
-                  }}
-                >
-                  {node.label}
-                  <div
-                    style={{
-                      fontSize: "0.55rem",
-                      color: "var(--color-text-tertiary)",
-                      letterSpacing: "0.04em",
-                      textTransform: "none",
-                      marginTop: 2,
-                    }}
-                  >
-                    {node.desc}
-                  </div>
-                </div>
-              )}
             </div>
           );
         })}

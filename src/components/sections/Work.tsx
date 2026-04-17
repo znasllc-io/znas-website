@@ -213,6 +213,20 @@ function Work() {
             </div>
           ))}
         </div>
+
+        <p
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.75rem",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "var(--color-text-tertiary)",
+            textAlign: "center",
+            marginTop: "2.5rem",
+          }}
+        >
+          And many more →
+        </p>
       </div>
 
       {/* Redirect confirmation modal */}
