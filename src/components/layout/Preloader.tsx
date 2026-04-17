@@ -25,6 +25,14 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     };
     window.addEventListener("pageshow", handlePageShow);
 
+    // Skip preloader when arriving via page transition (e.g. back from proposals)
+    const cameFromTransition = sessionStorage.getItem("znas-page-transition");
+    if (cameFromTransition) {
+      setPrefersReduced(true);
+      onComplete();
+      return () => window.removeEventListener("pageshow", handlePageShow);
+    }
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setPrefersReduced(true);
       onComplete();
