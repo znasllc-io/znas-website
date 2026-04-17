@@ -476,7 +476,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
           }}
           data-code-comment="// go version go1.22"
         >
-          Jose Sanz &mdash; Tucson, AZ
+          Jose Sanz | Tucson, AZ
         </div>
 
         <h1 className="text-hero-inline" style={{ whiteSpace: "nowrap" }}>
