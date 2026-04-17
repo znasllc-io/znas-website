@@ -148,6 +148,7 @@ export default function Navigation({ visible }: NavigationProps) {
                 padding: "0.35rem 0.85rem",
                 cursor: "none",
                 transition: "all 0.3s ease",
+                whiteSpace: "nowrap",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = isAvailable
@@ -173,7 +174,7 @@ export default function Navigation({ visible }: NavigationProps) {
                 }}
               />
               {/* ALTERNATE COPY (pending Jose confirmation): "Available part-time — currently founding Visionarys.io" */}
-              {isAvailable ? "Available | Part-Time" : "Unavailable"}
+              {isAvailable ? "Part-Time" : "Unavailable"}
             </button>
 
             {/* Status popup */}
@@ -244,9 +245,9 @@ export default function Navigation({ visible }: NavigationProps) {
           </div>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-8">
-            {/* Accent Color Picker */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+          <div className="hidden md:flex items-center gap-4 lg:gap-8">
+            {/* Accent Color Picker — hidden below 1024px to save space */}
+            <div className="hidden lg:flex" style={{ alignItems: "center", gap: "0.35rem" }}>
               {ACCENT_COLORS.map((color) => (
                 <button
                   key={color.id}

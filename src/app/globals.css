@@ -226,12 +226,17 @@ body {
 
 .text-hero-inline {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4.2vw, 4.5rem);
+  font-size: clamp(1.6rem, 4.2vw, 4.5rem);
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.03em;
   color: var(--color-text-primary);
-  white-space: nowrap;
+}
+
+@media (min-width: 769px) {
+  .text-hero-inline {
+    white-space: nowrap;
+  }
 }
 
 .text-display {
@@ -393,8 +398,8 @@ body {
 
 .flip-clock-contact {
   font-family: var(--font-mono);
-  font-size: clamp(0.75rem, 1.5vw, 1rem);
-  letter-spacing: 0.15em;
+  font-size: clamp(0.65rem, 1.5vw, 1rem);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-text-tertiary);
 }
