@@ -40,6 +40,7 @@ export default function ProposalViewer({
   }, []);
 
   const sections = (lang === "es" && proposal.sections_es) ? proposal.sections_es : proposal.sections;
+  const projectTitle = (lang === "es" && proposal.projectTitle_es) ? proposal.projectTitle_es : proposal.projectTitle;
 
   return (
     <div ref={containerRef}>
@@ -65,7 +66,7 @@ export default function ProposalViewer({
             className="text-display reveal-up"
             style={{ maxWidth: "900px" }}
           >
-            {proposal.projectTitle}
+            {projectTitle}
           </h1>
           <p
             className="reveal-up"

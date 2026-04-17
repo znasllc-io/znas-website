@@ -40,6 +40,7 @@ export interface Proposal {
   slug: string;
   clientName: string;
   projectTitle: string;
+  projectTitle_es?: string;
   password: string;
   status: "active" | "draft" | "archived";
   pdfFilename: string;
