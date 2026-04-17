@@ -2,7 +2,7 @@ export const siteConfig = {
   name: "ZNAS",
   title: "Jose Sanz | Software Architect & Consultant | ZNAS",
   description:
-    "Jose Sanz is a Software Architect with 17 years building distributed systems across healthcare, airlines, finance, and telecom. MIT-certified in AI Strategy. Founder of Znas LLC. Based in Tucson, AZ.",
+    "Jose Sanz is a Software Architect with 17 years building distributed systems across healthcare, airlines, finance, and telecom. MIT-certified in AI Strategy. Founder of Znas LLC. Based in Arizona, USA.",
   url: "https://znas.io",
 };
 
@@ -29,7 +29,7 @@ export const aboutContent = {
   paragraphs: [
     "I'm Jose Sanz, founder of Znas LLC and co-founder of Visionarys. For over 17 years I've engineered and architected production software across healthcare, airlines, finance, and telecommunications.",
     "My career has taken me from call center workflow systems at Afni, to airline technology at Amadeus IT Group, to a 12-year run at CyraCom where I grew from Software Developer to Junior Software Architect leading distributed systems and mobile platforms.",
-    "I'm MIT-certified in AI Business Strategy and actively building AI-powered tools and developer infrastructure through Znas LLC. Fluent in English and Spanish. Based in Tucson, AZ.",
+    "I'm MIT-certified in AI Business Strategy and actively building AI-powered tools and developer infrastructure through Znas LLC. Fluent in English and Spanish. Based in Arizona, USA.",
   ],
 };
 

@@ -8,6 +8,8 @@ import PasswordGate from "./PasswordGate";
 import ProposalViewer from "./ProposalViewer";
 import CustomCursor from "@/components/layout/CustomCursor";
 import GrainOverlay from "@/components/layout/GrainOverlay";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 
 interface ProposalPageClientProps {
   slug: string;
@@ -18,6 +20,8 @@ export default function ProposalPageClient({
   slug,
   clientName,
 }: ProposalPageClientProps) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const [proposal, setProposal] = useState<SafeProposal | null>(null);
   const passwordRef = useRef<string>("");
 
@@ -47,7 +51,7 @@ export default function ProposalPageClient({
       const res = await fetch("/api/proposals/download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, password: passwordRef.current }),
+        body: JSON.stringify({ slug, password: passwordRef.current, lang }),
       });
 
       if (!res.ok) {
@@ -67,7 +71,7 @@ export default function ProposalPageClient({
     } catch {
       alert("Download failed. Please try again.");
     }
-  }, [slug]);
+  }, [slug, lang]);
 
   // Security: clear proposal data on unmount
   useEffect(() => {
@@ -92,13 +96,13 @@ export default function ProposalPageClient({
         <>
           <Navigation
             navOverride={[
-              { label: "Summary", href: "#summary" },
-              { label: "Roadmap", href: "#roadmap" },
-              { label: "Timeline", href: "#timeline" },
-              { label: "Investment", href: "#investment" },
+              { label: t.proposals.viewer.nav.summary, href: "#summary" },
+              { label: t.proposals.viewer.nav.roadmap, href: "#roadmap" },
+              { label: t.proposals.viewer.nav.timeline, href: "#timeline" },
+              { label: t.proposals.viewer.nav.investment, href: "#investment" },
             ]}
             backHref="/proposals"
-            backLabel="Back"
+            backLabel={t.nav.back}
           />
           <ProposalViewer proposal={proposal} onDownload={handleDownload} />
           <Footer />

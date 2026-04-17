@@ -7,6 +7,8 @@ import SectionLabel from "@/components/ui/SectionLabel";
 import RoadmapTimeline from "./RoadmapTimeline";
 import InvestmentCards from "./InvestmentCards";
 import MilestoneTimeline from "./MilestoneTimeline";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 
 interface ProposalViewerProps {
   proposal: SafeProposal;
@@ -17,6 +19,8 @@ export default function ProposalViewer({
   proposal,
   onDownload,
 }: ProposalViewerProps) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +39,7 @@ export default function ProposalViewer({
     return () => ctx.revert();
   }, []);
 
-  const { sections } = proposal;
+  const sections = (lang === "es" && proposal.sections_es) ? proposal.sections_es : proposal.sections;
 
   return (
     <div ref={containerRef}>
@@ -54,7 +58,7 @@ export default function ProposalViewer({
               className="text-micro"
               style={{ color: "var(--color-accent)", marginBottom: "1rem", display: "block" }}
             >
-              Proposal
+              {t.proposals.viewer.label}
             </span>
           </div>
           <h1
@@ -73,7 +77,7 @@ export default function ProposalViewer({
               marginTop: "1.5rem",
             }}
           >
-            Prepared for {proposal.clientName}
+            {t.proposals.viewer.preparedFor} {proposal.clientName}
           </p>
         </div>
       </section>
@@ -92,7 +96,7 @@ export default function ProposalViewer({
         style={{ backgroundColor: "var(--color-bg-void)" }}
       >
         <div className="container">
-          <SectionLabel number=".02" label="Roadmap" />
+          <SectionLabel number=".02" label={t.proposals.viewer.sections.roadmap} />
           <RoadmapTimeline phases={sections.roadmap} />
         </div>
       </section>
@@ -103,7 +107,7 @@ export default function ProposalViewer({
         style={{ backgroundColor: "var(--color-bg-primary)" }}
       >
         <div className="container" style={{ paddingTop: "clamp(6rem, 12vh, 12rem)" }}>
-          <SectionLabel number=".03" label="Timeline" />
+          <SectionLabel number=".03" label={t.proposals.viewer.sections.timeline} />
         </div>
         <MilestoneTimeline milestones={sections.timeline} />
       </section>
@@ -115,7 +119,7 @@ export default function ProposalViewer({
         style={{ backgroundColor: "var(--color-bg-void)" }}
       >
         <div className="container">
-          <SectionLabel number=".04" label="Investment" />
+          <SectionLabel number=".04" label={t.proposals.viewer.sections.investment} />
           <InvestmentCards
             description={sections.investment.description}
             tiers={sections.investment.tiers}
@@ -139,6 +143,8 @@ function SummarySection({
   body: string;
   highlights: string[];
 }) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -168,7 +174,7 @@ function SummarySection({
       style={{ backgroundColor: "var(--color-bg-primary)" }}
     >
       <div className="container">
-        <SectionLabel number=".01" label="Executive Summary" />
+        <SectionLabel number=".01" label={t.proposals.viewer.sections.executiveSummary} />
 
         <h2
           className="text-heading summary-reveal"
@@ -236,6 +242,8 @@ function SummarySection({
 
 /* ── Download Sub-component ── */
 function DownloadSection({ onDownload }: { onDownload: () => void }) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   return (
     <section
       className="section-padding"
@@ -246,7 +254,7 @@ function DownloadSection({ onDownload }: { onDownload: () => void }) {
     >
       <div className="container">
         <h2 className="text-heading" style={{ marginBottom: "1rem" }}>
-          Ready to move forward?
+          {t.proposals.viewer.download.headline}
         </h2>
         <p
           className="text-body"
@@ -256,7 +264,7 @@ function DownloadSection({ onDownload }: { onDownload: () => void }) {
             margin: "0 auto 3rem",
           }}
         >
-          Download the full proposal document for your records.
+          {t.proposals.viewer.download.subtitle}
         </p>
         <button
           onClick={onDownload}
@@ -283,7 +291,7 @@ function DownloadSection({ onDownload }: { onDownload: () => void }) {
             e.currentTarget.style.color = "var(--color-bg-void)";
           }}
         >
-          Download Full Proposal
+          {t.proposals.viewer.download.button}
         </button>
       </div>
     </section>

@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap-config";
 import type { ProposalTier } from "@/lib/proposals";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 
 interface InvestmentCardsProps {
   description: string;
@@ -13,6 +15,8 @@ export default function InvestmentCards({
   description,
   tiers,
 }: InvestmentCardsProps) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const sectionRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
 
@@ -237,7 +241,7 @@ export default function InvestmentCards({
                   zIndex: 1,
                 }}
               >
-                Recommended
+                {t.proposals.investment.recommended}
               </div>
             )}
           </div>

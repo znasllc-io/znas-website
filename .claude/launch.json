@@ -4,14 +4,14 @@
     {
       "name": "dev",
       "runtimeExecutable": "/bin/zsh",
-      "runtimeArgs": ["-l", "-c", "cd /Users/jmendivil/znas-website && npx next dev"],
-      "port": 3000
+      "runtimeArgs": ["-l", "-c", "cd /Users/jmendivil/znas-website && npx next dev --port $PORT"],
+      "autoPort": true
     },
     {
       "name": "start",
       "runtimeExecutable": "/bin/zsh",
-      "runtimeArgs": ["-l", "-c", "cd /Users/jmendivil/znas-website && npx next start"],
-      "port": 3000
+      "runtimeArgs": ["-l", "-c", "cd /Users/jmendivil/znas-website && npx next start --port $PORT"],
+      "autoPort": true
     }
   ]
 }

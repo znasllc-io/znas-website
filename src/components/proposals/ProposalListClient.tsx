@@ -6,6 +6,8 @@ import Footer from "@/components/layout/Footer";
 import CustomCursor from "@/components/layout/CustomCursor";
 import GrainOverlay from "@/components/layout/GrainOverlay";
 import PageTransition from "@/components/layout/PageTransition";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 
 interface ProposalEntry {
   slug: string;
@@ -18,6 +20,8 @@ export default function ProposalListClient({
 }: {
   proposals: ProposalEntry[];
 }) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -82,15 +86,15 @@ export default function ProposalListClient({
           const data = await res.json().catch(() => ({}));
           const retryAfter = (data as { retryAfter?: number }).retryAfter ?? 60;
           startCountdown(retryAfter);
-          setRateLimitMsg(`Too many attempts. Please wait ${retryAfter} seconds.`);
+          setRateLimitMsg(t.proposals.list.rateLimitMsg(retryAfter));
           setLoading(false);
           return;
         }
 
-        setError("Invalid proposal key. Please try again.");
+        setError(t.proposals.list.invalidKey);
         setLoading(false);
       } catch {
-        setError("Network error. Please check your connection.");
+        setError(t.proposals.list.networkError);
         setLoading(false);
       }
     },
@@ -108,7 +112,7 @@ export default function ProposalListClient({
     <>
       <CustomCursor />
       <GrainOverlay />
-      <Navigation variant="portal" backHref="/" backLabel="Back" />
+      <Navigation variant="portal" backHref="/" backLabel={t.nav.back} />
       <PageTransition onReady={(fn) => { triggerExitRef.current = fn; }} />
 
       <div
@@ -133,10 +137,10 @@ export default function ProposalListClient({
           <div className="container" style={{ maxWidth: "600px" }}>
             <div style={{ textAlign: "center", marginBottom: "3rem" }}>
               <h1 className="text-heading" style={{ marginBottom: "0.75rem" }}>
-                Proposals
+                {t.proposals.list.title}
               </h1>
               <p className="text-small" style={{ color: "var(--color-text-tertiary)" }}>
-                Select your organization to access your proposal.
+                {t.proposals.list.subtitle}
               </p>
             </div>
 
@@ -197,7 +201,7 @@ export default function ProposalListClient({
                           textTransform: "uppercase",
                         }}
                       >
-                        View Proposal →
+                        {t.proposals.list.viewProposal}
                       </div>
                     )}
                   </div>
@@ -223,7 +227,7 @@ export default function ProposalListClient({
                           marginBottom: "0.75rem",
                         }}
                       >
-                        Enter your proposal key
+                        {t.proposals.list.enterKey}
                       </p>
                       <form onSubmit={handleSubmit}>
                         <input
@@ -306,7 +310,7 @@ export default function ProposalListClient({
                               opacity: loading || !password.trim() ? 0.5 : 1,
                             }}
                           >
-                            {loading ? "Verifying..." : "Access"}
+                            {loading ? t.proposals.list.verifying : t.proposals.list.access}
                           </button>
                           <button
                             type="button"
@@ -325,7 +329,7 @@ export default function ProposalListClient({
                               transition: "all 0.3s ease",
                             }}
                           >
-                            Cancel
+                            {t.proposals.list.cancel}
                           </button>
                         </div>
                       </form>
@@ -340,7 +344,7 @@ export default function ProposalListClient({
                   textAlign: "center",
                   padding: "2rem",
                 }}>
-                  No active proposals at this time.
+                  {t.proposals.list.noProposals}
                 </p>
               )}
             </div>

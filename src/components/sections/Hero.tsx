@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap, SplitText } from "@/lib/gsap-config";
 import FlipClock from "@/components/ui/FlipClock";
-import { heroContent, siteConfig, cyclingTitles } from "@/data/content";
+import { siteConfig } from "@/data/content";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 
 // Architecture diagram nodes — positioned as % of viewport
 const NODES = [
@@ -41,6 +43,8 @@ interface HeroProps {
 }
 
 export default function Hero({ preloaderDone }: HeroProps) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const sectionRef = useRef<HTMLElement>(null);
   const line1Ref = useRef<HTMLDivElement>(null);
   const line2Ref = useRef<HTMLDivElement>(null);
@@ -476,14 +480,14 @@ export default function Hero({ preloaderDone }: HeroProps) {
           }}
           data-code-comment="// go version go1.22"
         >
-          Jose Sanz | Tucson, AZ
+          {t.hero.tagline}
         </div>
 
         <h1 className="text-hero-inline">
-          <span ref={line1Ref} style={{ verticalAlign: "baseline" }}>{heroContent.headline[0]}</span>{" "}
+          <span ref={line1Ref} style={{ verticalAlign: "baseline" }}>Freelance</span>{" "}
           <span ref={flipClockRef} style={{ opacity: 0, verticalAlign: "baseline" }}>
             <FlipClock
-              titles={cyclingTitles}
+              titles={t.hero.cyclingTitles}
               intervalMs={2000}
               staggerMs={20}
               paused={!flipClockActive}
@@ -497,7 +501,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
           style={{ color: "var(--color-text-secondary)" }}
           data-code-comment="// 17 * 365 * coffee.Drink()"
         >
-          {heroContent.subtitle}
+          {t.hero.subtitle}
         </p>
 
         <div
@@ -533,10 +537,10 @@ export default function Hero({ preloaderDone }: HeroProps) {
               e.currentTarget.style.color = "var(--color-accent)";
             }}
           >
-            Start a project →
+            {t.hero.cta}
           </a>
           <span className="flex items-center gap-3" style={{ color: "var(--color-text-tertiary)" }}>
-            <span className="text-micro">{heroContent.scrollCta}</span>
+            <span className="text-micro">{t.hero.scrollCta}</span>
             <span className="animate-bounce text-sm">↓</span>
           </span>
         </div>

@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import type { ProposalMilestone } from "@/lib/proposals";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 
 interface MilestoneTimelineProps {
   milestones: ProposalMilestone[];
@@ -32,6 +34,8 @@ const STATUS_STYLES: Record<
 export default function MilestoneTimeline({
   milestones,
 }: MilestoneTimelineProps) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const wrapperRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -245,7 +249,7 @@ export default function MilestoneTimeline({
                       lineHeight: 1.4,
                     }}
                   >
-                    {ms.status}
+                    {t.proposals.timeline.status[ms.status]}
                   </span>
                 </div>
               </div>
@@ -350,7 +354,7 @@ export default function MilestoneTimeline({
                       display: "inline-block",
                     }}
                   >
-                    {ms.status}
+                    {t.proposals.timeline.status[ms.status]}
                   </span>
                 </div>
               );

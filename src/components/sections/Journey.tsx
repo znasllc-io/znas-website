@@ -3,9 +3,13 @@
 import { useEffect, useRef, memo } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { journeyContent } from "@/data/content";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 import SectionLabel from "@/components/ui/SectionLabel";
 
 function Journey() {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const sectionRef = useRef<HTMLElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -105,7 +109,7 @@ function Journey() {
       <div className="container">
         <SectionLabel
           number={journeyContent.number}
-          label={journeyContent.label}
+          label={t.journey.label}
         />
 
         <div ref={timelineRef} className="relative" style={{ minHeight: "60vh" }}>
@@ -152,7 +156,7 @@ function Journey() {
                       <h3
                         className="card-inner text-subhead mb-1"
                       >
-                        {m.role}
+                        {t.journey.milestones[i].role}
                       </h3>
                       <p
                         className="card-inner text-small mb-3"
@@ -164,7 +168,7 @@ function Journey() {
                         className="card-inner text-small"
                         style={{ color: "var(--color-text-tertiary)" }}
                       >
-                        {m.description}
+                        {t.journey.milestones[i].description}
                       </p>
                     </div>
                   </div>

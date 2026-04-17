@@ -3,11 +3,15 @@
 import { useEffect, useRef, useState, memo } from "react";
 import { gsap } from "@/lib/gsap-config";
 import { workContent } from "@/data/content";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 import SectionLabel from "@/components/ui/SectionLabel";
 import PillTag from "@/components/ui/PillTag";
 import ProjectModal, { getProjectUrl } from "@/components/ui/ProjectModal";
 
 function Work() {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const [selectedProject, setSelectedProject] = useState<{
@@ -58,7 +62,7 @@ function Work() {
       style={{ backgroundColor: "var(--color-bg-primary)" }}
     >
       <div className="container">
-        <SectionLabel number={workContent.number} label={workContent.label} />
+        <SectionLabel number={workContent.number} label={t.work.label} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           {workContent.projects.map((project, i) => (
@@ -161,9 +165,9 @@ function Work() {
               {/* Blueprint sections: Challenge / Approach / Impact */}
               <div className="flex flex-col gap-4" style={{ position: "relative" }}>
                 {[
-                  { label: "Challenge", text: project.challenge },
-                  { label: "Approach", text: project.approach },
-                  { label: "Impact", text: project.impact },
+                  { label: t.work.challengeLabel, text: t.work.projects[i].challenge },
+                  { label: t.work.approachLabel, text: t.work.projects[i].approach },
+                  { label: t.work.impactLabel, text: t.work.projects[i].impact },
                 ].map((section) => (
                   <div key={section.label}>
                     <div
@@ -225,7 +229,7 @@ function Work() {
             marginTop: "2.5rem",
           }}
         >
-          And many more →
+          {t.work.moreLabel}
         </p>
       </div>
 

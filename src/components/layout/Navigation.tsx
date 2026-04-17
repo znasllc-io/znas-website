@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
-import { navLinks, siteConfig } from "@/data/content";
+import { siteConfig } from "@/data/content";
 import { useTheme, ACCENT_COLORS } from "@/hooks/useTheme";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 import PageTransition from "@/components/layout/PageTransition";
 
 interface NavLink {
@@ -35,6 +37,8 @@ export default function Navigation({
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileLinksRef = useRef<HTMLAnchorElement[]>([]);
   const { resolved, cycle, accent, setAccent } = useTheme();
+  const { lang, toggle: toggleLang } = useLanguage();
+  const t = translations[lang];
   const [statusOpen, setStatusOpen] = useState(false);
   const triggerExitRef = useRef<((href: string) => void) | null>(null);
 
@@ -216,8 +220,7 @@ export default function Navigation({
                   backgroundColor: isAvailable ? "#FBBF24" : "#F87171",
                 }}
               />
-              {/* ALTERNATE COPY (pending Jose confirmation): "Available part-time — currently founding Visionarys.io" */}
-              {isAvailable ? "Part-Time" : "Unavailable"}
+              {isAvailable ? t.nav.partTime : t.nav.currentlyBooked}
             </button>
 
             {/* Status popup */}
@@ -267,7 +270,7 @@ export default function Navigation({
                       letterSpacing: "0.04em",
                     }}
                   >
-                    {isAvailable ? "Available Part-Time" : "Currently Booked"}
+                    {isAvailable ? t.nav.availablePartTime : t.nav.currentlyBooked}
                   </span>
                 </div>
                 <p
@@ -279,9 +282,7 @@ export default function Navigation({
                     letterSpacing: "0.02em",
                   }}
                 >
-                  {isAvailable
-                    ? "José is available 25 hours/week for consulting and architecture engagements. 2 clients currently in queue."
-                    : "Jose is currently focused on existing projects. Check back soon."}
+                  {isAvailable ? t.nav.availabilityDesc : t.nav.unavailabilityDesc}
                 </p>
               </div>
             )}
@@ -317,7 +318,7 @@ export default function Navigation({
                 ))}
               </div>}
 
-              {(navOverride || navLinks).map((link) => (
+              {(navOverride || t.nav.links).map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
@@ -375,7 +376,7 @@ export default function Navigation({
                   e.currentTarget.style.color = "var(--color-accent)";
                 }}
               >
-                {backLabel}
+                {backLabel || t.nav.back}
               </a>
             ) : !isPortal && !hasNavOverride ? (
               <a
@@ -412,11 +413,11 @@ export default function Navigation({
                   e.currentTarget.style.color = "var(--color-accent)";
                 }}
               >
-                Proposals
+                {t.nav.proposals}
               </a>
             ) : null}
 
-            {/* Theme Toggle — always in same position, rightmost */}
+            {/* Theme Toggle */}
             <button
               onClick={cycle}
               aria-label={resolved === "dark" ? "Switch to light mode" : "Switch to dark mode"}
@@ -449,6 +450,42 @@ export default function Navigation({
               }}
             >
               {resolved === "dark" ? "☀" : "☾"}
+            </button>
+
+            {/* Language Toggle */}
+            <button
+              onClick={toggleLang}
+              aria-label={lang === "en" ? "Switch to Spanish" : "Switch to English"}
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.65rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                color: "var(--color-text-secondary)",
+                background: "var(--color-bg-surface)",
+                border: "1px solid var(--color-border)",
+                borderRadius: "6px",
+                padding: "0.4rem 0.55rem",
+                minWidth: "unset",
+                minHeight: "unset",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.3s ease",
+                cursor: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "var(--color-text-primary)";
+                e.currentTarget.style.borderColor = "var(--color-accent)";
+                e.currentTarget.style.backgroundColor = "var(--color-bg-elevated)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "var(--color-text-secondary)";
+                e.currentTarget.style.borderColor = "var(--color-border)";
+                e.currentTarget.style.backgroundColor = "var(--color-bg-surface)";
+              }}
+            >
+              {t.nav.langButton}
             </button>
           </div>
 
@@ -508,7 +545,7 @@ export default function Navigation({
       {/* Mobile Menu (home only) */}
       {!isPortal && mobileOpen && (
         <div ref={mobileMenuRef} className="mobile-menu">
-          {navLinks.map((link, i) => (
+          {t.nav.links.map((link, i) => (
             <a
               key={link.href}
               ref={(el) => {
@@ -538,7 +575,7 @@ export default function Navigation({
               marginTop: "0.5rem",
             }}
           >
-            Proposals
+            {t.nav.proposals}
           </a>
 
           <button
@@ -555,6 +592,22 @@ export default function Navigation({
             }}
           >
             {resolved === "dark" ? "☀ Light" : "☾ Dark"}
+          </button>
+
+          <button
+            onClick={toggleLang}
+            className="text-heading"
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.85rem",
+              letterSpacing: "0.1em",
+              color: "var(--color-text-tertiary)",
+              background: "none",
+              border: "none",
+              textAlign: "left",
+            }}
+          >
+            {t.nav.langButton === "ES" ? "☾ Español" : "☾ English"}
           </button>
 
           {/* Mobile Accent Color Picker */}

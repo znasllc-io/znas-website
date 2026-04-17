@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/data/content";
 import { ThemeProvider } from "@/hooks/useTheme";
+import { LanguageProvider } from "@/lib/language";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -31,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider><LanguageProvider>{children}</LanguageProvider></ThemeProvider>
       </body>
     </html>
   );

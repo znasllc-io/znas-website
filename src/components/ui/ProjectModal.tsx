@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { gsap } from "@/lib/gsap-config";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 
 interface ProjectModalProps {
   isOpen: boolean;
@@ -32,6 +34,8 @@ export default function ProjectModal({
   onClose,
   project,
 }: ProjectModalProps) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
@@ -278,7 +282,7 @@ export default function ProjectModal({
               border: "1px dashed var(--color-border)",
             }}
           >
-            Private project &mdash; no public repository
+            {t.proposals.modal.privateProject}
           </p>
         )}
 
@@ -317,7 +321,7 @@ export default function ProjectModal({
                 el.style.color = "var(--color-bg-void)";
               }}
             >
-              Visit on GitHub
+              {t.proposals.modal.visitGitHub}
             </a>
           )}
           <button
@@ -348,7 +352,7 @@ export default function ProjectModal({
               el.style.color = "var(--color-text-secondary)";
             }}
           >
-            {hasUrl ? "Cancel" : "Close"}
+            {hasUrl ? t.proposals.modal.cancel : t.proposals.modal.close}
           </button>
         </div>
       </div>

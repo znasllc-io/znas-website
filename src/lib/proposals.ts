@@ -43,7 +43,9 @@ export interface Proposal {
   password: string;
   status: "active" | "draft" | "archived";
   pdfFilename: string;
+  pdfFilenameEs?: string;
   sections: ProposalSections;
+  sections_es?: ProposalSections;
 }
 
 // Safe proposal data (password stripped)

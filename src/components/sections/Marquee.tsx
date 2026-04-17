@@ -2,9 +2,12 @@
 
 import { useEffect, useRef, memo } from "react";
 import { gsap } from "@/lib/gsap-config";
-import { marqueeText } from "@/data/content";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 
 function Marquee() {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -64,7 +67,7 @@ function Marquee() {
               flexShrink: 0,
             }}
           >
-            {marqueeText}
+            {t.marquee}
           </span>
         ))}
       </div>

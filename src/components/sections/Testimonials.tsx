@@ -3,9 +3,13 @@
 import { useEffect, useRef, useState, memo } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { testimonialsContent } from "@/data/content";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 import SectionLabel from "@/components/ui/SectionLabel";
 
 function Testimonials() {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const sectionRef = useRef<HTMLElement>(null);
   const quoteRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -57,7 +61,7 @@ function Testimonials() {
       <div className="container">
         <SectionLabel
           number={testimonialsContent.number}
-          label={testimonialsContent.label}
+          label={t.testimonials.label}
         />
 
         <div className="max-w-4xl mx-auto text-center">

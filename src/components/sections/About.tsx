@@ -3,10 +3,13 @@
 import { useEffect, useRef, memo } from "react";
 import { gsap, SplitText } from "@/lib/gsap-config";
 import { ScrollTrigger } from "@/lib/gsap-config";
-import { aboutContent } from "@/data/content";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 import SectionLabel from "@/components/ui/SectionLabel";
 
 function About() {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -98,7 +101,7 @@ function About() {
       style={{ backgroundColor: "var(--color-bg-primary)" }}
     >
       <div className="container">
-        <SectionLabel number={aboutContent.number} label={aboutContent.label} />
+        <SectionLabel number=".01" label={t.about.label} />
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-16">
           <div className="md:col-span-3">
@@ -107,7 +110,7 @@ function About() {
               className="text-display"
               data-code-comment="// systems.Build() // nil err"
             >
-              {aboutContent.statement}
+              {t.about.statement}
             </h2>
           </div>
 
@@ -117,7 +120,7 @@ function About() {
               className="text-body reveal-up mb-10"
               style={{ color: "var(--color-text-secondary)" }}
             >
-              {aboutContent.paragraphs[0]}
+              {t.about.bio}
             </p>
 
             {/* Stats grid */}
@@ -130,12 +133,12 @@ function About() {
               }}
             >
               {[
-                { value: "17+", label: "Years Engineering", target: 17, suffix: "+", pad: 0, comment: "// time.Since(2008)" },
-                { value: "07", label: "Industries", target: 7, suffix: "", pad: 2, comment: "// len(industries)" },
-                { value: "02", label: "Companies Founded", target: 2, suffix: "", pad: 2, comment: "// make([]Company, 2)" },
-                { value: "MIT", label: "AI Certified", target: null, suffix: "", pad: 0, comment: "// import \"ai/strategy\"" },
-                { value: "EN/ES", label: "Bilingual", target: null, suffix: "", pad: 0, comment: "// locale: [2]string" },
-                { value: "AZ", label: "Tucson-Based", target: null, suffix: "", pad: 0, comment: "// os.Getenv(\"HOME\")" },
+                { value: "17+", target: 17, suffix: "+", pad: 0, comment: "// time.Since(2008)" },
+                { value: "07", target: 7, suffix: "", pad: 2, comment: "// len(industries)" },
+                { value: "02", target: 2, suffix: "", pad: 2, comment: "// make([]Company, 2)" },
+                { value: "MIT", target: null, suffix: "", pad: 0, comment: "// import \"ai/strategy\"" },
+                { value: "EN/ES", target: null, suffix: "", pad: 0, comment: "// locale: [2]string" },
+                { value: "AZ", target: null, suffix: "", pad: 0, comment: "// os.Getenv(\"HOME\")" },
               ].map((stat, i) => (
                 <div
                   key={i}
@@ -169,7 +172,7 @@ function About() {
                     className="text-micro mt-1"
                     style={{ color: "var(--color-text-tertiary)" }}
                   >
-                    {stat.label}
+                    {t.about.statLabels[i]}
                   </div>
                 </div>
               ))}

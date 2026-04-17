@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, memo } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { expertiseContent } from "@/data/content";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 import SectionLabel from "@/components/ui/SectionLabel";
 
 // Stack architecture — technologies as connected nodes
@@ -34,6 +36,8 @@ const STACK_LAYERS = [
 ];
 
 function Expertise() {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const sectionRef = useRef<HTMLElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
@@ -102,7 +106,7 @@ function Expertise() {
       <div className="container">
         <SectionLabel
           number={expertiseContent.number}
-          label={expertiseContent.label}
+          label={t.expertise.label}
         />
 
         {/* Stack architecture diagram */}
@@ -123,7 +127,7 @@ function Expertise() {
                     opacity: 0.8,
                   }}
                 >
-                  {layer.label}
+                  {t.expertise.stackLayerLabels[layerIdx]}
                 </div>
 
                 {/* Connecting line */}
@@ -203,7 +207,7 @@ function Expertise() {
 
         {/* Pillar descriptions */}
         <div className="pillar-grid grid grid-cols-1 md:grid-cols-2 gap-6">
-          {expertiseContent.pillars.map((pillar) => (
+          {expertiseContent.pillars.map((pillar, pi) => (
             <div
               key={pillar.id}
               className="pillar-card"
@@ -231,13 +235,13 @@ function Expertise() {
                         : "// go run startup.go // x2"
                 }
               >
-                {pillar.title}
+                {t.expertise.pillars[pi].title}
               </h3>
               <p
                 className="text-small"
                 style={{ color: "var(--color-text-secondary)" }}
               >
-                {pillar.description}
+                {t.expertise.pillars[pi].description}
               </p>
             </div>
           ))}

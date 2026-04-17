@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "@/lib/gsap-config";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 
 interface PasswordGateProps {
   slug: string;
@@ -11,6 +13,8 @@ interface PasswordGateProps {
 }
 
 export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGateProps) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -124,7 +128,7 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
         }
 
         if (res.status === 401) {
-          setError("Invalid proposal key. Please try again.");
+          setError(t.proposals.gate.invalidKey);
           shakeInput();
           return;
         }
@@ -134,17 +138,14 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
           const retryAfter =
             (data as { retryAfter?: number }).retryAfter ?? 60;
           setCountdown(retryAfter);
-          setRateLimitMsg(
-            `Too many attempts. Please wait ${retryAfter} seconds.`
-          );
+          setRateLimitMsg(t.proposals.gate.rateLimitMsg(retryAfter));
           return;
         }
 
-        // Unexpected status
-        setError("Something went wrong. Please try again.");
+        setError(t.proposals.gate.unexpected);
         shakeInput();
       } catch {
-        setError("Network error. Please check your connection.");
+        setError(t.proposals.gate.networkError);
         shakeInput();
       } finally {
         setLoading(false);
@@ -220,7 +221,7 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
               margin: 0,
             }}
           >
-            Enter your proposal key
+            {t.proposals.gate.enterKey}
           </p>
         </div>
 
@@ -359,7 +360,7 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
               e.currentTarget.style.color = "var(--color-accent)";
             }}
           >
-            {loading ? "Verifying..." : "Access Proposal"}
+            {loading ? t.proposals.gate.verifying : t.proposals.gate.access}
           </button>
         </div>
       </form>

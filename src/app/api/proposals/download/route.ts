@@ -14,7 +14,7 @@ const SECURITY_HEADERS = {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { slug, password } = body as { slug?: string; password?: string };
+    const { slug, password, lang } = body as { slug?: string; password?: string; lang?: string };
 
     if (!slug || !password) {
       return NextResponse.json(
@@ -53,8 +53,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Sanitize PDF filename (defense in depth — only allow alphanumeric + hyphens + .pdf)
-    const pdfName = proposal.pdfFilename;
+    // Pick PDF based on requested language, fall back to English
+    const pdfName =
+      lang === "es" && proposal.pdfFilenameEs
+        ? proposal.pdfFilenameEs
+        : proposal.pdfFilename;
     if (!/^[a-z0-9-]+\.pdf$/.test(pdfName)) {
       return NextResponse.json(
         { error: "Invalid credentials" },

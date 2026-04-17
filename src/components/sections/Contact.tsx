@@ -2,11 +2,15 @@
 
 import { useEffect, useRef, memo } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
-import { contactContent, siteConfig, cyclingTitles } from "@/data/content";
+import { contactContent, siteConfig } from "@/data/content";
+import { useLanguage } from "@/lib/language";
+import { translations } from "@/lib/translations";
 import FlipClock from "@/components/ui/FlipClock";
 import SectionLabel from "@/components/ui/SectionLabel";
 
 function Contact() {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -38,14 +42,14 @@ function Contact() {
       <div className="container">
         <SectionLabel
           number={contactContent.number}
-          label={contactContent.label}
+          label={t.contact.label}
         />
 
         <div className="max-w-3xl">
           <h2
             className="text-display reveal-up"
           >
-            {contactContent.headline.map((line, i) => (
+            {t.contact.headline.map((line, i) => (
               <span key={i} className="block">
                 <span data-code-comment={i === 0 ? "// go build -o partnership" : undefined}>
                   {line}
@@ -89,7 +93,7 @@ function Contact() {
               Freelance{" "}
             </span>
             <FlipClock
-              titles={cyclingTitles}
+              titles={t.hero.cyclingTitles}
               className="flip-clock-contact"
               intervalMs={4000}
             />
