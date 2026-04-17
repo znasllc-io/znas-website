@@ -115,7 +115,7 @@ export const translations: Record<Lang, LangStrings> = {
       availablePartTime: "Available Part-Time",
       currentlyBooked: "Currently Booked",
       availabilityDesc:
-        "Jose is available 25 hours/week for consulting and architecture engagements. 2 clients currently in queue.",
+        "Jose is available 25 hours/week for consulting and architecture engagements.",
       unavailabilityDesc:
         "Jose is currently focused on existing projects. Check back soon.",
       langButton: "ES",
@@ -333,7 +333,7 @@ export const translations: Record<Lang, LangStrings> = {
       availablePartTime: "Disponible Medio Tiempo",
       currentlyBooked: "Actualmente Reservado",
       availabilityDesc:
-        "José está disponible 25 horas/semana para consultorías y proyectos de arquitectura. 2 clientes actualmente en lista.",
+        "José está disponible 25 horas/semana para consultorías y proyectos de arquitectura.",
       unavailabilityDesc:
         "José está enfocado en proyectos existentes. Vuelve pronto.",
       langButton: "EN",
