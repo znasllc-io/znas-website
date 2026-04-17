@@ -126,12 +126,11 @@ function Work() {
                     lineHeight: 1.2,
                   }}
                   data-code-comment={
-                    i === 0 ? "// go generate ./asyncapi/..."
-                    : i === 1 ? "// tags > tree // obviously"
-                    : i === 2 ? "// 12yr monolith.Decompose()"
-                    : i === 3 ? "// amadeus.Fly(ctx, global)"
-                    : i === 4 ? "// memql.Query(ctx, time.Now())"
-                    : "// copresent.Agent.Listen(ctx)"
+                    project.title === "CoPresent" ? "// copresent.Agent.Listen(ctx)"
+                    : project.title === "MemQL" ? "// memql.Query(ctx, time.Now())"
+                    : project.title === "asyncapi-codegen" ? "// go generate ./asyncapi/..."
+                    : project.title.startsWith("t4t") ? "// tags > tree // obviously"
+                    : undefined
                   }
                 >
                   {project.title}
