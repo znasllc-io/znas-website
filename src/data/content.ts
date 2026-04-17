@@ -16,13 +16,10 @@ export const heroContent = {
 export const cyclingTitles = [
   "Software Architect",
   "AI Engineer",
-  "Web Designer",
   "Systems Engineer",
   "Mobile Developer",
-  "Open Source Builder",
   "Application Developer",
   "Tech Consultant",
-  "Language Solutions",
 ];
 
 export const aboutContent = {
@@ -183,32 +180,6 @@ export const workContent = {
       impact:
         "Open-source. Enables cross-cutting organization without duplicating or moving files.",
       tags: ["Go", "CLI", "Developer Tooling", "Open Source"],
-    },
-    {
-      title: "Language Platform Infrastructure",
-      challenge:
-        "Scaling one of the largest US language services platforms from monolith to distributed architecture.",
-      approach:
-        "12-year progression: decomposed monolith into microservices, built mobile platforms, led distributed systems design.",
-      impact:
-        "Production infrastructure serving millions of interpretation minutes across healthcare and telecom.",
-      tags: [
-        "Architecture",
-        ".NET",
-        "Microservices",
-        "Mobile",
-        "Healthcare / Telecom",
-      ],
-    },
-    {
-      title: "Airline Technology Systems",
-      challenge:
-        "Global airline technology needed mobile-first interfaces and reliable service infrastructure at scale.",
-      approach:
-        "Led mobile development and WCF service architecture at Amadeus IT Group for the global travel industry.",
-      impact:
-        "Production systems supporting major airlines worldwide with high-availability service infrastructure.",
-      tags: ["Mobile", "WCF Services", ".NET", "Airlines"],
     },
   ],
 };

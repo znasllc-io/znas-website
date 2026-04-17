@@ -7,44 +7,43 @@ import { heroContent, siteConfig, cyclingTitles } from "@/data/content";
 
 // Synapse connections — subset of backbone connections for neural firing effect
 const SYNAPSE_CONNECTIONS: [string, string][] = [
-  ["discovery", "architecture"],
-  ["development", "testing"],
-  ["testing", "integration"],
-  ["optimization", "deployment"],
-  ["monitoring", "delivery"],
-  ["testing", "development"],
+  ["client", "gateway"],
+  ["gateway", "services"],
+  ["services", "data"],
+  ["data", "cache"],
+  ["queue", "monitor"],
+  ["auth", "data"],
 ];
 
 // Architecture diagram nodes — positioned as % of viewport
 const NODES = [
-  { id: "discovery",     x: 6,  y: 14, label: "Discovery",      desc: "Requirements, research, stakeholder alignment" },
-  { id: "architecture",  x: 20, y: 10, label: "Architecture",    desc: "System design, data modeling, API contracts" },
-  { id: "prototype",     x: 34, y: 30, label: "Prototype",       desc: "Proof of concept, rapid iteration" },
-  { id: "development",   x: 48, y: 12, label: "Development",     desc: "Full-stack implementation, code reviews" },
-  { id: "testing",       x: 58, y: 34, label: "Testing",         desc: "Unit, integration, load, security" },
-  { id: "integration",   x: 68, y: 16, label: "Integration",     desc: "CI/CD pipelines, staging environments" },
-  { id: "optimization",  x: 78, y: 32, label: "Optimization",    desc: "Performance tuning, caching, monitoring" },
-  { id: "deployment",    x: 88, y: 12, label: "Deployment",      desc: "Production release, zero-downtime rollout" },
-  { id: "monitoring",    x: 92, y: 28, label: "Observability",   desc: "Logs, metrics, alerting, SLOs" },
-  { id: "delivery",      x: 96, y: 18, label: "Delivery",        desc: "Handoff, documentation, support" },
+  { id: "client",   x: 6,  y: 12, label: "Client Layer",    desc: "React, Next.js, React Native" },
+  { id: "gateway",  x: 24, y: 8,  label: "API Gateway",     desc: "Routing, auth, rate limiting" },
+  { id: "services", x: 48, y: 15, label: "Microservices",    desc: "Distributed service mesh" },
+  { id: "queue",    x: 72, y: 10, label: "Event Bus",        desc: "Async processing, CQRS" },
+  { id: "auth",     x: 36, y: 32, label: "Auth",             desc: "Identity, tokens, SSO" },
+  { id: "data",     x: 60, y: 36, label: "Data Layer",       desc: "PostgreSQL, Redis, caching" },
+  { id: "infra",    x: 88, y: 28, label: "Infrastructure",   desc: "CI/CD, Docker, monitoring" },
+  { id: "mobile",   x: 14, y: 35, label: "Mobile",           desc: "iOS, Android, cross-platform" },
+  { id: "cache",    x: 80, y: 42, label: "Cache",            desc: "Redis, CDN, edge caching" },
+  { id: "monitor",  x: 92, y: 14, label: "Observability",    desc: "Logs, metrics, tracing" },
 ];
 
 const CONNECTIONS: [string, string][] = [
-  // Main flow (left to right)
-  ["discovery", "architecture"],
-  ["architecture", "prototype"],
-  ["prototype", "development"],
-  ["development", "testing"],
-  ["testing", "integration"],
-  ["integration", "optimization"],
-  ["optimization", "deployment"],
-  ["deployment", "monitoring"],
-  ["monitoring", "delivery"],
-  // Iterative cross-links
-  ["testing", "development"],
-  ["architecture", "development"],
-  ["monitoring", "optimization"],
-  ["prototype", "architecture"],
+  ["client", "gateway"],
+  ["gateway", "services"],
+  ["gateway", "auth"],
+  ["services", "queue"],
+  ["services", "data"],
+  ["queue", "infra"],
+  ["data", "infra"],
+  ["client", "mobile"],
+  ["mobile", "auth"],
+  ["auth", "data"],
+  ["infra", "cache"],
+  ["data", "cache"],
+  ["queue", "monitor"],
+  ["infra", "monitor"],
 ];
 
 interface HeroProps {
@@ -61,7 +60,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const logoRef = useRef<HTMLImageElement>(null);
   const logoTextRef = useRef<HTMLSpanElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
-  const owlLayerRef = useRef<HTMLDivElement>(null);
   const flipClockRef = useRef<HTMLDivElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -215,19 +213,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
             scrub: true,
           },
         });
-        // Owl parallax — moves slower than diagram for depth (10x visible movement)
-        gsap.to(owlLayerRef.current, {
-          y: -200,
-          scale: 0.92,
-          opacity: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "20% top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
       });
     }, sectionRef);
 
@@ -354,32 +339,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
         }}
       />
 
-      {/* Owl parallax layer — independent depth, moves slower than diagram */}
-      <div
-        ref={owlLayerRef}
-        className="hero-owl-watermark absolute inset-0"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          pointerEvents: "none",
-          zIndex: 1,
-          willChange: "transform",
-        }}
-      >
-        <div
-          style={{
-            width: "clamp(300px, 40vw, 600px)",
-            height: "clamp(300px, 40vw, 600px)",
-            backgroundImage: "url(/logo.png)",
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            opacity: 0.06,
-          }}
-        />
-      </div>
-
       {/* Architecture diagram wrapper for parallax */}
       <div ref={diagramRef} className="hero-diagram absolute inset-0" style={{ willChange: "transform", opacity: 0, zIndex: 2 }}>
       <svg
@@ -410,8 +369,8 @@ export default function Hero({ preloaderDone }: HeroProps) {
               x2={`${to.x}%`}
               y2={`${to.y}%`}
               stroke="var(--color-accent)"
-              strokeWidth={isHighlighted ? 1.5 : 0.5}
-              strokeOpacity={isHighlighted ? 0.5 : 0.2}
+              strokeWidth={isHighlighted ? 1.2 : 0.7}
+              strokeOpacity={isHighlighted ? 0.45 : 0.15 + (i * 0.015)}
               style={{ transition: "stroke-opacity 0.3s, stroke-width 0.3s" }}
             />
           );
@@ -467,58 +426,28 @@ export default function Hero({ preloaderDone }: HeroProps) {
               {/* Node dot — centered in the 48px hit area */}
               <div
                 className={
-                  ["development", "testing", "deployment", "monitoring"].includes(node.id)
+                  ["services", "data", "gateway", "monitor"].includes(node.id)
                     ? "arch-node-pulse"
                     : undefined
                 }
                 style={{
-                  width: isHovered ? 22 : 12,
-                  height: isHovered ? 22 : 12,
+                  width: isHovered ? 14 : 8,
+                  height: isHovered ? 14 : 8,
                   borderRadius: "50%",
                   backgroundColor: isHovered
                     ? "var(--color-accent)"
                     : isConnected
                       ? "var(--color-accent)"
-                      : "var(--color-text-ghost)",
-                  opacity: isHovered ? 1 : isConnected ? 0.7 : 0.55,
+                      : "var(--color-accent)",
+                  opacity: isHovered ? 0.9 : isConnected ? 0.5 : 0.35,
                   boxShadow: isHovered
-                    ? "0 0 24px var(--color-accent-glow)"
+                    ? "0 0 20px var(--color-accent-glow)"
                     : "none",
                   transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
                   pointerEvents: "none",
                   flexShrink: 0,
                 }}
               />
-              {/* Tooltip */}
-              {isHovered && (
-                <div
-                  className="absolute whitespace-nowrap"
-                  style={{
-                    top: "calc(100% + 4px)",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "var(--color-accent)",
-                    pointerEvents: "none",
-                  }}
-                >
-                  {node.label}
-                  <div
-                    style={{
-                      fontSize: "0.55rem",
-                      color: "var(--color-text-tertiary)",
-                      letterSpacing: "0.04em",
-                      textTransform: "none",
-                      marginTop: 2,
-                    }}
-                  >
-                    {node.desc}
-                  </div>
-                </div>
-              )}
             </div>
           );
         })}
