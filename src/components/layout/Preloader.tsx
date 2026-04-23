@@ -52,13 +52,25 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     // so the user doesn't see a janky/unresponsive home page.
     const isReturn = !!sessionStorage.getItem("znas-page-transition");
 
+    // Fire onComplete at the START of the timeline (not the end) so Hero's
+    // heavy entry animation can begin behind the preloader panels while
+    // they're still covering. By the time panels slide off, Hero is already
+    // mid-animation — eliminates the "black screen" gap between preloader
+    // finishing and Hero elements becoming visible.
+    let onCompleteFired = false;
+    const fireOnCompleteOnce = () => {
+      if (onCompleteFired) return;
+      onCompleteFired = true;
+      onComplete();
+    };
+
     const tl = gsap.timeline({
       onComplete: () => {
         clearTimeout(fallback);
         if (containerRef.current) {
           containerRef.current.style.pointerEvents = "none";
         }
-        onComplete();
+        fireOnCompleteOnce();
       },
     });
 
@@ -73,6 +85,10 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
       // Hide the progress bar + counter — they're not part of the return UX
       gsap.set([lineRef.current, counterRef.current], { opacity: 0 });
+
+      // Start Hero's entry animation immediately (behind the preloader).
+      // By the time the panels slide off, Hero is mid-animation, no gap.
+      tl.call(fireOnCompleteOnce);
 
       tl.fromTo(
         logoRef.current,
@@ -102,6 +118,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     } else {
       // First-visit preloader (full ~2.2s with progress counter)
       const counter = { value: 0 };
+
+      // Fire parent's onComplete about halfway through so Hero's entry
+      // animation starts before the preloader's panels split. Eliminates
+      // the "black flash" between panels sliding off and Hero appearing.
+      tl.call(fireOnCompleteOnce, [], 1.2);
 
       tl.fromTo(logoRef.current,
         { opacity: 0, scale: 0.9 },
