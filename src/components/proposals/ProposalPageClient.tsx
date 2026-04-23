@@ -37,6 +37,13 @@ export default function ProposalPageClient({
     }
   }, [slug]);
 
+  // Mark that we're on a proposal page so ANY navigation away (including
+  // browser back button) triggers the short "welcome back" preloader on
+  // the home page.
+  useEffect(() => {
+    sessionStorage.setItem("znas-page-transition", "1");
+  }, []);
+
   const handleSuccess = useCallback(
     (data: SafeProposal, password: string) => {
       passwordRef.current = password;

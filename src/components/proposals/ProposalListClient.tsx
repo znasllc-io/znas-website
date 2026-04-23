@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import Navigation from "@/components/layout/Navigation";
 import CustomCursor from "@/components/layout/CustomCursor";
 import PageTransition from "@/components/layout/PageTransition";
@@ -28,6 +28,14 @@ export default function ProposalListClient({
   const [countdown, setCountdown] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const triggerExitRef = useRef<((href: string) => void) | null>(null);
+
+  // Mark that we're on a proposal page so ANY navigation away (including
+  // browser back button) triggers the short "welcome back" preloader on
+  // the home page. Runs after PageTransition's useEffect consumes any
+  // existing flag, so this re-sets it for the next navigation.
+  useEffect(() => {
+    sessionStorage.setItem("znas-page-transition", "1");
+  }, []);
 
   // Countdown timer for rate limiting
   const startCountdown = useCallback((seconds: number) => {

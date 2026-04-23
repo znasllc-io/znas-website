@@ -50,10 +50,10 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     // Fallback: force-complete if rAF is throttled (background tabs, headless)
     const fallback = setTimeout(() => {
       tl.progress(1, false);
-    }, isReturn ? 1800 : 2200);
+    }, isReturn ? 1400 : 2200);
 
     if (isReturn) {
-      // SHORT return animation (~1.3s): logo + glow fade in, brief hold,
+      // SHORT return animation (~1.0s): logo + glow fade in, brief hold,
       // fade out, panels split. No progress bar or counter.
 
       // Hide the progress bar + counter — they're not part of the return UX
@@ -62,28 +62,28 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       tl.fromTo(
         logoRef.current,
         { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 0.4, ease: "power3.out" }
+        { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" }
       )
         .fromTo(
           logoTextRef.current,
-          { opacity: 0, y: 4 },
-          { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" },
-          "-=0.2"
+          { opacity: 0, y: 3 },
+          { opacity: 1, y: 0, duration: 0.25, ease: "power3.out" },
+          "-=0.15"
         )
         .fromTo(
           glowRef.current,
           { opacity: 0 },
-          { opacity: 1, duration: 0.45, ease: "sine.inOut" },
-          "-=0.3"
+          { opacity: 1, duration: 0.35, ease: "sine.inOut" },
+          "-=0.25"
         )
-        // Hold briefly so home-page init has time to settle
-        .to({}, { duration: 0.3 })
+        // Brief hold so home init has time to settle
+        .to({}, { duration: 0.15 })
         .to(
           [logoRef.current, logoTextRef.current, glowRef.current],
-          { opacity: 0, duration: 0.25, ease: "power2.in" }
+          { opacity: 0, duration: 0.2, ease: "power2.in" }
         )
-        .to(topRef.current, { yPercent: -100, duration: 0.5, ease: "power3.inOut" }, "-=0.1")
-        .to(bottomRef.current, { yPercent: 100, duration: 0.5, ease: "power3.inOut" }, "<");
+        .to(topRef.current, { yPercent: -100, duration: 0.4, ease: "power3.inOut" }, "-=0.1")
+        .to(bottomRef.current, { yPercent: 100, duration: 0.4, ease: "power3.inOut" }, "<");
     } else {
       // First-visit preloader (full ~2.2s with progress counter)
       const counter = { value: 0 };
