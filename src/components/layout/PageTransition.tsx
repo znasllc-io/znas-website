@@ -60,13 +60,24 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
     if (cameFromTransition) {
       sessionStorage.removeItem("znas-page-transition");
 
-      // Start covering, then split apart
-      gsap.set(top, { yPercent: 0, force3D: true });
-      gsap.set(bottom, { yPercent: 0, force3D: true });
+      // On home, the Preloader plays the "welcome back" animation and
+      // covers the page while it rebuilds. PageTransition panels stay
+      // hidden to avoid double-covering the viewport.
+      const isHome =
+        typeof window !== "undefined" && window.location.pathname === "/";
 
-      const tl = gsap.timeline({ defaults: { force3D: true } });
-      tl.to(top, { yPercent: -100, duration: 0.6, ease: "power3.inOut" });
-      tl.to(bottom, { yPercent: 100, duration: 0.6, ease: "power3.inOut" }, "<");
+      if (isHome) {
+        gsap.set(top, { yPercent: -100 });
+        gsap.set(bottom, { yPercent: 100 });
+      } else {
+        // Proposal pages: panels cover, then split apart
+        gsap.set(top, { yPercent: 0, force3D: true });
+        gsap.set(bottom, { yPercent: 0, force3D: true });
+
+        const tl = gsap.timeline({ defaults: { force3D: true } });
+        tl.to(top, { yPercent: -100, duration: 0.6, ease: "power3.inOut" });
+        tl.to(bottom, { yPercent: 100, duration: 0.6, ease: "power3.inOut" }, "<");
+      }
     } else {
       // No transition — panels hidden
       gsap.set(top, { yPercent: -100 });

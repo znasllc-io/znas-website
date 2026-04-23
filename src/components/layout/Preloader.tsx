@@ -25,19 +25,17 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     };
     window.addEventListener("pageshow", handlePageShow);
 
-    // Skip preloader when arriving via page transition (e.g. back from proposals)
-    const cameFromTransition = sessionStorage.getItem("znas-page-transition");
-    if (cameFromTransition) {
-      setPrefersReduced(true);
-      onComplete();
-      return () => window.removeEventListener("pageshow", handlePageShow);
-    }
-
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setPrefersReduced(true);
       onComplete();
       return () => window.removeEventListener("pageshow", handlePageShow);
     }
+
+    // Returning from an in-app transition (e.g. back from /proposals).
+    // Play a shorter welcome-back animation that still covers the ~1-2s
+    // of home-page rebuild work (Lenis, ScrollTriggers, FlipClocks, etc.)
+    // so the user doesn't see a janky/unresponsive home page.
+    const isReturn = !!sessionStorage.getItem("znas-page-transition");
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -52,70 +50,104 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     // Fallback: force-complete if rAF is throttled (background tabs, headless)
     const fallback = setTimeout(() => {
       tl.progress(1, false);
-    }, 2200);
+    }, isReturn ? 1800 : 2200);
 
-    const counter = { value: 0 };
+    if (isReturn) {
+      // SHORT return animation (~1.3s): logo + glow fade in, brief hold,
+      // fade out, panels split. No progress bar or counter.
 
-    // Logo + glow fade in first
-    tl.fromTo(logoRef.current,
-      { opacity: 0, scale: 0.9 },
-      { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }
-    )
-      .fromTo(logoTextRef.current,
-        { opacity: 0, y: 5 },
-        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
-        "-=0.3"
+      // Hide the progress bar + counter — they're not part of the return UX
+      gsap.set([lineRef.current, counterRef.current], { opacity: 0 });
+
+      tl.fromTo(
+        logoRef.current,
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 0.4, ease: "power3.out" }
       )
-      .fromTo(glowRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.8, ease: "sine.inOut" },
-        "-=0.4"
+        .fromTo(
+          logoTextRef.current,
+          { opacity: 0, y: 4 },
+          { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" },
+          "-=0.2"
+        )
+        .fromTo(
+          glowRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.45, ease: "sine.inOut" },
+          "-=0.3"
+        )
+        // Hold briefly so home-page init has time to settle
+        .to({}, { duration: 0.3 })
+        .to(
+          [logoRef.current, logoTextRef.current, glowRef.current],
+          { opacity: 0, duration: 0.25, ease: "power2.in" }
+        )
+        .to(topRef.current, { yPercent: -100, duration: 0.5, ease: "power3.inOut" }, "-=0.1")
+        .to(bottomRef.current, { yPercent: 100, duration: 0.5, ease: "power3.inOut" }, "<");
+    } else {
+      // First-visit preloader (full ~2.2s with progress counter)
+      const counter = { value: 0 };
+
+      tl.fromTo(logoRef.current,
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }
       )
-      // Bar loads beneath the logo
-      .to(lineRef.current, {
-        width: "40%",
-        duration: 0.9,
-        ease: "power2.inOut",
-      }, "-=0.2")
-      .to(
-        counter,
-        {
-          value: 100,
+        .fromTo(logoTextRef.current,
+          { opacity: 0, y: 5 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
+          "-=0.3"
+        )
+        .fromTo(glowRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.8, ease: "sine.inOut" },
+          "-=0.4"
+        )
+        // Bar loads beneath the logo
+        .to(lineRef.current, {
+          width: "40%",
           duration: 0.9,
           ease: "power2.inOut",
-          onUpdate: () => {
-            if (counterRef.current) {
-              counterRef.current.textContent = String(
-                Math.round(counter.value)
-              ).padStart(3, "0");
-            }
+        }, "-=0.2")
+        .to(
+          counter,
+          {
+            value: 100,
+            duration: 0.9,
+            ease: "power2.inOut",
+            onUpdate: () => {
+              if (counterRef.current) {
+                counterRef.current.textContent = String(
+                  Math.round(counter.value)
+                ).padStart(3, "0");
+              }
+            },
           },
-        },
-        "<"
-      )
-      // Everything fades out, panels split
-      .to(
-        [logoRef.current, logoTextRef.current, glowRef.current, lineRef.current, counterRef.current],
-        {
-          opacity: 0,
-          duration: 0.3,
-          ease: "power2.in",
-        }
-      )
-      .to(topRef.current, {
-        yPercent: -100,
-        duration: 0.5,
-        ease: "power3.inOut",
-      }, "-=0.1")
-      .to(
-        bottomRef.current,
-        {
-          yPercent: 100,
+          "<"
+        )
+        // Everything fades out, panels split
+        .to(
+          [logoRef.current, logoTextRef.current, glowRef.current, lineRef.current, counterRef.current],
+          {
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.in",
+          }
+        )
+        .to(topRef.current, {
+          yPercent: -100,
           duration: 0.5,
           ease: "power3.inOut",
-        },
-        "<"
-      );
+        }, "-=0.1")
+        .to(
+          bottomRef.current,
+          {
+            yPercent: 100,
+            duration: 0.5,
+            ease: "power3.inOut",
+          },
+          "<"
+        );
+    }
 
     return () => {
       clearTimeout(fallback);
