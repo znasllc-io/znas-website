@@ -19,9 +19,24 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   const [prefersReduced, setPrefersReduced] = useState(false);
 
   useEffect(() => {
-    // Skip preloader on back/forward navigation (bfcache restore)
+    // Handle bfcache restore (browser back/forward).
+    // If we're returning from /proposals (flag set), bfcache would restore
+    // Home's DOM in a weird mid-initial state (GSAP transforms reverted,
+    // useEffect doesn't re-run, preloader stuck covering the page). Force
+    // a hard reload so the Preloader mounts fresh and plays the short
+    // welcome-back animation. Otherwise (e.g. back from external site),
+    // just complete the preloader since the page is already fully rendered.
     const handlePageShow = (e: PageTransitionEvent) => {
-      if (e.persisted) onComplete();
+      if (!e.persisted) return;
+      // Bfcache restore: if we were returning from /proposals, Home's DOM
+      // was cached in a pre-useEffect state (panels covering, counter
+      // visible, no GSAP transforms applied) — force a hard reload so
+      // the Preloader mounts fresh and plays the welcome-back animation.
+      if (sessionStorage.getItem("znas-page-transition")) {
+        window.location.reload();
+      } else {
+        onComplete();
+      }
     };
     window.addEventListener("pageshow", handlePageShow);
 
