@@ -33,8 +33,16 @@ export default function ProposalListClient({
   // browser back button) triggers the short "welcome back" preloader on
   // the home page. Runs after PageTransition's useEffect consumes any
   // existing flag, so this re-sets it for the next navigation.
+  //
+  // The unload listener disables bfcache in Chromium browsers, forcing
+  // a fresh mount of Home on browser back — so the Preloader's useEffect
+  // actually runs and plays the short animation instead of being stuck
+  // in a cached pre-animation state.
   useEffect(() => {
     sessionStorage.setItem("znas-page-transition", "1");
+    const preventBfcache = () => {};
+    window.addEventListener("unload", preventBfcache);
+    return () => window.removeEventListener("unload", preventBfcache);
   }, []);
 
   // Countdown timer for rate limiting

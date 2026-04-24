@@ -39,9 +39,13 @@ export default function ProposalPageClient({
 
   // Mark that we're on a proposal page so ANY navigation away (including
   // browser back button) triggers the short "welcome back" preloader on
-  // the home page.
+  // the home page. The unload listener disables bfcache in Chromium so
+  // Home gets a fresh mount on browser back.
   useEffect(() => {
     sessionStorage.setItem("znas-page-transition", "1");
+    const preventBfcache = () => {};
+    window.addEventListener("unload", preventBfcache);
+    return () => window.removeEventListener("unload", preventBfcache);
   }, []);
 
   const handleSuccess = useCallback(

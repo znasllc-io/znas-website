@@ -93,7 +93,10 @@ export default function Hero({ preloaderDone }: HeroProps) {
   }, []);
 
   useEffect(() => {
-    if (!preloaderDone) return;
+    // Run Hero's entry setup on mount regardless of preloaderDone.
+    // The preloader covers the viewport visually while this setup runs,
+    // so the user sees Hero mid-animation when the panels slide off — no
+    // "black flash" gap between preloader finishing and Hero appearing.
 
     const ctx = gsap.context(() => {
       // SplitText setup
@@ -221,12 +224,10 @@ export default function Hero({ preloaderDone }: HeroProps) {
       pulseTweenRef.current = null;
       ctx.revert();
     };
-  }, [preloaderDone]);
+  }, []);
 
   // Magnetic node attraction — nodes AND lines move together
   useEffect(() => {
-    if (!preloaderDone) return;
-
     const hasFine = window.matchMedia("(pointer: fine)").matches;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!hasFine || prefersReducedMotion) return;
@@ -314,7 +315,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
       diagram.removeEventListener("mousemove", handleMouseMove);
       diagram.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [preloaderDone, updateLines]);
+  }, [updateLines]);
 
   const getNode = (id: string) => NODES.find((n) => n.id === id)!;
 

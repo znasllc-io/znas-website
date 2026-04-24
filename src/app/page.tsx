@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useLenis } from "@/hooks/useLenis";
 import Preloader from "@/components/layout/Preloader";
 import Navigation from "@/components/layout/Navigation";
@@ -23,6 +23,24 @@ export default function Home() {
 
   const handlePreloaderComplete = useCallback(() => {
     setPreloaderDone(true);
+  }, []);
+
+  // Listen for popstate (browser back/forward). If Next.js soft-navigated
+  // us back to Home, the Preloader's component tree stays mounted and
+  // tweens don't re-run — leaving the preloader stuck covering the page.
+  // Force a hard reload in that case so everything mounts fresh and the
+  // short "welcome back" preloader plays correctly.
+  useEffect(() => {
+    const handlePopState = () => {
+      if (
+        window.location.pathname === "/" &&
+        sessionStorage.getItem("znas-page-transition")
+      ) {
+        window.location.reload();
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   return (
