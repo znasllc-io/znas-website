@@ -41,7 +41,8 @@ export interface Proposal {
   clientName: string;
   projectTitle: string;
   projectTitle_es?: string;
-  password: string;
+  // Argon2id hash of the access code. Never stored or transmitted in plaintext.
+  passwordHash: string;
   status: "active" | "draft" | "archived";
   pdfFilename: string;
   pdfFilenameEs?: string;
@@ -49,8 +50,8 @@ export interface Proposal {
   sections_es?: ProposalSections;
 }
 
-// Safe proposal data (password stripped)
-export type SafeProposal = Omit<Proposal, "password">;
+// Safe proposal data (hash stripped)
+export type SafeProposal = Omit<Proposal, "passwordHash">;
 
 const PROPOSALS_DIR = path.join(process.cwd(), "data", "proposals");
 
@@ -107,9 +108,9 @@ export function loadAllProposals(): Pick<SafeProposal, "slug" | "clientName" | "
 }
 
 /**
- * Strip password from proposal for safe client-side use.
+ * Strip password hash from proposal for safe client-side use.
  */
 export function toSafeProposal(proposal: Proposal): SafeProposal {
-  const { password, ...safe } = proposal;
+  const { passwordHash: _h, ...safe } = proposal;
   return safe;
 }

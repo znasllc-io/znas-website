@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
+import argon2 from "argon2";
 import fs from "fs";
 import path from "path";
 import { loadProposal } from "@/lib/proposals";
@@ -42,11 +42,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Constant-time password comparison
-    const inputBuf = Buffer.from(password);
-    const storedBuf = Buffer.from(proposal.password);
-
-    if (inputBuf.length !== storedBuf.length || !crypto.timingSafeEqual(inputBuf, storedBuf)) {
+    // Argon2id verify — same pattern as the verify route. Kept here as
+    // defense-in-depth; PR 3 will replace this with a signed session cookie
+    // so the raw code stops bouncing back from the client on every download.
+    let ok = false;
+    try {
+      ok = await argon2.verify(proposal.passwordHash, password);
+    } catch {
+      ok = false;
+    }
+    if (!ok) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401, headers: SECURITY_HEADERS }
