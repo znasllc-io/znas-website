@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import argon2 from "argon2";
 import { loadProposal, toSafeProposal } from "@/lib/proposals";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import {
   SESSION_COOKIE_NAME,
   SESSION_COOKIE_PATH,
@@ -27,8 +27,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Rate limiting (per-slug, not global)
-    const rateLimit = checkRateLimit(`verify:${slug}`);
+    // Rate limiting (per-IP+slug and per-slug abuse ceiling). Keyed by
+    // client IP so a single attacker cannot lock out the real client.
+    const ip = getClientIp(request);
+    const rateLimit = await checkRateLimit({ ip, slug });
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: "Too many attempts. Please try again later.", retryAfter: Math.ceil(rateLimit.resetIn / 1000) },

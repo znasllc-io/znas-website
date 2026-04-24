@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { loadProposal } from "@/lib/proposals";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { SESSION_COOKIE_NAME, verifySession } from "@/lib/session";
 
 /** Security headers applied to all responses */
@@ -23,8 +23,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Rate limiting (per-slug)
-    const rateLimit = checkRateLimit(`download:${slug}`);
+    // Rate limiting (per-IP+slug and per-slug abuse ceiling)
+    const ip = getClientIp(request);
+    const rateLimit = await checkRateLimit({ ip, slug });
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: "Too many attempts. Please try again later.", retryAfter: Math.ceil(rateLimit.resetIn / 1000) },
