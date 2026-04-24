@@ -98,7 +98,7 @@ export default function Navigation({
 
   useEffect(() => {
     if (isPortal || hasNavOverride) return; // No home section tracking on portal/proposal pages
-    const sections = ["about", "expertise", "journey", "work", "contact"];
+    const sections = ["about", "expertise", "journey", "work", "testimonials", "contact"];
     const triggers: ScrollTrigger[] = [];
 
     sections.forEach((id) => {
