@@ -190,32 +190,32 @@ export default function Hero({ preloaderDone }: HeroProps) {
         delay: tl.duration() + 0.5,
       });
 
-      // 7. Register parallax exit on scroll after entry completes
-      tl.call(() => {
-        setFlipClockActive(true);
-        gsap.to(".hero-content", {
-          y: -80,
-          opacity: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "20% top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-        gsap.to(".hero-diagram", {
-          y: -50,
-          scale: 0.95,
-          opacity: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "20% top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
+      // 7. Enable flip clock after entry animation completes
+      tl.call(() => setFlipClockActive(true));
+
+      // 8. Parallax exit — created INSIDE context so ctx.revert() kills them
+      gsap.to(".hero-content", {
+        y: -80,
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "20% top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+      gsap.to(".hero-diagram", {
+        y: -50,
+        scale: 0.95,
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "20% top",
+          end: "bottom top",
+          scrub: true,
+        },
       });
     }, sectionRef);
 
