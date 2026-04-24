@@ -193,30 +193,44 @@ export default function Hero({ preloaderDone }: HeroProps) {
       // 7. Enable flip clock after entry animation completes
       tl.call(() => setFlipClockActive(true));
 
-      // 8. Parallax exit — created INSIDE context so ctx.revert() kills them
-      gsap.to(".hero-content", {
-        y: -80,
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "20% top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-      gsap.to(".hero-diagram", {
-        y: -50,
-        scale: 0.95,
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "20% top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
+      // 8. Parallax exit — use fromTo with EXPLICIT from values.
+      //
+      // Why fromTo (not to): the JSX has style={{ opacity: 0 }} on these
+      // wrappers (FOUC prevention). When `gsap.to({opacity:0})` is created,
+      // GSAP snapshots the DOM state — opacity:0 — as the implicit "from".
+      // The entry timeline's `tl.set({opacity:1})` later makes the element
+      // visible, but the scrub tween's "from" is still 0. On scroll-back,
+      // scrub returns to its captured "from" (0), leaving the hero invisible.
+      // fromTo locks both endpoints explicitly so reverse-scroll restores 1.
+      gsap.fromTo(".hero-content",
+        { y: 0, opacity: 1 },
+        {
+          y: -80,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "20% top",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+      gsap.fromTo(".hero-diagram",
+        { y: 0, scale: 1, opacity: 1 },
+        {
+          y: -50,
+          scale: 0.95,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "20% top",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
     }, sectionRef);
 
     return () => {
