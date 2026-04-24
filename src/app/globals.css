@@ -52,35 +52,6 @@
   }
 }
 
-/* ── Hero Owl Watermark ── */
-.hero-owl-watermark > div {
-  mix-blend-mode: screen;
-  filter: blur(1px);
-}
-
-[data-theme="light"] .hero-owl-watermark > div {
-  mix-blend-mode: multiply;
-  filter: invert(1) blur(1px);
-  opacity: 0.04 !important;
-}
-
-@media (max-width: 768px) {
-  .hero-owl-watermark > div {
-    width: clamp(200px, 60vw, 350px) !important;
-    height: clamp(200px, 60vw, 350px) !important;
-  }
-}
-
-/* ── Synapse Dots ── */
-.synapse-dot {
-  /* will-change removed — GSAP sets it during active tweens via force3D */
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .synapse-dot {
-    display: none;
-  }
-}
 
 /* ── Brand Text Lockup ── */
 .logo-lockup-text {
@@ -204,7 +175,7 @@ body {
   a, button, [role="button"], input, textarea, select {
     cursor: none;
   }
-  .work-row, .blueprint-card {
+  .blueprint-card {
     cursor: none;
   }
 }
@@ -295,16 +266,6 @@ body {
   padding-bottom: clamp(6rem, 12vh, 12rem);
 }
 
-/* ── Word Reveal Clip ── */
-.word-wrap {
-  overflow: hidden;
-  display: inline-block;
-  vertical-align: top;
-}
-
-.word-wrap span {
-  display: inline-block;
-}
 
 /* ── Pill Tags ── */
 .pill-tag {
@@ -639,37 +600,6 @@ body {
   opacity: 0.7;
 }
 
-/* ── Work Row ── */
-.work-row {
-  border-bottom: 1px solid var(--color-border);
-  padding: 2rem 1.5rem;
-  transition: background-color 0.3s var(--ease-reveal);
-}
-
-.work-row:first-child {
-  border-top: 1px solid var(--color-border);
-}
-
-.work-row:hover {
-  background-color: var(--color-bg-elevated);
-}
-
-.work-row:hover .work-title {
-  color: var(--color-accent);
-}
-
-.work-row:hover .work-arrow {
-  transform: translateX(4px);
-}
-
-.work-title {
-  transition: color 0.3s var(--ease-reveal);
-}
-
-.work-arrow {
-  transition: transform 0.3s var(--ease-reveal);
-  color: var(--color-text-tertiary);
-}
 
 /* ── Mobile Menu ── */
 .mobile-menu {
