@@ -1,9 +1,16 @@
 FROM node:20-slim AS builder
 WORKDIR /app
-COPY package.json package-lock.json ./
-# Fresh install inside Linux container — avoids macOS lockfile binary mismatch
-# for lightningcss, tailwindcss-oxide, and other platform-specific packages
-RUN npm ci
+COPY package.json ./
+# Use `npm install` (not `npm ci`) inside the Linux container. The
+# package-lock.json is generated on macOS (Apple Silicon) and pins
+# darwin-arm64 / darwin-x64 native binaries for lightningcss and
+# @tailwindcss/oxide. `npm ci` is strict and refuses to deviate from
+# the lockfile, so it would NOT install the linux-x64-gnu variants
+# needed in this container, causing `Cannot find module 'lightningcss.linux-...'`
+# at build time. `npm install` resolves platform-appropriate optional
+# deps, which is what we need here. Reproducibility tradeoff is
+# acceptable since the source of truth for deps is package.json.
+RUN npm install
 COPY . .
 RUN npm run build
 
