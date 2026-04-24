@@ -25,22 +25,47 @@ export default function Home() {
     setPreloaderDone(true);
   }, []);
 
-  // Listen for popstate (browser back/forward). If Next.js soft-navigated
-  // us back to Home, the Preloader's component tree stays mounted and
-  // tweens don't re-run — leaving the preloader stuck covering the page.
-  // Force a hard reload in that case so everything mounts fresh and the
-  // short "welcome back" preloader plays correctly.
+  // WATCHDOG: If Home ends up in the stuck state (preloader visible
+  // covering the viewport with the "000" counter, tweens never ran),
+  // force a hard reload. This catches all the cases we can't predict:
+  //   - Bfcache restore without fresh mount
+  //   - Next.js App Router soft nav keeping JS context alive
+  //   - Browser back where useEffect doesn't re-run
+  //   - Any other mechanism that bypasses React's normal lifecycle
+  //
+  // A `znas-reload-once` session flag prevents infinite reload loops —
+  // if reloading once didn't fix it, we stop and let the user see
+  // whatever state they're in rather than looping forever.
   useEffect(() => {
-    const handlePopState = () => {
-      if (
-        window.location.pathname === "/" &&
-        sessionStorage.getItem("znas-page-transition")
-      ) {
+    // Interval-based watchdog. Runs every 400ms. Checks if:
+    //  - The return flag is set (user came from /proposals)
+    //  - The Preloader element exists and is in its stuck pattern:
+    //      counter text is "000" AND counter opacity is "1"
+    //  - We haven't already reloaded once to try to fix it.
+    const interval = setInterval(() => {
+      if (!sessionStorage.getItem("znas-page-transition")) return;
+      const counter = document.querySelector(
+        ".preloader-counter"
+      ) as HTMLElement | null;
+      if (!counter) return;
+      const isStuck =
+        counter.textContent?.trim() === "000" &&
+        window.getComputedStyle(counter).opacity === "1";
+      if (isStuck && !sessionStorage.getItem("znas-reload-once")) {
+        sessionStorage.setItem("znas-reload-once", "1");
+        clearInterval(interval);
         window.location.reload();
       }
+    }, 400);
+    // Clear the one-shot guard after 3s of NOT being stuck, so future
+    // back-navigations can self-heal too.
+    const clearGuard = setTimeout(() => {
+      sessionStorage.removeItem("znas-reload-once");
+    }, 3000);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(clearGuard);
     };
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   return (
