@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import argon2 from "argon2";
 import fs from "fs";
 import path from "path";
 import { loadProposal } from "@/lib/proposals";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { SESSION_COOKIE_NAME, verifySession } from "@/lib/session";
 
 /** Security headers applied to all responses */
 const SECURITY_HEADERS = {
@@ -14,9 +14,9 @@ const SECURITY_HEADERS = {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { slug, password, lang } = body as { slug?: string; password?: string; lang?: string };
+    const { slug, lang } = body as { slug?: string; lang?: string };
 
-    if (!slug || !password) {
+    if (!slug) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400, headers: SECURITY_HEADERS }
@@ -32,26 +32,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Load proposal
-    const proposal = loadProposal(slug);
-    if (!proposal) {
-      // Same error as wrong password — prevents slug enumeration
+    // Authenticate via the session cookie issued by /verify. The raw access
+    // code no longer travels on download requests. The cookie is HttpOnly
+    // and bound to this slug by the JWT payload, so a cookie for proposal A
+    // cannot download proposal B even if someone tries to swap the slug in
+    // the request body.
+    const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+    const sessionSlug = await verifySession(token);
+    if (!sessionSlug || sessionSlug !== slug) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401, headers: SECURITY_HEADERS }
       );
     }
 
-    // Argon2id verify — same pattern as the verify route. Kept here as
-    // defense-in-depth; PR 3 will replace this with a signed session cookie
-    // so the raw code stops bouncing back from the client on every download.
-    let ok = false;
-    try {
-      ok = await argon2.verify(proposal.passwordHash, password);
-    } catch {
-      ok = false;
-    }
-    if (!ok) {
+    // Load proposal (already authenticated above — this is to fetch the
+    // PDF filename mapping, not to re-verify access).
+    const proposal = loadProposal(slug);
+    if (!proposal) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401, headers: SECURITY_HEADERS }

@@ -2,14 +2,14 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "@/lib/gsap-config";
+import type { SafeProposal } from "@/lib/proposals";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
 
 interface PasswordGateProps {
   slug: string;
   clientName: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSuccess: (proposalData: any, password: string) => void;
+  onSuccess: (proposalData: SafeProposal) => void;
 }
 
 export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGateProps) {
@@ -21,7 +21,6 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
   const inputWrapRef = useRef<HTMLDivElement>(null);
   const buttonWrapRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<string>("");
 
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -114,7 +113,8 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
 
         if (res.ok) {
           const data = await res.json();
-          passwordRef.current = password;
+          // Server has set the HttpOnly session cookie — we no longer hold
+          // the access code anywhere in client memory.
 
           // Success exit animation, then callback
           gsap.to(containerRef.current, {
@@ -122,7 +122,7 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
             y: -30,
             duration: 0.5,
             ease: "power3.in",
-            onComplete: () => onSuccess(data.proposal, password),
+            onComplete: () => onSuccess(data.proposal),
           });
           return;
         }

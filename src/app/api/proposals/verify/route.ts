@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import argon2 from "argon2";
 import { loadProposal, toSafeProposal } from "@/lib/proposals";
 import { checkRateLimit } from "@/lib/rate-limit";
+import {
+  SESSION_COOKIE_NAME,
+  SESSION_COOKIE_PATH,
+  SESSION_MAX_AGE_SECONDS,
+  signSession,
+} from "@/lib/session";
 
 /** Security headers applied to all responses from this route */
 const SECURITY_HEADERS = {
@@ -56,11 +62,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Return safe proposal data — password field is stripped by toSafeProposal()
-    return NextResponse.json(
+    // Mint a session token. From here on the client proves it passed the
+    // argon2 gate by presenting this cookie — the raw access code never
+    // needs to be held in client state or re-sent on subsequent requests.
+    const token = await signSession(proposal.slug);
+
+    const response = NextResponse.json(
       { proposal: toSafeProposal(proposal) },
       { headers: SECURITY_HEADERS }
     );
+    response.cookies.set({
+      name: SESSION_COOKIE_NAME,
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: SESSION_COOKIE_PATH,
+      maxAge: SESSION_MAX_AGE_SECONDS,
+    });
+    return response;
   } catch {
     return NextResponse.json(
       { error: "Invalid request" },

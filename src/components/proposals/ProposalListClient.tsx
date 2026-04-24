@@ -80,10 +80,13 @@ export default function ProposalListClient({
 
         if (res.ok) {
           const data = await res.json();
-          // Store auth data in sessionStorage
+          // Hand off proposal content to the viewer page. The access code
+          // is NOT stored — auth now lives in the HttpOnly session cookie
+          // the server set on this response, which the next page's download
+          // call will send automatically.
           sessionStorage.setItem(
             `znas-proposal-${selectedSlug}`,
-            JSON.stringify({ proposal: data.proposal, password })
+            JSON.stringify({ proposal: data.proposal })
           );
           // Navigate — PageTransition handles the animation.
           // IMPORTANT: do NOT call setLoading(false) — we're leaving this page.
