@@ -1,9 +1,9 @@
 FROM node:20-slim AS builder
 WORKDIR /app
-COPY package.json ./
+COPY package.json package-lock.json ./
 # Fresh install inside Linux container — avoids macOS lockfile binary mismatch
 # for lightningcss, tailwindcss-oxide, and other platform-specific packages
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npm run build
 
