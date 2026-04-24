@@ -47,7 +47,8 @@ export default function Home() {
       const counter = document.querySelector(
         ".preloader-counter"
       ) as HTMLElement | null;
-      if (!counter) return;
+      // Preloader gone — stop polling
+      if (!counter) { clearInterval(interval); return; }
       const isStuck =
         counter.textContent?.trim() === "000" &&
         window.getComputedStyle(counter).opacity === "1";
