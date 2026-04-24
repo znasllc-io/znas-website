@@ -72,6 +72,18 @@ function Work() {
                 if (el) cardsRef.current[i] = el;
               }}
               className="blueprint-card group"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSelectedProject({
+                    title: project.title,
+                    challenge: project.challenge,
+                    url: getProjectUrl(project.title),
+                  });
+                }
+              }}
               style={{
                 position: "relative",
                 padding: "2rem",
@@ -80,6 +92,7 @@ function Work() {
                 backgroundColor: "transparent",
                 transition: "border-color 0.4s",
                 cursor: "none",
+                outline: "none",
               }}
               onClick={() => {
                 setSelectedProject({
