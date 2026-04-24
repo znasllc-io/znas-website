@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 import { loadProposal } from "@/lib/proposals";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { SESSION_COOKIE_NAME, verifySession } from "@/lib/session";
 
 /** Security headers applied to all responses */
 const SECURITY_HEADERS = {
@@ -14,17 +14,18 @@ const SECURITY_HEADERS = {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { slug, password, lang } = body as { slug?: string; password?: string; lang?: string };
+    const { slug, lang } = body as { slug?: string; lang?: string };
 
-    if (!slug || !password) {
+    if (!slug) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400, headers: SECURITY_HEADERS }
       );
     }
 
-    // Rate limiting (per-slug)
-    const rateLimit = checkRateLimit(`download:${slug}`);
+    // Rate limiting (per-IP+slug and per-slug abuse ceiling)
+    const ip = getClientIp(request);
+    const rateLimit = await checkRateLimit({ ip, slug });
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: "Too many attempts. Please try again later.", retryAfter: Math.ceil(rateLimit.resetIn / 1000) },
@@ -32,21 +33,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Load proposal
-    const proposal = loadProposal(slug);
-    if (!proposal) {
-      // Same error as wrong password — prevents slug enumeration
+    // Authenticate via the session cookie issued by /verify. The raw access
+    // code no longer travels on download requests. The cookie is HttpOnly
+    // and bound to this slug by the JWT payload, so a cookie for proposal A
+    // cannot download proposal B even if someone tries to swap the slug in
+    // the request body.
+    const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+    const sessionSlug = await verifySession(token);
+    if (!sessionSlug || sessionSlug !== slug) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401, headers: SECURITY_HEADERS }
       );
     }
 
-    // Constant-time password comparison
-    const inputBuf = Buffer.from(password);
-    const storedBuf = Buffer.from(proposal.password);
-
-    if (inputBuf.length !== storedBuf.length || !crypto.timingSafeEqual(inputBuf, storedBuf)) {
+    // Load proposal (already authenticated above — this is to fetch the
+    // PDF filename mapping, not to re-verify access).
+    const proposal = loadProposal(slug);
+    if (!proposal) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401, headers: SECURITY_HEADERS }

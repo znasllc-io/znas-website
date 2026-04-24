@@ -32,6 +32,11 @@ yarn-error.log*
 .env
 .env*.local
 
+# Proposal data — contains client content + argon2id password hashes.
+# See data/proposals/README.md. Only the *.example.json template is tracked.
+/data/proposals/*.json
+!/data/proposals/*.example.json
+
 # vercel
 .vercel
 

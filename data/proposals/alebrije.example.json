@@ -1,0 +1,45 @@
+{
+  "_comment": "TEMPLATE ONLY. Real proposal JSONs live outside version control (see data/proposals/README.md). Generate passwordHash with scripts/hash-password.mjs.",
+  "slug": "example-slug",
+  "clientName": "Example Client Name",
+  "projectTitle": "Example Project Title",
+  "projectTitle_es": "Título de Proyecto de Ejemplo",
+  "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$REPLACE_ME$REPLACE_ME",
+  "status": "draft",
+  "pdfFilename": "example-en.pdf",
+  "pdfFilenameEs": "example-es.pdf",
+  "sections": {
+    "summary": {
+      "headline": "One-line pitch.",
+      "body": "Multi-paragraph proposal body.",
+      "highlights": ["Highlight 1", "Highlight 2"]
+    },
+    "roadmap": [
+      {
+        "phase": "Phase 1: Assessment",
+        "description": "What happens in this phase.",
+        "deliverables": ["Deliverable A", "Deliverable B"]
+      }
+    ],
+    "timeline": [
+      {
+        "milestone": "Kickoff",
+        "date": "2026-05-01",
+        "status": "upcoming",
+        "description": "Optional milestone description."
+      }
+    ],
+    "investment": {
+      "description": "Investment overview.",
+      "tiers": [
+        {
+          "name": "Tier Name",
+          "price": "$0",
+          "description": "What this tier includes.",
+          "includes": ["Item 1", "Item 2"],
+          "recommended": false
+        }
+      ]
+    }
+  }
+}

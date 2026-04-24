@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { SafeProposal } from "@/lib/proposals";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
@@ -22,16 +22,17 @@ export default function ProposalPageClient({
   const { lang } = useLanguage();
   const t = translations[lang];
   const [proposal, setProposal] = useState<SafeProposal | null>(null);
-  const passwordRef = useRef<string>("");
 
-  // Check sessionStorage for pre-auth from inline code entry
+  // Pick up proposal data handed off from the /proposals list page via
+  // sessionStorage. The server already issued an HttpOnly session cookie
+  // during that verify call, so auth state lives in the cookie — the
+  // access code is never stored or re-sent by client code.
   useEffect(() => {
     const stored = sessionStorage.getItem(`znas-proposal-${slug}`);
     if (stored) {
       try {
-        const { proposal: data, password } = JSON.parse(stored);
-        setProposal(data);
-        passwordRef.current = password;
+        const { proposal: data } = JSON.parse(stored);
+        if (data) setProposal(data);
       } catch { /* ignore parse errors */ }
       sessionStorage.removeItem(`znas-proposal-${slug}`);
     }
@@ -49,8 +50,7 @@ export default function ProposalPageClient({
   }, []);
 
   const handleSuccess = useCallback(
-    (data: SafeProposal, password: string) => {
-      passwordRef.current = password;
+    (data: SafeProposal) => {
       setTimeout(() => setProposal(data), 600);
     },
     []
@@ -60,8 +60,11 @@ export default function ProposalPageClient({
     try {
       const res = await fetch("/api/proposals/download", {
         method: "POST",
+        // credentials: "same-origin" is default; explicit here to signal
+        // that the HttpOnly session cookie is the auth mechanism.
+        credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, password: passwordRef.current, lang }),
+        body: JSON.stringify({ slug, lang }),
       });
 
       if (!res.ok) {
@@ -81,13 +84,19 @@ export default function ProposalPageClient({
     } catch {
       alert(t.proposals.viewer.download.errorFailed);
     }
-  }, [slug, lang]);
+  }, [slug, lang, t.proposals.viewer.download.errorRefresh, t.proposals.viewer.download.errorFailed]);
 
-  // Security: clear proposal data on unmount
+  // On unmount clear the in-memory proposal and ask the server to drop
+  // the session cookie. Best-effort — if the request fails (tab closed
+  // mid-flight) the cookie will still expire on its own Max-Age.
   useEffect(() => {
     return () => {
       setProposal(null);
-      passwordRef.current = "";
+      fetch("/api/proposals/logout", {
+        method: "POST",
+        credentials: "same-origin",
+        keepalive: true,
+      }).catch(() => { /* tab closing, nothing to do */ });
     };
   }, []);
 
