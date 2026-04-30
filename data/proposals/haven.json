@@ -1,147 +1,109 @@
 {
-  "_comment": "STRUCTURAL SCAFFOLD. Content sections are placeholders derived from the GBP Recovery gameplan. Replace with the real proposal copy when the proposal document arrives. Status is 'draft' so this does not appear on the public proposals list until flipped to 'active'.",
   "slug": "haven",
   "clientName": "Haven Landscaping",
-  "projectTitle": "Google Business Profile Recovery",
-  "projectTitle_es": "Recuperación del Perfil de Google Business",
+  "projectTitle": "Digital Consulting & Problem-Solving",
+  "projectTitle_es": "Consultoría Digital y Resolución de Problemas",
   "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$k/Qk6s8nspXwopesnEnUdw$3y0RDoEFRxFxCVFmXbmeVBfzUqW7L1oJve5MdZQtdSo",
   "status": "active",
   "pdfFilename": "haven-en.pdf",
-  "pdfFilenameEs": "haven-es.pdf",
   "sections": {
     "summary": {
-      "headline": "Reclaim Haven's primary client acquisition channel — full recovery for four suspended Google Business Profiles.",
-      "body": "Haven Landscaping has four Google Business Profiles suspended across Victorville, Fontana/Pasadena, Rancho Cucamonga, and Irvine. For a service-area business, that channel is the lead pipeline — losing it means losing visibility in every market Haven serves.\n\nWe've spent weeks researching this problem from the inside out: cross-referencing real documented cases from local SEO forums and trade publications, incorporating direct feedback from a peer who survived an identical suspension and got reinstated, and validating every step against Google's official guidelines. The plan is operational, not speculative.\n\nThis proposal lays out the recovery: a phased reinstatement workflow that begins with preparation work we can complete today, escalates through credential gathering and a compliance audit, and culminates in coordinated appeals submitted with Google's current evidence standard — a continuous on-camera verification video showing the owner, the work truck, the equipment, and the documentation that proves Haven is a real business operating in the markets it claims.",
+      "headline": "Haven has 20 years of work behind it. This proposal is about what gets built around it next.",
+      "body": "Every business that has been around for 20 years carries a body of knowledge, a way of working, and a set of habits that got it where it is. The next stage of growth rarely depends on doing more of the same — it usually depends on what gets built around the work that is already happening. This proposal lays out how ZNAS would help Haven build that next layer.\n\nZNAS comes in as a consultant and a fixer. The role is straightforward: identify the digital and technological problems holding Haven back, and solve them one by one, in the order that makes the most impact for the business. José Sanz steps in as Haven's fractional CTO, supported by his team where needed. He doesn't replace anyone on the Haven side — he works alongside Ángel, brings outside expertise, and takes ownership of the technical problems Haven needs resolved.\n\nThe starting point is already on the table: the four suspended Google Business Profiles. That's Haven's primary lead-generation channel and the most urgent issue right now. From the first week, ZNAS attends to that recovery in parallel with a broader assessment of Haven's digital operation. From there, the work continues, covering whichever priorities surface as the most valuable to address next.\n\nThroughout the engagement, ZNAS proposes, substantiates, and recommends; Haven gives the green light on every step. Each phase of work is presented for review and approval before being executed. Ángel keeps full control over direction, pace, and depth — including the right to pause, resume later, or execute part of the plan with Haven's own resources at any point.",
       "highlights": [
-        "Recovery plan covering all four suspended profiles, prioritized by market value",
-        "Pre-flight compliance audit that fixes every policy violation before the appeal lands — no wasted attempts",
-        "Verification video script aligned to Google's 2025 SAB standard, proven in independent reinstatement cases",
-        "Per-profile evidence dossier (LLC registration, CSLB license, utility, branded vehicle) packaged for one-shot submission",
-        "Escalation path through Google Business Profile Community + Product Expert if a denial occurs",
-        "TODO: replace highlights with final proposal copy when received"
+        "Three-phase backbone — Assessment, Transformation Proposal, Execution — with Ángel's green light at every step",
+        "Suspended Google Business Profiles attended to from week one, in parallel with the broader digital assessment",
+        "AI-orchestrator methodology: years of traditional development compressed into months without sacrificing quality",
+        "17+ years building production-scale systems across airlines, language services, and consumer platforms",
+        "Everything ZNAS builds for Haven is owned 100% by Haven — no retained rights",
+        "Month-to-month engagement with 15 days' notice — Ángel keeps full control over pace and depth"
       ]
     },
     "roadmap": [
       {
-        "phase": "Phase 0: Parallel Preparation",
-        "description": "Work that requires no account access. Done in parallel while client-side credentials are gathered. Removes the entire critical path from the wait state.",
+        "phase": "Phase 1 · Assessment",
+        "description": "Understanding Haven in depth from a technological and operational perspective. José analyzes how the business runs today, which tools and systems are in use, where current technology falls short, and which manual processes can be replaced or improved through automation and AI. The work is grounded in direct observation of the operation, conversations with Ángel and his team, and review of the available data — never in assumptions. From the first week, ZNAS also takes on the recovery of the suspended Google Business Profiles in parallel.",
         "deliverables": [
-          "Four polished appeal narratives, one per suspended location",
-          "Evidence dossier ZIP template with per-profile folder structure",
-          "Verification video script for the on-camera owner walkthrough",
-          "Profile ID validation against Google's Appeals Tool",
-          "Pre-flight compliance checklist covering SAB config, address visibility, name/license match, and duplicate detection"
+          "Technical and operational assessment of Haven's current digital state",
+          "Active recovery work on the four suspended Google Business Profiles",
+          "Map of the real opportunities to transform through technology and AI",
+          "A clear picture of where Haven stands today in digital maturity, and what's possible next"
         ]
       },
       {
-        "phase": "Phase 1: Access & Compliance Audit",
-        "description": "Once client credentials and documentation arrive, a full audit and remediation pass on all four profiles BEFORE any appeal is filed.",
+        "phase": "Phase 2 · Transformation Proposal",
+        "description": "With the assessment in hand, José returns with a concrete proposal. Not a generic digitalization plan, not an open-ended recommendation — a tailored technological restructuring roadmap detailing which systems will be built or replaced, which processes will be automated, in what order, how long each component takes, and what results to expect at each stage. Ángel reviews, asks the questions he needs to ask, adjusts what needs adjusting, and approves before any execution begins.",
         "deliverables": [
-          "Login + verification across all four Google accounts",
-          "Suspension type identification (soft vs. hard) per profile",
-          "Duplicate profile detection and merge planning",
-          "All policy violations remediated in advance of submission"
+          "Tailored restructuring roadmap with prioritized scope",
+          "Per-component effort and timeline estimates",
+          "Specific results expected at each stage",
+          "An approved plan with full visibility into what gets built, in what order, and what to expect"
         ]
       },
       {
-        "phase": "Phase 2: Dossier & Verification Video",
-        "description": "Per-profile evidence packages assembled and the verification video produced to spec.",
+        "phase": "Phase 3 · Execution",
+        "description": "Once the plan is approved, execution begins. José and his team implement each technological piece in the agreed order, integrating new systems with the existing operation, training Haven's team in the use and administration of the new tools, and adjusting the plan as the business responds. Duration depends on the scope of the approved plan and the pace Haven decides to sustain. At some point, the new digital infrastructure is operating at full capacity, the team is autonomous, and the engagement either closes or transitions into a lighter strategic advisory relationship.",
         "deliverables": [
-          "Four ZIP dossiers (one per location) with all required documents",
-          "Continuous verification video filmed by the owner per script",
-          "Pre-submission QA on every artifact"
-        ]
-      },
-      {
-        "phase": "Phase 3: Appeal Submission",
-        "description": "Coordinated submission across all four profiles, highest-priority market first. Owner availability locked in for the 60-minute evidence-upload window.",
-        "deliverables": [
-          "Victorville appeal submitted (highest priority)",
-          "Fontana/Pasadena, Rancho Cucamonga, Irvine appeals submitted same day",
-          "Case IDs captured from Google's confirmation emails",
-          "Evidence + video uploaded inside each 60-minute window"
-        ]
-      },
-      {
-        "phase": "Phase 4: Monitoring & Escalation",
-        "description": "Active tracking through Google's 4-6 week review window, with a defined escalation path if any profile is denied.",
-        "deliverables": [
-          "Weekly status check on all four cases",
-          "Re-appeal package ready if first attempt is denied",
-          "Escalation through GBP Community Forum and Product Expert if needed"
+          "Implementation of each technological piece in the agreed order",
+          "Integration of new systems with Haven's existing operation",
+          "Training and knowledge transfer to the Haven team",
+          "New digital infrastructure operating at full capacity, Haven's team autonomous in its day-to-day",
+          "Continuity plan or transition to lighter strategic advisory at engagement end"
         ]
       }
     ],
     "timeline": [
       {
-        "milestone": "Kickoff & preparation begins",
-        "date": "2026-04-28",
-        "status": "upcoming",
-        "description": "Phase 0 starts. Internal work runs in parallel while client credentials are gathered."
+        "milestone": "Proposal sent",
+        "date": "2026-04-30",
+        "status": "complete",
+        "description": "Ángel receives this proposal for review."
       },
       {
-        "milestone": "Credentials received from client",
-        "date": "2026-05-02",
-        "status": "upcoming",
-        "description": "Account access, business documents, and suspension dates delivered. Phase 1 audit begins immediately."
-      },
-      {
-        "milestone": "Compliance audit complete",
+        "milestone": "Proposal review",
         "date": "2026-05-05",
         "status": "upcoming",
-        "description": "All four profiles cleaned up; every policy violation remediated before any appeal is filed."
+        "description": "Ángel reads through the proposal and surfaces any questions."
       },
       {
-        "milestone": "Verification video & dossiers ready",
-        "date": "2026-05-08",
+        "milestone": "Alignment meeting",
+        "date": "2026-05-12",
         "status": "upcoming",
-        "description": "Phase 2 complete. All evidence packaged and video produced to spec."
+        "description": "Walk through any open points and align on the scope of the engagement."
       },
       {
-        "milestone": "All four appeals submitted",
-        "date": "2026-05-09",
+        "milestone": "Agreement formalized",
+        "date": "2026-05-15",
         "status": "upcoming",
-        "description": "Same-day submission across all four profiles. Case IDs captured."
+        "description": "Engagement terms locked in. ZNAS starts the week after."
       },
       {
-        "milestone": "First responses expected from Google",
-        "date": "2026-06-13",
+        "milestone": "Work begins",
+        "date": "2026-05-19",
         "status": "upcoming",
-        "description": "Standard 4-6 week review window. Re-appeal or escalation path activated for any denial."
+        "description": "Phase 1 kicks off: assessment of Haven's digital operation, in parallel with the recovery of the suspended Google Business Profiles."
       }
     ],
     "investment": {
-      "description": "Investment structure is a placeholder. Final pricing tiers and scope will come from the proposal document — replace this entire investment block when ready.",
+      "description": "ZNAS engages Haven on a fractional CTO basis. The work is structured month to month with no long-term commitment, so Ángel can pause, accelerate, or wind down the engagement at any point with 15 days' notice. Specific scope and pricing are confirmed in the alignment meeting and revisited as the work progresses. CoPresent — Visionarys' AI platform mentioned in early conversations — is intentionally out of scope here; if Haven evaluates it later, that's a separate agreement directly with Visionarys.",
       "tiers": [
         {
-          "name": "GBP Recovery — Full Engagement",
-          "price": "TBD",
-          "description": "End-to-end recovery for all four suspended profiles, including preparation, compliance audit, evidence dossiers, verification video coordination, appeal submission, and monitoring through reinstatement.",
+          "name": "Fractional CTO Engagement",
+          "price": "Discussed during alignment meeting",
+          "description": "Senior consultant focused on solving the right problems, backed by a team that can move fast and deliver. Ángel approves every implementation decision. ZNAS proposes, substantiates, and executes; Haven gives the green light.",
           "includes": [
-            "Full Phase 0–4 execution as outlined in the roadmap",
-            "Per-profile compliance audit and remediation",
-            "Evidence dossier assembly (one ZIP per location)",
-            "Verification video script + on-set coordination",
-            "Coordinated submission across all four profiles",
-            "4–6 week active monitoring window",
-            "Re-appeal package + escalation path if denial occurs",
-            "TODO: replace included scope with final proposal terms"
+            "Executive technology leadership and architecture decisions",
+            "Direct execution: code, deployment, and working systems delivered",
+            "Recovery of the four suspended Google Business Profiles from week one",
+            "Regular progress reports throughout the engagement",
+            "Training and knowledge transfer to the Haven team",
+            "Clear continuity plan at engagement end",
+            "100% intellectual property ownership for everything ZNAS builds for Haven",
+            "Active Tech E&O, Cyber Liability, and AI coverage of $1M USD",
+            "Month-to-month renewal with 15 days' notice to conclude",
+            "NDA available on request"
           ],
           "recommended": true
-        },
-        {
-          "name": "Recovery + Ongoing GBP Management",
-          "price": "TBD",
-          "description": "Everything in the recovery engagement, plus 12 months of post-reinstatement profile management to prevent re-suspension and grow ranking.",
-          "includes": [
-            "All deliverables from the recovery engagement",
-            "Monthly profile health audits",
-            "Review monitoring and response handling",
-            "Posts, photos, and Q&A management",
-            "Quarterly performance reporting",
-            "TODO: replace with the real ongoing-management terms"
-          ],
-          "recommended": false
         }
       ]
     }
