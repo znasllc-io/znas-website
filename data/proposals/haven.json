@@ -1,0 +1,149 @@
+{
+  "_comment": "STRUCTURAL SCAFFOLD. Content sections are placeholders derived from the GBP Recovery gameplan. Replace with the real proposal copy when the proposal document arrives. Status is 'draft' so this does not appear on the public proposals list until flipped to 'active'.",
+  "slug": "haven",
+  "clientName": "Haven Landscaping",
+  "projectTitle": "Google Business Profile Recovery",
+  "projectTitle_es": "Recuperación del Perfil de Google Business",
+  "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$k/Qk6s8nspXwopesnEnUdw$3y0RDoEFRxFxCVFmXbmeVBfzUqW7L1oJve5MdZQtdSo",
+  "status": "draft",
+  "pdfFilename": "haven-en.pdf",
+  "pdfFilenameEs": "haven-es.pdf",
+  "sections": {
+    "summary": {
+      "headline": "Reclaim Haven's primary client acquisition channel — full recovery for four suspended Google Business Profiles.",
+      "body": "Haven Landscaping has four Google Business Profiles suspended across Victorville, Fontana/Pasadena, Rancho Cucamonga, and Irvine. For a service-area business, that channel is the lead pipeline — losing it means losing visibility in every market Haven serves.\n\nWe've spent weeks researching this problem from the inside out: cross-referencing real documented cases from local SEO forums and trade publications, incorporating direct feedback from a peer who survived an identical suspension and got reinstated, and validating every step against Google's official guidelines. The plan is operational, not speculative.\n\nThis proposal lays out the recovery: a phased reinstatement workflow that begins with preparation work we can complete today, escalates through credential gathering and a compliance audit, and culminates in coordinated appeals submitted with Google's current evidence standard — a continuous on-camera verification video showing the owner, the work truck, the equipment, and the documentation that proves Haven is a real business operating in the markets it claims.",
+      "highlights": [
+        "Recovery plan covering all four suspended profiles, prioritized by market value",
+        "Pre-flight compliance audit that fixes every policy violation before the appeal lands — no wasted attempts",
+        "Verification video script aligned to Google's 2025 SAB standard, proven in independent reinstatement cases",
+        "Per-profile evidence dossier (LLC registration, CSLB license, utility, branded vehicle) packaged for one-shot submission",
+        "Escalation path through Google Business Profile Community + Product Expert if a denial occurs",
+        "TODO: replace highlights with final proposal copy when received"
+      ]
+    },
+    "roadmap": [
+      {
+        "phase": "Phase 0: Parallel Preparation",
+        "description": "Work that requires no account access. Done in parallel while client-side credentials are gathered. Removes the entire critical path from the wait state.",
+        "deliverables": [
+          "Four polished appeal narratives, one per suspended location",
+          "Evidence dossier ZIP template with per-profile folder structure",
+          "Verification video script for the on-camera owner walkthrough",
+          "Profile ID validation against Google's Appeals Tool",
+          "Pre-flight compliance checklist covering SAB config, address visibility, name/license match, and duplicate detection"
+        ]
+      },
+      {
+        "phase": "Phase 1: Access & Compliance Audit",
+        "description": "Once client credentials and documentation arrive, a full audit and remediation pass on all four profiles BEFORE any appeal is filed.",
+        "deliverables": [
+          "Login + verification across all four Google accounts",
+          "Suspension type identification (soft vs. hard) per profile",
+          "Duplicate profile detection and merge planning",
+          "All policy violations remediated in advance of submission"
+        ]
+      },
+      {
+        "phase": "Phase 2: Dossier & Verification Video",
+        "description": "Per-profile evidence packages assembled and the verification video produced to spec.",
+        "deliverables": [
+          "Four ZIP dossiers (one per location) with all required documents",
+          "Continuous verification video filmed by the owner per script",
+          "Pre-submission QA on every artifact"
+        ]
+      },
+      {
+        "phase": "Phase 3: Appeal Submission",
+        "description": "Coordinated submission across all four profiles, highest-priority market first. Owner availability locked in for the 60-minute evidence-upload window.",
+        "deliverables": [
+          "Victorville appeal submitted (highest priority)",
+          "Fontana/Pasadena, Rancho Cucamonga, Irvine appeals submitted same day",
+          "Case IDs captured from Google's confirmation emails",
+          "Evidence + video uploaded inside each 60-minute window"
+        ]
+      },
+      {
+        "phase": "Phase 4: Monitoring & Escalation",
+        "description": "Active tracking through Google's 4-6 week review window, with a defined escalation path if any profile is denied.",
+        "deliverables": [
+          "Weekly status check on all four cases",
+          "Re-appeal package ready if first attempt is denied",
+          "Escalation through GBP Community Forum and Product Expert if needed"
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "milestone": "Kickoff & preparation begins",
+        "date": "2026-04-28",
+        "status": "upcoming",
+        "description": "Phase 0 starts. Internal work runs in parallel while client credentials are gathered."
+      },
+      {
+        "milestone": "Credentials received from client",
+        "date": "2026-05-02",
+        "status": "upcoming",
+        "description": "Account access, business documents, and suspension dates delivered. Phase 1 audit begins immediately."
+      },
+      {
+        "milestone": "Compliance audit complete",
+        "date": "2026-05-05",
+        "status": "upcoming",
+        "description": "All four profiles cleaned up; every policy violation remediated before any appeal is filed."
+      },
+      {
+        "milestone": "Verification video & dossiers ready",
+        "date": "2026-05-08",
+        "status": "upcoming",
+        "description": "Phase 2 complete. All evidence packaged and video produced to spec."
+      },
+      {
+        "milestone": "All four appeals submitted",
+        "date": "2026-05-09",
+        "status": "upcoming",
+        "description": "Same-day submission across all four profiles. Case IDs captured."
+      },
+      {
+        "milestone": "First responses expected from Google",
+        "date": "2026-06-13",
+        "status": "upcoming",
+        "description": "Standard 4-6 week review window. Re-appeal or escalation path activated for any denial."
+      }
+    ],
+    "investment": {
+      "description": "Investment structure is a placeholder. Final pricing tiers and scope will come from the proposal document — replace this entire investment block when ready.",
+      "tiers": [
+        {
+          "name": "GBP Recovery — Full Engagement",
+          "price": "TBD",
+          "description": "End-to-end recovery for all four suspended profiles, including preparation, compliance audit, evidence dossiers, verification video coordination, appeal submission, and monitoring through reinstatement.",
+          "includes": [
+            "Full Phase 0–4 execution as outlined in the roadmap",
+            "Per-profile compliance audit and remediation",
+            "Evidence dossier assembly (one ZIP per location)",
+            "Verification video script + on-set coordination",
+            "Coordinated submission across all four profiles",
+            "4–6 week active monitoring window",
+            "Re-appeal package + escalation path if denial occurs",
+            "TODO: replace included scope with final proposal terms"
+          ],
+          "recommended": true
+        },
+        {
+          "name": "Recovery + Ongoing GBP Management",
+          "price": "TBD",
+          "description": "Everything in the recovery engagement, plus 12 months of post-reinstatement profile management to prevent re-suspension and grow ranking.",
+          "includes": [
+            "All deliverables from the recovery engagement",
+            "Monthly profile health audits",
+            "Review monitoring and response handling",
+            "Posts, photos, and Q&A management",
+            "Quarterly performance reporting",
+            "TODO: replace with the real ongoing-management terms"
+          ],
+          "recommended": false
+        }
+      ]
+    }
+  }
+}
