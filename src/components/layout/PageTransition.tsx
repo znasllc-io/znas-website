@@ -49,7 +49,17 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
     tl.to(bottom, { yPercent: 0, duration: 0.5, ease: "power3.inOut" }, "<");
   }, []);
 
-  // On mount: reveal animation if coming from a transition
+  // Mount-only: reveal animation if coming from a transition.
+  //
+  // Critical: this effect MUST have [] deps. If it depended on `onReady` or
+  // `triggerExit`, any parent re-render that passes a fresh inline callback
+  // would re-fire this effect — and on a proposal-list page (which re-sets
+  // the "znas-page-transition" sessionStorage flag in its own mount effect
+  // so future navigations get the transition) the flag would still be set,
+  // causing the reveal animation to replay on every state change. That bug
+  // manifested as: clicking a proposal card to expand the inline password
+  // form triggers the panels-split animation even though no navigation
+  // happens. Keep mount logic isolated from prop deps.
   useEffect(() => {
     const top = topRef.current;
     const bottom = bottomRef.current;
@@ -83,8 +93,12 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
       gsap.set(top, { yPercent: -100 });
       gsap.set(bottom, { yPercent: 100 });
     }
+  }, []);
 
-    // Expose triggerExit to parent
+  // Separately: re-register triggerExit with the parent whenever onReady
+  // changes. Idempotent — just stores a stable function reference. Safe to
+  // re-run on prop changes; cannot trigger animations.
+  useEffect(() => {
     onReady?.(triggerExit);
   }, [onReady, triggerExit]);
 
