@@ -14,7 +14,11 @@ const SECURITY_HEADERS = {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { slug, lang } = body as { slug?: string; lang?: string };
+    const { slug, lang, attachmentId } = body as {
+      slug?: string;
+      lang?: string;
+      attachmentId?: string;
+    };
 
     if (!slug) {
       return NextResponse.json(
@@ -57,11 +61,35 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Pick PDF based on requested language, fall back to English
-    const pdfName =
-      lang === "es" && proposal.pdfFilenameEs
-        ? proposal.pdfFilenameEs
-        : proposal.pdfFilename;
+    // Pick PDF: attachmentId wins over language. attachmentId must match
+    // an entry in proposal.attachments (and only THIS proposal's attachments
+    // — a session for slug A cannot reach an attachment registered on slug B
+    // because the proposal load is already gated on the session's slug).
+    let pdfName: string;
+    if (attachmentId) {
+      // Validate attachmentId shape before lookup. Defense in depth — the
+      // filename pattern check below is the real gate, but rejecting weird
+      // ids early keeps logs cleaner.
+      if (!/^[a-z0-9-]+$/.test(attachmentId)) {
+        return NextResponse.json(
+          { error: "Invalid credentials" },
+          { status: 401, headers: SECURITY_HEADERS }
+        );
+      }
+      const attachment = proposal.attachments?.find((a) => a.id === attachmentId);
+      if (!attachment) {
+        return NextResponse.json(
+          { error: "Invalid credentials" },
+          { status: 401, headers: SECURITY_HEADERS }
+        );
+      }
+      pdfName = attachment.filename;
+    } else {
+      pdfName =
+        lang === "es" && proposal.pdfFilenameEs
+          ? proposal.pdfFilenameEs
+          : proposal.pdfFilename;
+    }
     if (!/^[a-z0-9-]+\.pdf$/.test(pdfName)) {
       return NextResponse.json(
         { error: "Invalid credentials" },

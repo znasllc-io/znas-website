@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap-config";
-import type { SafeProposal } from "@/lib/proposals";
+import type { SafeProposal, ProposalAttachment } from "@/lib/proposals";
 import SectionLabel from "@/components/ui/SectionLabel";
 import RoadmapTimeline from "./RoadmapTimeline";
 import InvestmentCards from "./InvestmentCards";
@@ -12,7 +12,9 @@ import { translations } from "@/lib/translations";
 
 interface ProposalViewerProps {
   proposal: SafeProposal;
-  onDownload: () => void;
+  // attachmentId is undefined for the main PDF, or matches an entry in
+  // proposal.attachments for a supplementary download.
+  onDownload: (attachmentId?: string) => void;
 }
 
 export default function ProposalViewer({
@@ -129,7 +131,10 @@ export default function ProposalViewer({
       </section>
 
       {/* ── Download CTA ── */}
-      <DownloadSection onDownload={onDownload} />
+      <DownloadSection
+        onDownload={onDownload}
+        attachments={proposal.attachments}
+      />
     </div>
   );
 }
@@ -242,7 +247,13 @@ function SummarySection({
 }
 
 /* ── Download Sub-component ── */
-function DownloadSection({ onDownload }: { onDownload: () => void }) {
+function DownloadSection({
+  onDownload,
+  attachments,
+}: {
+  onDownload: (attachmentId?: string) => void;
+  attachments?: ProposalAttachment[];
+}) {
   const { lang } = useLanguage();
   const t = translations[lang];
   return (
@@ -267,34 +278,82 @@ function DownloadSection({ onDownload }: { onDownload: () => void }) {
         >
           {t.proposals.viewer.download.subtitle}
         </p>
-        <button
-          onClick={onDownload}
+        <div
           style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(1rem, 1.5vw, 1.25rem)",
-            fontWeight: 500,
-            letterSpacing: "-0.01em",
-            color: "var(--color-bg-void)",
-            backgroundColor: "var(--color-accent)",
-            border: "2px solid var(--color-accent)",
-            borderRadius: "2px",
-            padding: "1.1rem 3rem",
-            cursor: "none",
-            transition: "all 0.3s ease",
-            display: "inline-block",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "transparent";
-            e.currentTarget.style.color = "var(--color-accent)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "var(--color-accent)";
-            e.currentTarget.style.color = "var(--color-bg-void)";
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "1rem",
+            justifyContent: "center",
           }}
         >
-          {t.proposals.viewer.download.button}
-        </button>
+          {/* Primary: main proposal PDF */}
+          <DownloadButton
+            label={t.proposals.viewer.download.button}
+            variant="primary"
+            onClick={() => onDownload()}
+          />
+          {/* Secondary: supplementary downloads (gameplan etc.) */}
+          {attachments?.map((att) => (
+            <DownloadButton
+              key={att.id}
+              label={lang === "es" && att.label_es ? att.label_es : att.label}
+              variant="secondary"
+              onClick={() => onDownload(att.id)}
+            />
+          ))}
+        </div>
       </div>
     </section>
+  );
+}
+
+function DownloadButton({
+  label,
+  variant,
+  onClick,
+}: {
+  label: string;
+  variant: "primary" | "secondary";
+  onClick: () => void;
+}) {
+  const isPrimary = variant === "primary";
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        fontFamily: "var(--font-display)",
+        fontSize: "clamp(1rem, 1.5vw, 1.25rem)",
+        fontWeight: 500,
+        letterSpacing: "-0.01em",
+        color: isPrimary ? "var(--color-bg-void)" : "var(--color-accent)",
+        backgroundColor: isPrimary ? "var(--color-accent)" : "transparent",
+        border: "2px solid var(--color-accent)",
+        borderRadius: "2px",
+        padding: "1.1rem 3rem",
+        cursor: "none",
+        transition: "all 0.3s ease",
+        display: "inline-block",
+      }}
+      onMouseEnter={(e) => {
+        if (isPrimary) {
+          e.currentTarget.style.backgroundColor = "transparent";
+          e.currentTarget.style.color = "var(--color-accent)";
+        } else {
+          e.currentTarget.style.backgroundColor = "var(--color-accent)";
+          e.currentTarget.style.color = "var(--color-bg-void)";
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (isPrimary) {
+          e.currentTarget.style.backgroundColor = "var(--color-accent)";
+          e.currentTarget.style.color = "var(--color-bg-void)";
+        } else {
+          e.currentTarget.style.backgroundColor = "transparent";
+          e.currentTarget.style.color = "var(--color-accent)";
+        }
+      }}
+    >
+      {label}
+    </button>
   );
 }

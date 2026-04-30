@@ -6,6 +6,14 @@
   "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$k/Qk6s8nspXwopesnEnUdw$3y0RDoEFRxFxCVFmXbmeVBfzUqW7L1oJve5MdZQtdSo",
   "status": "active",
   "pdfFilename": "haven-en.pdf",
+  "attachments": [
+    {
+      "id": "gameplan",
+      "filename": "haven-gameplan.pdf",
+      "label": "Download Gameplan",
+      "label_es": "Descargar Plan de Acción"
+    }
+  ],
   "sections": {
     "summary": {
       "headline": "Haven has 20 years of work behind it. This proposal is about what gets built around it next.",

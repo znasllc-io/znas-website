@@ -36,6 +36,25 @@ export interface ProposalSections {
   };
 }
 
+/**
+ * Optional supplementary downloads shown alongside the main proposal PDF
+ * (gameplans, addenda, reports, etc.). Each attachment is gated through
+ * the same /api/proposals/download endpoint as the main PDF — the session
+ * cookie must match the proposal slug, and the filename has to match the
+ * `^[a-z0-9-]+\.pdf$` pattern. The path-traversal check on the resolved
+ * filesystem path provides defense in depth.
+ */
+export interface ProposalAttachment {
+  // url-safe id, e.g. "gameplan". Used in the download API as attachmentId.
+  id: string;
+  // PDF filename inside data/proposals/pdfs/ — must match ^[a-z0-9-]+\.pdf$
+  filename: string;
+  // Label shown on the download button (English).
+  label: string;
+  // Optional Spanish label.
+  label_es?: string;
+}
+
 export interface Proposal {
   slug: string;
   clientName: string;
@@ -46,6 +65,9 @@ export interface Proposal {
   status: "active" | "draft" | "archived";
   pdfFilename: string;
   pdfFilenameEs?: string;
+  // Optional supplementary downloads (rendered as additional buttons next
+  // to the main PDF download). Same auth + path validation rules apply.
+  attachments?: ProposalAttachment[];
   sections: ProposalSections;
   sections_es?: ProposalSections;
 }

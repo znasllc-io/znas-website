@@ -56,35 +56,50 @@ export default function ProposalPageClient({
     []
   );
 
-  const handleDownload = useCallback(async () => {
-    try {
-      const res = await fetch("/api/proposals/download", {
-        method: "POST",
-        // credentials: "same-origin" is default; explicit here to signal
-        // that the HttpOnly session cookie is the auth mechanism.
-        credentials: "same-origin",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, lang }),
-      });
+  // attachmentId is optional — when present the server returns the matching
+  // proposal.attachments[] entry; when absent it returns the main PDF.
+  // Filename for the saved file comes from the server's Content-Disposition
+  // header so it stays correct per-proposal (the previous hardcoded
+  // "Alebrijes_*.pdf" would have saved Haven's PDF under the wrong name).
+  const handleDownload = useCallback(
+    async (attachmentId?: string) => {
+      try {
+        const res = await fetch("/api/proposals/download", {
+          method: "POST",
+          // credentials: "same-origin" is default; explicit here to signal
+          // that the HttpOnly session cookie is the auth mechanism.
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ slug, lang, attachmentId }),
+        });
 
-      if (!res.ok) {
-        alert(t.proposals.viewer.download.errorRefresh);
-        return;
+        if (!res.ok) {
+          alert(t.proposals.viewer.download.errorRefresh);
+          return;
+        }
+
+        // Pull filename from Content-Disposition. Server-side it's set to
+        // the actual on-disk PDF name (e.g. "haven-en.pdf",
+        // "haven-gameplan.pdf"). Falls back to a generic name if missing.
+        const cd = res.headers.get("Content-Disposition") || "";
+        const m = cd.match(/filename="?([^";]+)"?/);
+        const filename = m ? m[1] : "proposal.pdf";
+
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch {
+        alert(t.proposals.viewer.download.errorFailed);
       }
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = lang === "es" ? "Alebrijes_ES.pdf" : "Alebrijes_EN.pdf";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch {
-      alert(t.proposals.viewer.download.errorFailed);
-    }
-  }, [slug, lang, t.proposals.viewer.download.errorRefresh, t.proposals.viewer.download.errorFailed]);
+    },
+    [slug, lang, t.proposals.viewer.download.errorRefresh, t.proposals.viewer.download.errorFailed]
+  );
 
   // On unmount clear the in-memory proposal and ask the server to drop
   // the session cookie. Best-effort — if the request fails (tab closed
