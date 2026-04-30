@@ -5,7 +5,7 @@
   "projectTitle": "Google Business Profile Recovery",
   "projectTitle_es": "Recuperación del Perfil de Google Business",
   "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$k/Qk6s8nspXwopesnEnUdw$3y0RDoEFRxFxCVFmXbmeVBfzUqW7L1oJve5MdZQtdSo",
-  "status": "draft",
+  "status": "active",
   "pdfFilename": "haven-en.pdf",
   "pdfFilenameEs": "haven-es.pdf",
   "sections": {
