@@ -114,6 +114,11 @@
           "recommended": true
         }
       ]
+    },
+    "initiative": {
+      "headline": "We don't pitch initiative — we show it.",
+      "body": "Before any agreement is signed, the operational gameplan for Haven's most urgent problem is already drafted. The document below walks through how ZNAS would attack the four suspended Google Business Profiles: what we can start on this week without any client access, exactly what we'll need from your team to unblock the rest, and the one task only Ángel can handle (a single 60-second on-camera verification that mirrors a real reinstated case from a peer business).\n\nIt's research-backed — cross-referenced against documented reinstatement cases, validated against Google's current SAB standard, and structured so nothing burns one of the limited appeal attempts. More than that, it's the kind of preparation we bring to every problem ZNAS takes on. You'll see how each task is owned, what's blocked on what, and the exact sequence we'd run from kickoff to first response from Google.\n\nRead it before our alignment meeting — that way the conversation starts on what to adjust, not what to explain.",
+      "attachmentId": "gameplan"
     }
   }
 }

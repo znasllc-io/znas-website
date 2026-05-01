@@ -17,7 +17,7 @@ export interface ProposalListStrings {
 export interface ProposalViewerStrings {
   label: string;
   preparedFor: string;
-  sections: { executiveSummary: string; roadmap: string; timeline: string; investment: string };
+  sections: { executiveSummary: string; roadmap: string; timeline: string; investment: string; initiative: string };
   download: {
     headline: string;
     subtitle: string;
@@ -25,7 +25,7 @@ export interface ProposalViewerStrings {
     errorRefresh: string;
     errorFailed: string;
   };
-  nav: { summary: string; roadmap: string; timeline: string; investment: string };
+  nav: { summary: string; roadmap: string; timeline: string; investment: string; initiative: string };
 }
 
 export interface ProposalGateStrings {
@@ -276,6 +276,7 @@ export const translations: Record<Lang, LangStrings> = {
           roadmap: "Roadmap",
           timeline: "Timeline",
           investment: "Investment",
+          initiative: "Initiative",
         },
         download: {
           headline: "Ready to move forward?",
@@ -289,6 +290,7 @@ export const translations: Record<Lang, LangStrings> = {
           roadmap: "Roadmap",
           timeline: "Timeline",
           investment: "Investment",
+          initiative: "Initiative",
         },
       },
       gate: {
@@ -495,6 +497,7 @@ export const translations: Record<Lang, LangStrings> = {
           roadmap: "Hoja de Ruta",
           timeline: "Cronograma",
           investment: "Inversión",
+          initiative: "Iniciativa",
         },
         download: {
           headline: "¿Listo para avanzar?",
@@ -508,6 +511,7 @@ export const translations: Record<Lang, LangStrings> = {
           roadmap: "Hoja de Ruta",
           timeline: "Cronograma",
           investment: "Inversión",
+          initiative: "Iniciativa",
         },
       },
       gate: {

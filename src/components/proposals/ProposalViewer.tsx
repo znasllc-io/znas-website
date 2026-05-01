@@ -130,10 +130,30 @@ export default function ProposalViewer({
         </div>
       </section>
 
+      {/* ── Initiative (optional) ── */}
+      {sections.initiative && (
+        <InitiativeSection
+          headline={sections.initiative.headline}
+          body={sections.initiative.body}
+          attachmentId={sections.initiative.attachmentId}
+          attachments={proposal.attachments}
+          onDownload={onDownload}
+          lang={lang}
+        />
+      )}
+
       {/* ── Download CTA ── */}
       <DownloadSection
         onDownload={onDownload}
-        attachments={proposal.attachments}
+        attachments={
+          // Hide attachments already surfaced in the Initiative section so
+          // the same gameplan/document doesn't get a button in two places.
+          sections.initiative?.attachmentId
+            ? proposal.attachments?.filter(
+                (a) => a.id !== sections.initiative!.attachmentId
+              )
+            : proposal.attachments
+        }
       />
     </div>
   );
@@ -241,6 +261,103 @@ function SummarySection({
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Initiative Sub-component ── */
+function InitiativeSection({
+  headline,
+  body,
+  attachmentId,
+  attachments,
+  onDownload,
+  lang,
+}: {
+  headline: string;
+  body: string;
+  attachmentId?: string;
+  attachments?: ProposalAttachment[];
+  onDownload: (attachmentId?: string) => void;
+  lang: "en" | "es";
+}) {
+  const { lang: _l } = useLanguage();
+  const t = translations[_l];
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Resolve the referenced attachment so the inline button can show the
+  // right label. If the lookup fails, the button is omitted (the section
+  // still renders its narrative).
+  const attachment = attachmentId
+    ? attachments?.find((a) => a.id === attachmentId)
+    : undefined;
+  const buttonLabel = attachment
+    ? lang === "es" && attachment.label_es
+      ? attachment.label_es
+      : attachment.label
+    : null;
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.from(".initiative-reveal", {
+        y: 60,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        stagger: 0.12,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 70%",
+          toggleActions: "play none none none",
+        },
+      });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section
+      id="initiative"
+      ref={sectionRef}
+      className="section-padding"
+      style={{ backgroundColor: "var(--color-bg-primary)" }}
+    >
+      <div className="container">
+        <SectionLabel number=".05" label={t.proposals.viewer.sections.initiative} />
+
+        <h2
+          className="text-heading initiative-reveal"
+          style={{ maxWidth: "800px", marginBottom: "2rem" }}
+        >
+          {headline}
+        </h2>
+
+        <div
+          className="initiative-reveal"
+          style={{
+            maxWidth: "800px",
+            color: "var(--color-text-secondary)",
+            lineHeight: 1.8,
+          }}
+        >
+          {body.split("\n\n").map((para, i) => (
+            <p key={i} className="text-body" style={{ marginBottom: "1.5rem" }}>
+              {para}
+            </p>
+          ))}
+        </div>
+
+        {attachment && buttonLabel && (
+          <div className="initiative-reveal" style={{ marginTop: "2.5rem" }}>
+            <DownloadButton
+              label={buttonLabel}
+              variant="secondary"
+              onClick={() => onDownload(attachment.id)}
+            />
+          </div>
+        )}
       </div>
     </section>
   );

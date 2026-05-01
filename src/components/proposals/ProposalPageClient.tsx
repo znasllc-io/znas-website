@@ -133,6 +133,12 @@ export default function ProposalPageClient({
               { label: t.proposals.viewer.nav.roadmap, href: "#roadmap" },
               { label: t.proposals.viewer.nav.timeline, href: "#timeline" },
               { label: t.proposals.viewer.nav.investment, href: "#investment" },
+              // Only include the Initiative link when this proposal
+              // actually defines an initiative section. Other proposals
+              // (e.g. Alebrije) skip it cleanly.
+              ...(proposal.sections.initiative
+                ? [{ label: t.proposals.viewer.nav.initiative, href: "#initiative" }]
+                : []),
             ]}
             backHref="/proposals"
             backLabel={t.nav.back}

@@ -22,6 +22,22 @@ export interface ProposalTier {
   recommended?: boolean;
 }
 
+/**
+ * Optional "Initiative" section. Used to surface a supplementary document
+ * (typically a gameplan or pre-engagement plan) inline with a short
+ * narrative explaining what it is. The download is gated through the same
+ * /api/proposals/download endpoint as everything else — `attachmentId`
+ * MUST reference an entry in proposal.attachments[]; the section will not
+ * render its button if the lookup fails.
+ */
+export interface ProposalInitiative {
+  headline: string;
+  body: string; // multi-paragraph; split on \n\n for rendering
+  // References proposal.attachments[i].id. Optional — section can also
+  // exist as pure narrative without a download (renders text only).
+  attachmentId?: string;
+}
+
 export interface ProposalSections {
   summary: {
     headline: string;
@@ -34,6 +50,10 @@ export interface ProposalSections {
     description: string;
     tiers: ProposalTier[];
   };
+  // Optional. When present, rendered as section .05 between Investment
+  // and the bottom Download CTA. Any attachment referenced here is hidden
+  // from the bottom CTA's secondary-button list to avoid duplication.
+  initiative?: ProposalInitiative;
 }
 
 /**
