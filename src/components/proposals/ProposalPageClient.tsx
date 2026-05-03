@@ -128,14 +128,28 @@ export default function ProposalPageClient({
       ) : (
         <>
           <Navigation
+            // Nav links are derived from which sections actually exist on
+            // this proposal. Summary is always present. The rest match the
+            // canonical render order in ProposalViewer (roadmap or
+            // howItWorks, then timeline, investment, team, initiative).
+            // Other proposals' nav stays unaffected.
             navOverride={[
               { label: t.proposals.viewer.nav.summary, href: "#summary" },
-              { label: t.proposals.viewer.nav.roadmap, href: "#roadmap" },
-              { label: t.proposals.viewer.nav.timeline, href: "#timeline" },
-              { label: t.proposals.viewer.nav.investment, href: "#investment" },
-              // Only include the Initiative link when this proposal
-              // actually defines an initiative section. Other proposals
-              // (e.g. Alebrije) skip it cleanly.
+              ...(proposal.sections.roadmap
+                ? [{ label: t.proposals.viewer.nav.roadmap, href: "#roadmap" }]
+                : []),
+              ...(proposal.sections.howItWorks
+                ? [{ label: t.proposals.viewer.nav.howItWorks, href: "#howItWorks" }]
+                : []),
+              ...(proposal.sections.timeline
+                ? [{ label: t.proposals.viewer.nav.timeline, href: "#timeline" }]
+                : []),
+              ...(proposal.sections.investment
+                ? [{ label: t.proposals.viewer.nav.investment, href: "#investment" }]
+                : []),
+              ...(proposal.sections.team
+                ? [{ label: t.proposals.viewer.nav.team, href: "#team" }]
+                : []),
               ...(proposal.sections.initiative
                 ? [{ label: t.proposals.viewer.nav.initiative, href: "#initiative" }]
                 : []),

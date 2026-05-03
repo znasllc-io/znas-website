@@ -14,110 +14,46 @@
       "label_es": "Descargar Plan de Acción"
     }
   ],
+  "downloadCta": {
+    "headline": "Ready to move forward?",
+    "subtitle": "This is what working with ZNAS looks like in practice. The full proposal is below."
+  },
+  "closingNote": "Investment terms are reviewed during the alignment meeting and confirmed in writing before any work begins.",
   "sections": {
     "summary": {
       "headline": "Haven has 20 years of work behind it. This proposal is about what gets built around it next.",
-      "body": "Every business that has been around for 20 years carries a body of knowledge, a way of working, and a set of habits that got it where it is. The next stage of growth rarely depends on doing more of the same — it usually depends on what gets built around the work that is already happening. This proposal lays out how ZNAS would help Haven build that next layer.\n\nZNAS comes in as a consultant and a fixer. The role is straightforward: identify the digital and technological problems holding Haven back, and solve them one by one, in the order that makes the most impact for the business. José Sanz steps in as Haven's fractional CTO, supported by his team where needed. He doesn't replace anyone on the Haven side — he works alongside Ángel, brings outside expertise, and takes ownership of the technical problems Haven needs resolved.\n\nThe starting point is already on the table: the four suspended Google Business Profiles. That's Haven's primary lead-generation channel and the most urgent issue right now. From the first week, ZNAS attends to that recovery in parallel with a broader assessment of Haven's digital operation. From there, the work continues, covering whichever priorities surface as the most valuable to address next.\n\nThroughout the engagement, ZNAS proposes, substantiates, and recommends; Haven gives the green light on every step. Each phase of work is presented for review and approval before being executed. Ángel keeps full control over direction, pace, and depth — including the right to pause, resume later, or execute part of the plan with Haven's own resources at any point.",
-      "highlights": [
-        "Three-phase backbone — Assessment, Transformation Proposal, Execution — with Ángel's green light at every step",
-        "Suspended Google Business Profiles attended to from week one, in parallel with the broader digital assessment",
-        "AI-orchestrator methodology: years of traditional development compressed into months without sacrificing quality",
-        "17+ years building production-scale systems across airlines, language services, and consumer platforms",
-        "Everything ZNAS builds for Haven is owned 100% by Haven — no retained rights",
-        "Month-to-month engagement with 15 days' notice — Ángel keeps full control over pace and depth"
-      ]
+      "body": "ZNAS comes in as a consultant and a fixer for Haven's digital and technological side. The starting point is the suspended Google Business Profiles. From there, the work continues across whatever digital and technological problems are holding the business back, with Ángel approving each step."
     },
-    "roadmap": [
-      {
-        "phase": "Phase 1 · Assessment",
-        "description": "Understanding Haven in depth from a technological and operational perspective. José analyzes how the business runs today, which tools and systems are in use, where current technology falls short, and which manual processes can be replaced or improved through automation and AI. The work is grounded in direct observation of the operation, conversations with Ángel and his team, and review of the available data — never in assumptions. From the first week, ZNAS also takes on the recovery of the suspended Google Business Profiles in parallel.",
-        "deliverables": [
-          "Technical and operational assessment of Haven's current digital state",
-          "Active recovery work on the four suspended Google Business Profiles",
-          "Map of the real opportunities to transform through technology and AI",
-          "A clear picture of where Haven stands today in digital maturity, and what's possible next"
-        ]
-      },
-      {
-        "phase": "Phase 2 · Transformation Proposal",
-        "description": "With the assessment in hand, José returns with a concrete proposal. Not a generic digitalization plan, not an open-ended recommendation — a tailored technological restructuring roadmap detailing which systems will be built or replaced, which processes will be automated, in what order, how long each component takes, and what results to expect at each stage. Ángel reviews, asks the questions he needs to ask, adjusts what needs adjusting, and approves before any execution begins.",
-        "deliverables": [
-          "Tailored restructuring roadmap with prioritized scope",
-          "Per-component effort and timeline estimates",
-          "Specific results expected at each stage",
-          "An approved plan with full visibility into what gets built, in what order, and what to expect"
-        ]
-      },
-      {
-        "phase": "Phase 3 · Execution",
-        "description": "Once the plan is approved, execution begins. José and his team implement each technological piece in the agreed order, integrating new systems with the existing operation, training Haven's team in the use and administration of the new tools, and adjusting the plan as the business responds. Duration depends on the scope of the approved plan and the pace Haven decides to sustain. At some point, the new digital infrastructure is operating at full capacity, the team is autonomous, and the engagement either closes or transitions into a lighter strategic advisory relationship.",
-        "deliverables": [
-          "Implementation of each technological piece in the agreed order",
-          "Integration of new systems with Haven's existing operation",
-          "Training and knowledge transfer to the Haven team",
-          "New digital infrastructure operating at full capacity, Haven's team autonomous in its day-to-day",
-          "Continuity plan or transition to lighter strategic advisory at engagement end"
-        ]
-      }
-    ],
-    "timeline": [
-      {
-        "milestone": "Proposal sent",
-        "date": "2026-04-30",
-        "status": "complete",
-        "description": "Ángel receives this proposal for review."
-      },
-      {
-        "milestone": "Proposal review",
-        "date": "2026-05-05",
-        "status": "upcoming",
-        "description": "Ángel reads through the proposal and surfaces any questions."
-      },
-      {
-        "milestone": "Alignment meeting",
-        "date": "2026-05-12",
-        "status": "upcoming",
-        "description": "Walk through any open points and align on the scope of the engagement."
-      },
-      {
-        "milestone": "Agreement formalized",
-        "date": "2026-05-15",
-        "status": "upcoming",
-        "description": "Engagement terms locked in. ZNAS starts the week after."
-      },
-      {
-        "milestone": "Work begins",
-        "date": "2026-05-19",
-        "status": "upcoming",
-        "description": "Phase 1 kicks off: assessment of Haven's digital operation, in parallel with the recovery of the suspended Google Business Profiles."
-      }
-    ],
-    "investment": {
-      "description": "ZNAS engages Haven on a fractional CTO basis. The work is structured month to month with no long-term commitment, so Ángel can pause, accelerate, or wind down the engagement at any point with 15 days' notice. Specific scope and pricing are confirmed in the alignment meeting and revisited as the work progresses. CoPresent — Visionarys' AI platform mentioned in early conversations — is intentionally out of scope here; if Haven evaluates it later, that's a separate agreement directly with Visionarys.",
-      "tiers": [
+    "howItWorks": {
+      "intro": "José leads the engagement directly. The work covers technology decisions, execution, and recovery of the suspended Google Business Profiles from week one. Specific scope and pricing are confirmed in the alignment meeting before any work begins.",
+      "cards": [
         {
-          "name": "Fractional CTO Engagement",
-          "price": "Discussed during alignment meeting",
-          "description": "Senior consultant focused on solving the right problems, backed by a team that can move fast and deliver. Ángel approves every implementation decision. ZNAS proposes, substantiates, and executes; Haven gives the green light.",
-          "includes": [
-            "Executive technology leadership and architecture decisions",
-            "Direct execution: code, deployment, and working systems delivered",
-            "Recovery of the four suspended Google Business Profiles from week one",
-            "Regular progress reports throughout the engagement",
-            "Training and knowledge transfer to the Haven team",
-            "Clear continuity plan at engagement end",
-            "100% intellectual property ownership for everything ZNAS builds for Haven",
-            "Active Tech E&O, Cyber Liability, and AI coverage of $1M USD",
-            "Month-to-month renewal with 15 days' notice to conclude",
-            "NDA available on request"
-          ],
-          "recommended": true
+          "title": "Month-to-month engagement",
+          "body": "No long-term commitments. Pause anytime with 15 days' notice."
+        },
+        {
+          "title": "Ángel approves every step",
+          "body": "ZNAS proposes and recommends; Haven gives the green light before anything is executed."
+        },
+        {
+          "title": "Three phases, one logic",
+          "body": "Assessment, Transformation Proposal, Execution. Each phase ends with a clear deliverable: a diagnosis, an approved roadmap, and a working infrastructure. Scope is defined as the work progresses, not promised upfront."
+        },
+        {
+          "title": "100% IP ownership",
+          "body": "Everything ZNAS builds for Haven is owned by Haven. No retained rights."
         }
       ]
     },
+    "team": {
+      "name": "José Sanz",
+      "tagline": "17+ years building production-scale systems. Founder of ZNAS LLC, co-founder of Visionarys. MIT Certification in AI Business Strategy.",
+      "caption": "José leads the engagement directly, supported by the ZNAS team where execution requires it.",
+      "photo": "/images/jose-placeholder.svg"
+    },
     "initiative": {
-      "headline": "We don't pitch initiative — we show it.",
-      "body": "Before any agreement is signed, the operational gameplan for Haven's most urgent problem is already drafted. The document below walks through how ZNAS would attack the four suspended Google Business Profiles: what we can start on this week without any client access, exactly what we'll need from your team to unblock the rest, and the one task only Ángel can handle (a single 60-second on-camera verification that mirrors a real reinstated case from a peer business).\n\nIt's research-backed — cross-referenced against documented reinstatement cases, validated against Google's current SAB standard, and structured so nothing burns one of the limited appeal attempts. More than that, it's the kind of preparation we bring to every problem ZNAS takes on. You'll see how each task is owned, what's blocked on what, and the exact sequence we'd run from kickoff to first response from Google.\n\nRead it before our alignment meeting — that way the conversation starts on what to adjust, not what to explain.",
+      "headline": "Initiative on paper.",
+      "body": "Before any agreement is signed, the operational gameplan for Haven's most urgent problem is already drafted. The document below walks through how ZNAS would attack the four suspended Google Business Profiles: what we can start on this week without any client access, what we'll need from your team to unblock the rest, and the one task only Ángel can handle (a single 60-second on-camera verification that mirrors a real reinstated case from a peer business).\n\nIt is research-backed: cross-referenced against documented reinstatement cases, validated against Google's current SAB standard, and structured so nothing burns one of the limited appeal attempts. More than that, it is the kind of preparation we bring to every problem ZNAS takes on. You will see how each task is owned, what is blocked on what, and the exact sequence we would run from kickoff to first response from Google.\n\nRead it before our alignment meeting so we can spend that time on adjustments instead of explanations.",
       "attachmentId": "gameplan"
     }
   }

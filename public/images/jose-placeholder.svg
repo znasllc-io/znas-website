@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#1A1F2E"/>
+  <rect x="0.5" y="0.5" width="399" height="399" fill="none" stroke="#2E3548" stroke-width="1"/>
+  <text x="200" y="218" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, monospace" font-size="64" fill="#5A6278" letter-spacing="6">JS</text>
+  <text x="200" y="270" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, monospace" font-size="11" fill="#3A3F4E" letter-spacing="3">PHOTO PLACEHOLDER</text>
+</svg>

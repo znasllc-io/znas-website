@@ -17,7 +17,7 @@ export interface ProposalListStrings {
 export interface ProposalViewerStrings {
   label: string;
   preparedFor: string;
-  sections: { executiveSummary: string; roadmap: string; timeline: string; investment: string; initiative: string };
+  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string };
   download: {
     headline: string;
     subtitle: string;
@@ -25,7 +25,7 @@ export interface ProposalViewerStrings {
     errorRefresh: string;
     errorFailed: string;
   };
-  nav: { summary: string; roadmap: string; timeline: string; investment: string; initiative: string };
+  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string };
 }
 
 export interface ProposalGateStrings {
@@ -274,8 +274,10 @@ export const translations: Record<Lang, LangStrings> = {
         sections: {
           executiveSummary: "Executive Summary",
           roadmap: "Roadmap",
+          howItWorks: "How It Works",
           timeline: "Timeline",
           investment: "Investment",
+          team: "The Team",
           initiative: "Initiative",
         },
         download: {
@@ -288,8 +290,10 @@ export const translations: Record<Lang, LangStrings> = {
         nav: {
           summary: "Summary",
           roadmap: "Roadmap",
+          howItWorks: "How It Works",
           timeline: "Timeline",
           investment: "Investment",
+          team: "The Team",
           initiative: "Initiative",
         },
       },
@@ -495,8 +499,10 @@ export const translations: Record<Lang, LangStrings> = {
         sections: {
           executiveSummary: "Resumen Ejecutivo",
           roadmap: "Hoja de Ruta",
+          howItWorks: "Cómo Funciona",
           timeline: "Cronograma",
           investment: "Inversión",
+          team: "El Equipo",
           initiative: "Iniciativa",
         },
         download: {
@@ -509,8 +515,10 @@ export const translations: Record<Lang, LangStrings> = {
         nav: {
           summary: "Resumen",
           roadmap: "Hoja de Ruta",
+          howItWorks: "Cómo Funciona",
           timeline: "Cronograma",
           investment: "Inversión",
+          team: "El Equipo",
           initiative: "Iniciativa",
         },
       },

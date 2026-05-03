@@ -38,21 +38,74 @@ export interface ProposalInitiative {
   attachmentId?: string;
 }
 
+/**
+ * "How It Works" section. Replaces the old long-form Roadmap on lean
+ * proposals (e.g. Haven) where the work-structure detail belongs in the
+ * downloadable PDF, not on the page. Renders as: short intro paragraph,
+ * then a 2x2 (or 1x4 on mobile) grid of small cards.
+ */
+export interface ProposalHowItWorks {
+  intro: string;
+  cards: { title: string; body: string }[];
+}
+
+/**
+ * "The Team" section. A single-person team block for solo or
+ * solo-led engagements: name, short tagline, secondary caption, optional
+ * photo. The photo path is served from /public so it must live there.
+ */
+export interface ProposalTeam {
+  name: string;
+  tagline: string;
+  caption: string;
+  // Optional path under /public, e.g. "/images/jose-placeholder.svg"
+  photo?: string;
+}
+
+/**
+ * Optional override for the bottom Download CTA copy. When omitted, the
+ * viewer falls back to the global i18n strings in translations.ts. Lets
+ * a single proposal customize the closing line without changing the
+ * shared i18n strings (which would affect every other proposal).
+ */
+export interface ProposalDownloadCta {
+  headline?: string;
+  subtitle?: string;
+}
+
 export interface ProposalSections {
   summary: {
     headline: string;
+    // Plain prose. Multi-paragraph supported via \n\n split at render.
     body: string;
-    highlights: string[];
+    // Optional now: lean proposals can omit the highlights grid entirely.
+    highlights?: string[];
   };
-  roadmap: ProposalRoadmapPhase[];
-  timeline: ProposalMilestone[];
-  investment: {
+  // Long-form phase-by-phase roadmap. Optional: lean proposals can use
+  // `howItWorks` instead, or omit work-structure detail entirely (and
+  // let it live in the PDF).
+  roadmap?: ProposalRoadmapPhase[];
+  // Short-form work-structure section: 4 small cards with an intro line.
+  // Mutually optional with `roadmap` — a proposal typically has one or
+  // the other, not both. Renders second when present (after Summary).
+  howItWorks?: ProposalHowItWorks;
+  // Optional. Date-driven milestones list (proposal sent, alignment
+  // meeting, agreement, kickoff). Lean proposals omit this and let the
+  // schedule live in email follow-ups.
+  timeline?: ProposalMilestone[];
+  // Optional. Pricing tiers. Lean proposals omit and confirm pricing in
+  // the alignment meeting / PDF instead of on the page.
+  investment?: {
     description: string;
     tiers: ProposalTier[];
   };
-  // Optional. When present, rendered as section .05 between Investment
-  // and the bottom Download CTA. Any attachment referenced here is hidden
-  // from the bottom CTA's secondary-button list to avoid duplication.
+  // Optional. Renders after the work-structure / pricing sections and
+  // before Initiative.
+  team?: ProposalTeam;
+  // Optional. Surfaces a supplementary document (typically a gameplan)
+  // inline with a short narrative explaining what it is. Any attachment
+  // referenced via attachmentId is hidden from the bottom Download CTA's
+  // secondary-button list to avoid showing the same file twice.
   initiative?: ProposalInitiative;
 }
 
@@ -88,6 +141,14 @@ export interface Proposal {
   // Optional supplementary downloads (rendered as additional buttons next
   // to the main PDF download). Same auth + path validation rules apply.
   attachments?: ProposalAttachment[];
+  // Optional override for the bottom Download CTA headline + subtitle.
+  // Falls back to translations.ts strings when absent. Lets one proposal
+  // customize closing copy without touching the shared i18n.
+  downloadCta?: ProposalDownloadCta;
+  // Optional one-line note rendered above the bottom Download CTA as
+  // quiet body text (no card, no badge). Used to surface a small
+  // pricing/terms reassurance without giving it its own section.
+  closingNote?: string;
   sections: ProposalSections;
   sections_es?: ProposalSections;
 }
