@@ -37,6 +37,17 @@ yarn-error.log*
 /data/proposals/*.json
 !/data/proposals/*.example.json
 
+# Local working PDFs and drafts. NEVER commit these — they hold draft
+# proposals, source documents, and exports that should not leave this
+# machine. Production PDFs live in data/proposals/pdfs/ (force-added)
+# and are served only through the auth-gated /api/proposals/download
+# endpoint, never via the static /public folder.
+/pdf files/
+/*.pdf
+/*.zip
+/Untitled*.png
+/agent-output/
+
 # vercel
 .vercel
 

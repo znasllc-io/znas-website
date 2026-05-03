@@ -153,6 +153,9 @@ export default function ProposalPageClient({
               ...(proposal.sections.initiative
                 ? [{ label: t.proposals.viewer.nav.initiative, href: "#initiative" }]
                 : []),
+              ...(proposal.sections.realEstateAgent
+                ? [{ label: t.proposals.viewer.nav.realEstateAgent, href: "#realEstateAgent" }]
+                : []),
             ]}
             backHref="/proposals"
             backLabel={t.nav.back}
