@@ -39,6 +39,21 @@ export interface ProposalInitiative {
 }
 
 /**
+ * "Real Estate Agent" section. Surfaces a forward-looking deliverable
+ * that's already in build (an AI agent for property research/bidding).
+ * Pure narrative, no inline download (the agent isn't a deliverable yet).
+ * Used by the Haven proposal to call out a concrete real-estate-side
+ * outcome alongside the gameplan-focused Initiative section.
+ */
+export interface ProposalRealEstateAgent {
+  headline: string;
+  body?: string;
+  intro?: string;
+  points?: { title: string; body: string }[];
+  note?: string;
+}
+
+/**
  * "How It Works" section. Replaces the old long-form Roadmap on lean
  * proposals (e.g. Haven) where the work-structure detail belongs in the
  * downloadable PDF, not on the page. Renders as: short intro paragraph,
@@ -54,12 +69,16 @@ export interface ProposalHowItWorks {
  * solo-led engagements: name, short tagline, secondary caption, optional
  * photo. The photo path is served from /public so it must live there.
  */
-export interface ProposalTeam {
+export interface ProposalTeamMember {
   name: string;
   tagline: string;
   caption: string;
-  // Optional path under /public, e.g. "/images/jose-placeholder.svg"
   photo?: string;
+}
+
+export interface ProposalTeam extends ProposalTeamMember {
+  // Additional team members rendered below the lead.
+  members?: ProposalTeamMember[];
 }
 
 /**
@@ -107,6 +126,9 @@ export interface ProposalSections {
   // referenced via attachmentId is hidden from the bottom Download CTA's
   // secondary-button list to avoid showing the same file twice.
   initiative?: ProposalInitiative;
+  // Optional. Forward-looking deliverable already in build (e.g. the
+  // Haven real estate agent). Renders after Initiative.
+  realEstateAgent?: ProposalRealEstateAgent;
 }
 
 /**

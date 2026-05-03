@@ -1,14 +1,50 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, Fragment } from "react";
 import { gsap } from "@/lib/gsap-config";
-import type { SafeProposal, ProposalAttachment } from "@/lib/proposals";
+import type { SafeProposal, ProposalAttachment, ProposalTeamMember } from "@/lib/proposals";
 import SectionLabel from "@/components/ui/SectionLabel";
 import RoadmapTimeline from "./RoadmapTimeline";
 import InvestmentCards from "./InvestmentCards";
 import MilestoneTimeline from "./MilestoneTimeline";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
+
+// Brand-name glow: cyan aura on CoPresent / Visionarys, white aura on ZNAS.
+// The split keeps **bold** working alongside these. Glow CSS is scoped to
+// .proposal-page in globals.css so the styling never leaks elsewhere.
+const CYAN_WORDS = ["CoPresent", "Visionarys"];
+const WHITE_WORDS = ["ZNAS"];
+const ALL_GLOW_WORDS = [...CYAN_WORDS, ...WHITE_WORDS];
+
+function glowClassFor(word: string): string | undefined {
+  if (CYAN_WORDS.includes(word)) return "glow-cyan";
+  if (WHITE_WORDS.includes(word)) return "glow-white";
+  return undefined;
+}
+
+function renderInline(text: string) {
+  // Word-bounded matches so "ZNAS" inside "ZNAS LLC" still highlights, but
+  // we don't accidentally match within an unrelated longer token.
+  const pattern = new RegExp(
+    `(\\*\\*[^*]+\\*\\*|\\b(?:${ALL_GLOW_WORDS.join("|")})\\b)`,
+    "g",
+  );
+  return text.split(pattern).map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      const inner = part.slice(2, -2);
+      const klass = glowClassFor(inner);
+      return klass
+        ? <strong key={i} className={klass}>{inner}</strong>
+        : <strong key={i}>{inner}</strong>;
+    }
+    const klass = glowClassFor(part);
+    if (klass) {
+      return <span key={i} className={klass}>{part}</span>;
+    }
+    return <Fragment key={i}>{part}</Fragment>;
+  });
+}
 
 interface ProposalViewerProps {
   proposal: SafeProposal;
@@ -45,7 +81,7 @@ export default function ProposalViewer({
   const projectTitle = (lang === "es" && proposal.projectTitle_es) ? proposal.projectTitle_es : proposal.projectTitle;
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} className="proposal-page">
       {/* ── Header ── */}
       <section
         ref={headerRef}
@@ -143,6 +179,7 @@ export default function ProposalViewer({
                 tagline={sections.team.tagline}
                 caption={sections.team.caption}
                 photo={sections.team.photo}
+                members={sections.team.members}
               />
             )}
 
@@ -155,6 +192,17 @@ export default function ProposalViewer({
                 attachments={proposal.attachments}
                 onDownload={onDownload}
                 lang={lang}
+              />
+            )}
+
+            {sections.realEstateAgent && (
+              <RealEstateAgentSection
+                number={nextNumber()}
+                headline={sections.realEstateAgent.headline}
+                body={sections.realEstateAgent.body}
+                intro={sections.realEstateAgent.intro}
+                points={sections.realEstateAgent.points}
+                note={sections.realEstateAgent.note}
               />
             )}
           </>
@@ -245,7 +293,7 @@ function SummarySection({
         >
           {body.split("\n\n").map((para, i) => (
             <p key={i} className="text-body" style={{ marginBottom: "1.5rem" }}>
-              {para}
+              {renderInline(para)}
             </p>
           ))}
         </div>
@@ -406,7 +454,7 @@ function HowItWorksSection({
                   lineHeight: 1.6,
                 }}
               >
-                {c.body}
+                {renderInline(c.body)}
               </p>
             </div>
           ))}
@@ -466,19 +514,98 @@ function InvestmentSection({
 }
 
 /* ── Team Sub-component ── */
+function TeamMemberRow({ name, tagline, caption, photo }: ProposalTeamMember) {
+  return (
+    <div
+      className="team-reveal"
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "2rem",
+        alignItems: "flex-start",
+        maxWidth: "900px",
+      }}
+    >
+      {photo && (
+        <div
+          className="team-photo"
+          style={{
+            position: "relative",
+            width: "clamp(120px, 20vw, 180px)",
+            height: "clamp(120px, 20vw, 180px)",
+            flexShrink: 0,
+          }}
+        >
+          {/* Corner brackets — animate from a "+" cross at center to the photo's corners */}
+          {(["topLeft", "topRight", "bottomLeft", "bottomRight"] as const).map((corner) => (
+            <span
+              key={corner}
+              className={`team-bracket team-bracket-${corner}`}
+              style={{
+                position: "absolute",
+                width: 16,
+                height: 16,
+                zIndex: 2,
+                ...(corner === "topLeft"    && { top: -3, left: -3, borderTop: "2px solid var(--color-accent)", borderLeft: "2px solid var(--color-accent)" }),
+                ...(corner === "topRight"   && { top: -3, right: -3, borderTop: "2px solid var(--color-accent)", borderRight: "2px solid var(--color-accent)" }),
+                ...(corner === "bottomLeft" && { bottom: -3, left: -3, borderBottom: "2px solid var(--color-accent)", borderLeft: "2px solid var(--color-accent)" }),
+                ...(corner === "bottomRight"&& { bottom: -3, right: -3, borderBottom: "2px solid var(--color-accent)", borderRight: "2px solid var(--color-accent)" }),
+              }}
+            />
+          ))}
+          <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="team-photo-image"
+              src={photo}
+              alt={name}
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", opacity: 0 }}
+            />
+          </div>
+        </div>
+      )}
+
+      <div style={{ flex: 1, minWidth: "260px" }}>
+        <h3
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(1.5rem, 3vw, 2rem)",
+            fontWeight: 500,
+            letterSpacing: "-0.02em",
+            marginBottom: "0.75rem",
+            color: "var(--color-text-primary)",
+          }}
+        >
+          {name}
+        </h3>
+        <p
+          className="text-body"
+          style={{ color: "var(--color-text-secondary)", lineHeight: 1.7, marginBottom: "1rem" }}
+        >
+          {renderInline(tagline)}
+        </p>
+        <p
+          className="text-small"
+          style={{ color: "var(--color-text-tertiary)", lineHeight: 1.6 }}
+        >
+          {renderInline(caption)}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function TeamSection({
   number,
   name,
   tagline,
   caption,
   photo,
+  members,
 }: {
   number: string;
-  name: string;
-  tagline: string;
-  caption: string;
-  photo?: string;
-}) {
+  members?: ProposalTeamMember[];
+} & ProposalTeamMember) {
   const { lang } = useLanguage();
   const t = translations[lang];
   const sectionRef = useRef<HTMLElement>(null);
@@ -486,17 +613,66 @@ function TeamSection({
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.from(".team-reveal", {
-        y: 60,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-        stagger: 0.12,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none none",
-        },
+      const rows = gsap.utils.toArray<HTMLElement>(".team-reveal");
+      // 3px = the corner offset used in CSS; 2px = bracket border, halved → centers
+      // the 2px-thick borders on the photo's center axes when forming the "+".
+      const cornerOffset = 3;
+      const borderHalf = 1;
+
+      rows.forEach((row, index) => {
+        const photo = row.querySelector<HTMLElement>(".team-photo");
+        const img = photo?.querySelector<HTMLElement>(".team-photo-image") ?? null;
+        const tl_br = photo?.querySelector<HTMLElement>(".team-bracket-topLeft") ?? null;
+        const tr_br = photo?.querySelector<HTMLElement>(".team-bracket-topRight") ?? null;
+        const bl_br = photo?.querySelector<HTMLElement>(".team-bracket-bottomLeft") ?? null;
+        const br_br = photo?.querySelector<HTMLElement>(".team-bracket-bottomRight") ?? null;
+        const allBrackets = [tl_br, tr_br, bl_br, br_br].filter(
+          (el): el is HTMLElement => el !== null,
+        );
+
+        if (photo && allBrackets.length === 4 && tl_br && tr_br && bl_br && br_br) {
+          const w = photo.offsetWidth;
+          const h = photo.offsetHeight;
+          const dx = w / 2 + cornerOffset - borderHalf;
+          const dy = h / 2 + cornerOffset - borderHalf;
+          gsap.set(tl_br, { x:  dx, y:  dy });
+          gsap.set(tr_br, { x: -dx, y:  dy });
+          gsap.set(bl_br, { x:  dx, y: -dy });
+          gsap.set(br_br, { x: -dx, y: -dy });
+        }
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: row,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+          delay: index * 0.15,
+        });
+
+        tl.from(row, {
+          y: 60,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        });
+
+        if (allBrackets.length === 4) {
+          tl.to(allBrackets, {
+            x: 0,
+            y: 0,
+            duration: 0.7,
+            ease: "power3.out",
+          }, "-=0.35");
+        }
+
+        if (img) {
+          tl.to(img, {
+            opacity: 1,
+            duration: 0.5,
+            ease: "power2.out",
+          }, "-=0.25");
+        }
       });
     }, sectionRef);
     return () => ctx.revert();
@@ -512,76 +688,15 @@ function TeamSection({
       <div className="container">
         <SectionLabel number={number} label={t.proposals.viewer.sections.team} />
 
-        <div
-          className="team-reveal"
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "2rem",
-            alignItems: "flex-start",
-            maxWidth: "900px",
-          }}
-        >
-          {photo && (
-            <div
-              style={{
-                width: "clamp(120px, 20vw, 180px)",
-                height: "clamp(120px, 20vw, 180px)",
-                flexShrink: 0,
-                border: "1px solid var(--color-border)",
-                borderRadius: 0,
-                overflow: "hidden",
-                backgroundColor: "var(--color-bg-elevated)",
-              }}
-            >
-              {/* Plain <img> — placeholder is an SVG, swappable later. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={photo}
-                alt={name}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                }}
-              />
-            </div>
-          )}
+        <div style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
+          <TeamMemberRow name={name} tagline={tagline} caption={caption} photo={photo} />
 
-          <div style={{ flex: 1, minWidth: "260px" }}>
-            <h3
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                fontWeight: 500,
-                letterSpacing: "-0.02em",
-                marginBottom: "0.75rem",
-                color: "var(--color-text-primary)",
-              }}
-            >
-              {name}
-            </h3>
-            <p
-              className="text-body"
-              style={{
-                color: "var(--color-text-secondary)",
-                lineHeight: 1.7,
-                marginBottom: "1rem",
-              }}
-            >
-              {tagline}
-            </p>
-            <p
-              className="text-small"
-              style={{
-                color: "var(--color-text-tertiary)",
-                lineHeight: 1.6,
-              }}
-            >
-              {caption}
-            </p>
-          </div>
+          {members && members.length > 0 && members.map((m, i) => (
+            <Fragment key={i}>
+              <div style={{ borderTop: "1px solid var(--color-border)", maxWidth: "900px" }} />
+              <TeamMemberRow {...m} />
+            </Fragment>
+          ))}
         </div>
       </div>
     </section>
@@ -697,7 +812,7 @@ function InitiativeSection({
         >
           {body.split("\n\n").map((para, i) => (
             <p key={i} className="text-body" style={{ marginBottom: "1.5rem" }}>
-              {para}
+              {renderInline(para)}
             </p>
           ))}
         </div>
@@ -709,6 +824,154 @@ function InitiativeSection({
               variant="secondary"
               onClick={() => onDownload(attachment.id)}
             />
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* ── Real Estate Agent Sub-component ── */
+// Forward-looking deliverable section. Pure narrative, no inline button.
+// Used to surface a concrete in-progress build (e.g. the Haven property
+// research agent) without implying a downloadable artifact yet.
+function RealEstateAgentSection({
+  number,
+  headline,
+  body,
+  intro,
+  points,
+  note,
+}: {
+  number: string;
+  headline: string;
+  body?: string;
+  intro?: string;
+  points?: { title: string; body: string }[];
+  note?: string;
+}) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.from(".real-estate-reveal", {
+        y: 60,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        stagger: 0.12,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 70%",
+          toggleActions: "play none none none",
+        },
+      });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section
+      id="realEstateAgent"
+      ref={sectionRef}
+      className="section-padding"
+      style={{ backgroundColor: "var(--color-bg-void)" }}
+    >
+      <div className="container">
+        <SectionLabel
+          number={number}
+          label={t.proposals.viewer.sections.realEstateAgent}
+        />
+
+        <h2
+          className="text-heading real-estate-reveal"
+          style={{ maxWidth: "800px", marginBottom: "2rem" }}
+        >
+          {headline}
+        </h2>
+
+        {/* Structured layout: intro → feature points → licensing note */}
+        {intro && (
+          <p
+            className="text-body real-estate-reveal"
+            style={{
+              maxWidth: "800px",
+              color: "var(--color-text-secondary)",
+              lineHeight: 1.8,
+              marginBottom: points ? "2.5rem" : "1.5rem",
+            }}
+          >
+            {renderInline(intro)}
+          </p>
+        )}
+
+        {points && points.length > 0 && (
+          <div
+            className="real-estate-reveal grid grid-cols-1 md:grid-cols-3 gap-4"
+            style={{ maxWidth: "900px", marginBottom: note ? "2.5rem" : 0 }}
+          >
+            {points.map((p, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: "1.5rem",
+                  border: "1px solid var(--color-border)",
+                  borderLeft: "2px solid var(--color-accent)",
+                  backgroundColor: "var(--color-bg-elevated)",
+                }}
+              >
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.05rem",
+                    fontWeight: 500,
+                    letterSpacing: "-0.01em",
+                    marginBottom: "0.5rem",
+                    color: "var(--color-text-primary)",
+                  }}
+                >
+                  {p.title}
+                </h3>
+                <p
+                  className="text-small"
+                  style={{ color: "var(--color-text-secondary)", lineHeight: 1.6 }}
+                >
+                  {renderInline(p.body)}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {note && (
+          <p
+            className="text-small real-estate-reveal"
+            style={{
+              maxWidth: "800px",
+              color: "var(--color-text-tertiary)",
+              lineHeight: 1.7,
+              borderTop: "1px solid var(--color-border)",
+              paddingTop: "1.5rem",
+            }}
+          >
+            {renderInline(note)}
+          </p>
+        )}
+
+        {/* Legacy fallback: plain body prose */}
+        {body && !intro && (
+          <div
+            className="real-estate-reveal"
+            style={{ maxWidth: "800px", color: "var(--color-text-secondary)", lineHeight: 1.8 }}
+          >
+            {body.split("\n\n").map((para, i) => (
+              <p key={i} className="text-body" style={{ marginBottom: "1.5rem" }}>
+                {renderInline(para)}
+              </p>
+            ))}
           </div>
         )}
       </div>

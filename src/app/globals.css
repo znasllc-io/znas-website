@@ -180,6 +180,62 @@ body {
   }
 }
 
+/* Brand name glow — scoped to proposal pages only. Faint colored aura around
+   the letters so the eye catches them first. Glow follows letter shape via
+   text-shadow, NOT a box. */
+@keyframes proposal-shimmer-cyan {
+  0%, 100% {
+    text-shadow:
+      0 0 4px rgba(125, 211, 252, 0.54),
+      0 0 10px rgba(125, 211, 252, 0.198),
+      0 0 22px rgba(125, 211, 252, 0.101);
+  }
+  50% {
+    text-shadow:
+      0 0 5px rgba(125, 211, 252, 0.78),
+      0 0 14px rgba(125, 211, 252, 0.32),
+      0 0 30px rgba(125, 211, 252, 0.16);
+  }
+}
+
+@keyframes proposal-shimmer-white {
+  0%, 100% {
+    text-shadow:
+      0 0 4px rgba(255, 255, 255, 0.48),
+      0 0 10px rgba(255, 255, 255, 0.162),
+      0 0 22px rgba(255, 255, 255, 0.079);
+  }
+  50% {
+    text-shadow:
+      0 0 5px rgba(255, 255, 255, 0.70),
+      0 0 14px rgba(255, 255, 255, 0.27),
+      0 0 30px rgba(255, 255, 255, 0.13);
+  }
+}
+
+.proposal-page .glow-cyan {
+  text-shadow:
+    0 0 4px rgba(125, 211, 252, 0.54),
+    0 0 10px rgba(125, 211, 252, 0.198),
+    0 0 22px rgba(125, 211, 252, 0.101);
+  animation: proposal-shimmer-cyan 3.4s ease-in-out infinite;
+}
+
+.proposal-page .glow-white {
+  text-shadow:
+    0 0 4px rgba(255, 255, 255, 0.48),
+    0 0 10px rgba(255, 255, 255, 0.162),
+    0 0 22px rgba(255, 255, 255, 0.079);
+  animation: proposal-shimmer-white 4.1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proposal-page .glow-cyan,
+  .proposal-page .glow-white {
+    animation: none;
+  }
+}
+
 ::selection {
   background-color: var(--color-accent);
   color: var(--color-bg-void);

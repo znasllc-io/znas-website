@@ -17,7 +17,7 @@ export interface ProposalListStrings {
 export interface ProposalViewerStrings {
   label: string;
   preparedFor: string;
-  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string };
+  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string };
   download: {
     headline: string;
     subtitle: string;
@@ -25,7 +25,7 @@ export interface ProposalViewerStrings {
     errorRefresh: string;
     errorFailed: string;
   };
-  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string };
+  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string };
 }
 
 export interface ProposalGateStrings {
@@ -277,8 +277,9 @@ export const translations: Record<Lang, LangStrings> = {
           howItWorks: "How It Works",
           timeline: "Timeline",
           investment: "Investment",
-          team: "The Team",
+          team: "Meet the Team",
           initiative: "Initiative",
+          realEstateAgent: "Real Estate Agent",
         },
         download: {
           headline: "Ready to move forward?",
@@ -293,8 +294,9 @@ export const translations: Record<Lang, LangStrings> = {
           howItWorks: "How It Works",
           timeline: "Timeline",
           investment: "Investment",
-          team: "The Team",
+          team: "Meet the Team",
           initiative: "Initiative",
+          realEstateAgent: "Real Estate Agent",
         },
       },
       gate: {
@@ -504,6 +506,7 @@ export const translations: Record<Lang, LangStrings> = {
           investment: "Inversión",
           team: "El Equipo",
           initiative: "Iniciativa",
+          realEstateAgent: "Agente de Bienes Raíces",
         },
         download: {
           headline: "¿Listo para avanzar?",
@@ -520,6 +523,7 @@ export const translations: Record<Lang, LangStrings> = {
           investment: "Inversión",
           team: "El Equipo",
           initiative: "Iniciativa",
+          realEstateAgent: "Agente de Bienes Raíces",
         },
       },
       gate: {

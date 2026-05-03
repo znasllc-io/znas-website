@@ -22,39 +22,72 @@
   "sections": {
     "summary": {
       "headline": "Haven has 20 years of work behind it. This proposal is about what gets built around it next.",
-      "body": "ZNAS comes in as a consultant and a fixer for Haven's digital and technological side. The starting point is the suspended Google Business Profiles. From there, the work continues across whatever digital and technological problems are holding the business back, with Ángel approving each step."
+      "body": "You've put two decades into Haven. The digital side hasn't kept pace. Four suspended Google Business Profiles are the most visible problem — but they're not the only one. ZNAS comes in as your technology partner: we identify what's broken, propose what needs to change, and execute only after you approve. You stay in control of every decision."
     },
     "howItWorks": {
-      "intro": "José leads the engagement directly. The work covers technology decisions, execution, and recovery of the suspended Google Business Profiles from week one. Specific scope and pricing are confirmed in the alignment meeting before any work begins.",
+      "intro": "José runs this engagement directly — you'll always be working with him, not handed off to a team. From week one, the focus is recovering the suspended profiles and mapping whatever else is holding Haven back. Scope and pricing are set together in the alignment meeting, before anything starts.",
       "cards": [
         {
-          "title": "Month-to-month engagement",
-          "body": "No long-term commitments. Pause anytime with 15 days' notice."
+          "title": "Month-to-month",
+          "body": "No long-term lock-in. Pause or end the engagement with 15 days' notice — no penalties."
         },
         {
-          "title": "Ángel approves every step",
-          "body": "ZNAS proposes and recommends; Haven gives the green light before anything is executed."
+          "title": "You approve every move",
+          "body": "ZNAS recommends; you decide. Nothing is executed without your sign-off first."
         },
         {
-          "title": "Three phases, one logic",
-          "body": "Assessment, Transformation Proposal, Execution. Each phase ends with a clear deliverable: a diagnosis, an approved roadmap, and a working infrastructure. Scope is defined as the work progresses, not promised upfront."
+          "title": "Three phases, clear exits",
+          "body": "Assessment, Transformation Proposal, Execution. Each phase ends with a deliverable you review before the next one begins."
         },
         {
-          "title": "100% IP ownership",
-          "body": "Everything ZNAS builds for Haven is owned by Haven. No retained rights."
+          "title": "100% your IP",
+          "body": "Everything ZNAS builds for Haven stays with Haven. No retained rights, no licensing back to us."
         }
       ]
     },
     "team": {
       "name": "José Sanz",
-      "tagline": "17+ years building production-scale systems. Founder of ZNAS LLC, co-founder of Visionarys. MIT Certification in AI Business Strategy.",
-      "caption": "José leads the engagement directly, supported by the ZNAS team where execution requires it.",
-      "photo": "/images/jose-placeholder.svg"
+      "tagline": "17+ years building production-scale systems across enterprise environments. Founder of ZNAS LLC and co-founder of Visionarys. Previously a lead engineer at a large-scale enterprise language services platform, driving technical architecture across a five-year tenure. Holds an MIT Certification in AI Business Strategy and has presented on AI adoption at the AI Trailblazers developer workshop series.",
+      "caption": "José leads every engagement directly. Clients work with him, not a team that reports to him.",
+      "photo": "/images/jose-sanz.png",
+      "members": [
+        {
+          "name": "María José Zepeda",
+          "tagline": "Leads operations at Visionarys and supports ZNAS engagements on the coordination and client-facing side. Keeps projects organized, communication clear, and deliverables on schedule.",
+          "caption": "Majo makes sure nothing falls through the cracks — handling the day-to-day coordination that lets José focus on the work itself.",
+          "photo": "/images/maria-zepeda.png"
+        },
+        {
+          "name": "Jesús Mendivil",
+          "tagline": "Handles technical execution across ZNAS engagements. Works across cloud infrastructure, IT administration, and AI tooling — building and maintaining the systems that keep operations running.",
+          "caption": "Jesús is the person who makes things work. From GCP deployments to device management and automation, he takes ownership of the technical side so engagements don't stall.",
+          "photo": "/images/jesus-mendivil.png"
+        }
+      ]
     },
     "initiative": {
-      "headline": "Initiative on paper.",
-      "body": "Before any agreement is signed, the operational gameplan for Haven's most urgent problem is already drafted. The document below walks through how ZNAS would attack the four suspended Google Business Profiles: what we can start on this week without any client access, what we'll need from your team to unblock the rest, and the one task only Ángel can handle (a single 60-second on-camera verification that mirrors a real reinstated case from a peer business).\n\nIt is research-backed: cross-referenced against documented reinstatement cases, validated against Google's current SAB standard, and structured so nothing burns one of the limited appeal attempts. More than that, it is the kind of preparation we bring to every problem ZNAS takes on. You will see how each task is owned, what is blocked on what, and the exact sequence we would run from kickoff to first response from Google.\n\nRead it before our alignment meeting so we can spend that time on adjustments instead of explanations.",
+      "headline": "The work starts before you sign.",
+      "body": "The gameplan below was drafted before this meeting. It covers exactly how ZNAS would recover your four suspended Google Business Profiles — what starts this week without needing any access from you, what we'll need your side to unblock, and the one step only you can take: a single 60-second on-camera verification that mirrors a documented reinstatement from a peer business.\n\nEvery task is assigned. Every dependency is mapped. The appeal sequence is structured so nothing wastes one of Google's limited review windows.\n\nRead it before we meet — so we spend that time on adjustments, not on catching up.",
       "attachmentId": "gameplan"
+    },
+    "realEstateAgent": {
+      "headline": "The real estate agent is already in build.",
+      "intro": "You mentioned it in our first conversation: property research and bidding takes too long. Finding listings that actually fit your criteria, running the numbers, deciding fast enough to move on a deal — it burns time Haven doesn't have to waste. ZNAS and Visionarys are already building the agent that handles this for you.",
+      "points": [
+        {
+          "title": "Live market data",
+          "body": "Zillow integration pulls current listings, pricing, and comparable sales automatically — no manual searching required."
+        },
+        {
+          "title": "Trained on how you think",
+          "body": "The agent learns your criteria: how you pick targets, how you weigh trade-offs, and what makes a property worth moving on."
+        },
+        {
+          "title": "Your logic, your IP",
+          "body": "The decision framework ZNAS configures for Haven inside the platform belongs to Haven — not to us, not to the platform."
+        }
+      ],
+      "note": "The agent runs on CoPresent — an AI platform built by Visionarys. Haven licenses it directly from Visionarys; everything built on top of it is yours."
     }
   }
 }
