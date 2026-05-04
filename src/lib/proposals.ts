@@ -237,7 +237,7 @@ export function loadAllProposals(): Pick<SafeProposal, "slug" | "clientName" | "
         projectTitle: proposal.projectTitle,
         status: proposal.status,
       };
-    }).filter((p) => p.status === "active");
+    }).filter((p) => p.status === "active" || p.status === "formalized");
   } catch {
     return [];
   }

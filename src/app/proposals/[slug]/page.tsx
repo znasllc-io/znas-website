@@ -27,7 +27,7 @@ function getClientMeta(slug: string): { clientName: string; projectTitle: string
   try {
     const raw = fs.readFileSync(filePath, "utf-8");
     const data = JSON.parse(raw);
-    if (data.status !== "active") return null;
+    if (data.status !== "active" && data.status !== "formalized") return null;
     return {
       clientName: data.clientName as string,
       projectTitle: data.projectTitle as string,
