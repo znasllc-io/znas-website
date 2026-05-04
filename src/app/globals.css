@@ -203,11 +203,11 @@ body {
 .proposal-page .glow-cyan {
   background-image: linear-gradient(
     90deg,
-    #22D3EE 0%,
-    #14B8A6 25%,
-    #06B6D4 50%,
-    #14B8A6 75%,
-    #22D3EE 100%
+    #38BDF8 0%,
+    #22D3EE 25%,
+    #0EA5E9 50%,
+    #22D3EE 75%,
+    #38BDF8 100%
   );
 }
 
