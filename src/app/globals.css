@@ -180,53 +180,48 @@ body {
   }
 }
 
-/* Brand name glow — scoped to proposal pages only. Faint colored aura around
-   the letters so the eye catches them first. Glow follows letter shape via
-   text-shadow, NOT a box. */
-@keyframes proposal-shimmer-cyan {
-  0%, 100% {
-    text-shadow:
-      0 0 4px rgba(125, 211, 252, 0.54),
-      0 0 10px rgba(125, 211, 252, 0.198),
-      0 0 22px rgba(125, 211, 252, 0.101);
-  }
-  50% {
-    text-shadow:
-      0 0 5px rgba(125, 211, 252, 0.78),
-      0 0 14px rgba(125, 211, 252, 0.32),
-      0 0 30px rgba(125, 211, 252, 0.16);
-  }
+/* Brand-name highlight — scoped to proposal pages only. Subtle gradient
+   fill on the letter shapes (not a blur), with a slow shimmer that
+   shifts the gradient position so the letters read as metallic but
+   stay legible. */
+@keyframes proposal-gradient-shift {
+  0%   { background-position:   0% 50%; }
+  100% { background-position: 200% 50%; }
 }
 
-@keyframes proposal-shimmer-white {
-  0%, 100% {
-    text-shadow:
-      0 0 4px rgba(255, 255, 255, 0.48),
-      0 0 10px rgba(255, 255, 255, 0.162),
-      0 0 22px rgba(255, 255, 255, 0.079);
-  }
-  50% {
-    text-shadow:
-      0 0 5px rgba(255, 255, 255, 0.70),
-      0 0 14px rgba(255, 255, 255, 0.27),
-      0 0 30px rgba(255, 255, 255, 0.13);
-  }
+.proposal-page .glow-cyan,
+.proposal-page .glow-white {
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  /* Linear timing keeps the highlight sweeping smoothly across the letters */
+  animation: proposal-gradient-shift 6s linear infinite;
 }
 
 .proposal-page .glow-cyan {
-  text-shadow:
-    0 0 4px rgba(125, 211, 252, 0.54),
-    0 0 10px rgba(125, 211, 252, 0.198),
-    0 0 22px rgba(125, 211, 252, 0.101);
-  animation: proposal-shimmer-cyan 3.4s ease-in-out infinite;
+  background-image: linear-gradient(
+    90deg,
+    #22D3EE 0%,
+    #14B8A6 25%,
+    #06B6D4 50%,
+    #14B8A6 75%,
+    #22D3EE 100%
+  );
 }
 
 .proposal-page .glow-white {
-  text-shadow:
-    0 0 4px rgba(255, 255, 255, 0.48),
-    0 0 10px rgba(255, 255, 255, 0.162),
-    0 0 22px rgba(255, 255, 255, 0.079);
-  animation: proposal-shimmer-white 4.1s ease-in-out infinite;
+  background-image: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    #94A3B8 25%,
+    #FFFFFF 50%,
+    #94A3B8 75%,
+    #FFFFFF 100%
+  );
+  /* Slightly different speed so cyan and white don't tick in lockstep */
+  animation-duration: 7s;
 }
 
 @media (prefers-reduced-motion: reduce) {

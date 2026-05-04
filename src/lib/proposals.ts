@@ -157,7 +157,18 @@ export interface Proposal {
   projectTitle_es?: string;
   // Argon2id hash of the access code. Never stored or transmitted in plaintext.
   passwordHash: string;
-  status: "active" | "draft" | "archived";
+  // Lifecycle:
+  //   draft     — internal, hidden from listing
+  //   active    — published; if expiresAt has passed, the listing card
+  //               renders an "On Hold" + Re-contact variant instead of
+  //               the password-entry flow
+  //   formalized — proposal converted to an active engagement; listing
+  //               renders a quieter "in progress" badge
+  //   archived  — hidden from listing
+  status: "active" | "draft" | "archived" | "formalized";
+  // Optional ISO date (YYYY-MM-DD or full ISO). Drives the live
+  // countdown on Active cards and the Expired/On-Hold transition.
+  expiresAt?: string;
   pdfFilename: string;
   pdfFilenameEs?: string;
   // Optional supplementary downloads (rendered as additional buttons next

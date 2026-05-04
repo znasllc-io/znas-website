@@ -5,6 +5,7 @@
   "projectTitle_es": "CTO Fraccional y Transformación Digital",
   "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$7WRvWoJlmNcFc7yz3RJVZg$a+7SSUEfymgXHnvidcmG3VqaBK1mvBZv5/7NU5ttOww",
   "status": "active",
+  "expiresAt": "2026-05-21T23:59:59-07:00",
   "pdfFilename": "alebrijes-en.pdf",
   "pdfFilenameEs": "alebrijes-es.pdf",
   "sections": {

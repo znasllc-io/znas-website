@@ -1,16 +1,67 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
+import Link from "next/link";
 import Navigation from "@/components/layout/Navigation";
 import CustomCursor from "@/components/layout/CustomCursor";
 import PageTransition from "@/components/layout/PageTransition";
 import { useLanguage } from "@/lib/language";
-import { translations } from "@/lib/translations";
+import { translations, type ProposalListStrings } from "@/lib/translations";
 
 interface ProposalEntry {
   slug: string;
   clientName: string;
   projectTitle: string;
+  status: "active" | "formalized";
+  expiresAt?: string;
+}
+
+type LifecycleState = "pending" | "formalized" | "expired";
+
+function computeLifecycle(p: ProposalEntry, now: number): LifecycleState {
+  if (p.status === "formalized") return "formalized";
+  if (p.expiresAt && new Date(p.expiresAt).getTime() < now) return "expired";
+  return "pending";
+}
+
+// Live-updating countdown to an ISO date. Re-ticks each second when total
+// time remaining is < 1 day, otherwise once per minute (cheaper).
+function Countdown({
+  target,
+  units,
+  prefix,
+}: {
+  target: string;
+  units: ProposalListStrings["units"];
+  prefix: string;
+}) {
+  const targetMs = useMemo(() => new Date(target).getTime(), [target]);
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const remaining = targetMs - Date.now();
+    const tick = remaining < 24 * 3600 * 1000 ? 1000 : 60 * 1000;
+    const id = setInterval(() => setNow(Date.now()), tick);
+    return () => clearInterval(id);
+  }, [targetMs]);
+
+  const diff = Math.max(0, targetMs - now);
+  const d = Math.floor(diff / (24 * 3600 * 1000));
+  const h = Math.floor((diff % (24 * 3600 * 1000)) / (3600 * 1000));
+  const m = Math.floor((diff % (3600 * 1000)) / (60 * 1000));
+  const s = Math.floor((diff % (60 * 1000)) / 1000);
+
+  // Show D + H when more than 1 day, else H + M + S
+  const formatted = d > 0
+    ? `${d}${units.d} ${String(h).padStart(2, "0")}${units.h}`
+    : `${String(h).padStart(2, "0")}${units.h} ${String(m).padStart(2, "0")}${units.m} ${String(s).padStart(2, "0")}${units.s}`;
+
+  return (
+    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", letterSpacing: "0.06em" }}>
+      <span style={{ color: "var(--color-text-tertiary)" }}>{prefix} </span>
+      <span style={{ color: "var(--color-accent)" }}>{formatted}</span>
+    </span>
+  );
 }
 
 export default function ProposalListClient({
@@ -26,6 +77,13 @@ export default function ProposalListClient({
   const [loading, setLoading] = useState(false);
   const [rateLimitMsg, setRateLimitMsg] = useState("");
   const [countdown, setCountdown] = useState(0);
+  // Re-tick once a minute so a proposal flips from pending → expired as
+  // soon as its expiresAt passes, even with the page held open.
+  const [nowMs, setNowMs] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNowMs(Date.now()), 60_000);
+    return () => clearInterval(id);
+  }, []);
   const inputRef = useRef<HTMLInputElement>(null);
   const triggerExitRef = useRef<((href: string) => void) | null>(null);
 
@@ -161,11 +219,16 @@ export default function ProposalListClient({
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              {proposals.map((p) => (
+              {proposals.map((p) => {
+                const state = computeLifecycle(p, nowMs);
+                const isExpired = state === "expired";
+                const isFormalized = state === "formalized";
+                const isSelected = selectedSlug === p.slug;
+                return (
                 <div key={p.slug}>
                   {/* Card */}
                   <div
-                    onClick={() => {
+                    onClick={isExpired ? undefined : () => {
                       if (selectedSlug !== p.slug) {
                         setSelectedSlug(p.slug);
                         setPassword("");
@@ -177,49 +240,111 @@ export default function ProposalListClient({
                     style={{
                       display: "block",
                       padding: "1.25rem 1.5rem",
-                      border: `1px solid ${selectedSlug === p.slug ? "var(--color-accent)" : "var(--color-border)"}`,
+                      border: `1px ${isExpired ? "dashed" : "solid"} ${isSelected ? "var(--color-accent)" : "var(--color-border)"}`,
                       borderRadius: 0,
-                      backgroundColor: selectedSlug === p.slug ? "var(--color-bg-elevated)" : "transparent",
+                      backgroundColor: isSelected ? "var(--color-bg-elevated)" : "transparent",
                       transition: "border-color 0.3s, background-color 0.3s",
-                      cursor: "none",
+                      cursor: isExpired ? "default" : "none",
+                      opacity: isExpired ? 0.78 : 1,
                     }}
                     onMouseEnter={(e) => {
-                      if (selectedSlug !== p.slug) {
+                      if (!isSelected && !isExpired) {
                         e.currentTarget.style.borderColor = "var(--color-accent)";
                         e.currentTarget.style.backgroundColor = "var(--color-bg-elevated)";
                       }
                     }}
                     onMouseLeave={(e) => {
-                      if (selectedSlug !== p.slug) {
+                      if (!isSelected && !isExpired) {
                         e.currentTarget.style.borderColor = "var(--color-border)";
                         e.currentTarget.style.backgroundColor = "transparent";
                       }
                     }}
                   >
-                    <div
-                      style={{
-                        fontFamily: "var(--font-display)",
-                        fontSize: "1.1rem",
-                        fontWeight: 500,
-                        color: "var(--color-text-primary)",
-                        marginBottom: "0.25rem",
-                      }}
-                    >
-                      {p.clientName}
-                    </div>
-                    {selectedSlug !== p.slug && (
-                      <div
-                        style={{
-                          fontFamily: "var(--font-mono)",
-                          fontSize: "0.65rem",
-                          letterSpacing: "0.1em",
-                          color: "var(--color-text-tertiary)",
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        {t.proposals.list.viewProposal}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem" }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div
+                          style={{
+                            fontFamily: "var(--font-display)",
+                            fontSize: "1.1rem",
+                            fontWeight: 500,
+                            color: isExpired ? "var(--color-text-tertiary)" : "var(--color-text-primary)",
+                            marginBottom: "0.25rem",
+                          }}
+                        >
+                          {p.clientName}
+                        </div>
+                        {!isSelected && !isExpired && (
+                          <div
+                            style={{
+                              fontFamily: "var(--font-mono)",
+                              fontSize: "0.65rem",
+                              letterSpacing: "0.1em",
+                              color: "var(--color-text-tertiary)",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            {isFormalized ? t.proposals.list.viewEngagement : t.proposals.list.viewProposal}
+                          </div>
+                        )}
+                        {isExpired && (
+                          <Link
+                            href="/contact"
+                            style={{
+                              display: "inline-block",
+                              marginTop: "0.5rem",
+                              fontFamily: "var(--font-mono)",
+                              fontSize: "0.7rem",
+                              letterSpacing: "0.08em",
+                              textTransform: "uppercase",
+                              color: "var(--color-accent)",
+                              border: "1px solid var(--color-accent)",
+                              borderRadius: "2px",
+                              padding: "0.5rem 1rem",
+                              textDecoration: "none",
+                              cursor: "none",
+                            }}
+                          >
+                            {t.proposals.list.reContact} →
+                          </Link>
+                        )}
                       </div>
-                    )}
+                      {/* State indicator (right side) */}
+                      <div style={{ flexShrink: 0, paddingTop: "0.15rem", textAlign: "right" }}>
+                        {state === "pending" && p.expiresAt && (
+                          <Countdown
+                            target={p.expiresAt}
+                            units={t.proposals.list.units}
+                            prefix={t.proposals.list.expiresIn}
+                          />
+                        )}
+                        {isFormalized && (
+                          <span
+                            style={{
+                              fontFamily: "var(--font-mono)",
+                              fontSize: "0.65rem",
+                              letterSpacing: "0.1em",
+                              textTransform: "uppercase",
+                              color: "var(--color-accent)",
+                            }}
+                          >
+                            // {t.proposals.list.inProgress}
+                          </span>
+                        )}
+                        {isExpired && (
+                          <span
+                            style={{
+                              fontFamily: "var(--font-mono)",
+                              fontSize: "0.65rem",
+                              letterSpacing: "0.1em",
+                              textTransform: "uppercase",
+                              color: "var(--color-text-tertiary)",
+                            }}
+                          >
+                            // {t.proposals.list.onHold}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
                   {/* Inline code entry */}
@@ -352,7 +477,8 @@ export default function ProposalListClient({
                     </div>
                   )}
                 </div>
-              ))}
+                );
+              })}
 
               {proposals.length === 0 && (
                 <p className="text-small" style={{

@@ -12,6 +12,15 @@ export interface ProposalListStrings {
   invalidKey: string;
   networkError: string;
   rateLimitMsg: (s: number) => string;
+  // Lifecycle states
+  expiresIn: string;
+  expired: string;
+  formalized: string;
+  inProgress: string;
+  onHold: string;
+  reContact: string;
+  viewEngagement: string;
+  units: { d: string; h: string; m: string; s: string };
 }
 
 export interface ProposalViewerStrings {
@@ -86,6 +95,19 @@ export interface LangStrings {
   contact: {
     label: string;
     headline: string[];
+  };
+  contactPage: {
+    title: string;
+    subtitle: string;
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+    send: string;
+    namePlaceholder: string;
+    emailPlaceholder: string;
+    subjectPlaceholder: string;
+    messagePlaceholder: string;
   };
   marquee: string;
   proposals: {
@@ -252,6 +274,19 @@ export const translations: Record<Lang, LangStrings> = {
       label: "Contact",
       headline: ["Let's build", "something real."],
     },
+    contactPage: {
+      title: "Get in touch",
+      subtitle: "Send a note. Replies come back from znas@znas.io.",
+      name: "Name",
+      email: "Email",
+      subject: "Subject",
+      message: "Message",
+      send: "Send →",
+      namePlaceholder: "Your name",
+      emailPlaceholder: "you@company.com",
+      subjectPlaceholder: "What's this about?",
+      messagePlaceholder: "Briefly, what would you like to discuss?",
+    },
     marquee:
       "Software Architecture  /  Distributed Systems  /  Full-Stack Engineering  /  AI Strategy  /  Open Source  /  ",
     proposals: {
@@ -267,6 +302,14 @@ export const translations: Record<Lang, LangStrings> = {
         invalidKey: "Invalid proposal key. Please try again.",
         networkError: "Network error. Please check your connection.",
         rateLimitMsg: (s) => `Too many attempts. Please wait ${s} seconds.`,
+        expiresIn: "Expires in",
+        expired: "Expired",
+        formalized: "Formalized",
+        inProgress: "In progress",
+        onHold: "On hold",
+        reContact: "Re-contact",
+        viewEngagement: "View engagement →",
+        units: { d: "d", h: "h", m: "m", s: "s" },
       },
       viewer: {
         label: "Proposal",
@@ -479,6 +522,19 @@ export const translations: Record<Lang, LangStrings> = {
       label: "Contacto",
       headline: ["Construyamos", "algo real."],
     },
+    contactPage: {
+      title: "Ponte en contacto",
+      subtitle: "Envía un mensaje. Las respuestas llegan desde znas@znas.io.",
+      name: "Nombre",
+      email: "Email",
+      subject: "Asunto",
+      message: "Mensaje",
+      send: "Enviar →",
+      namePlaceholder: "Tu nombre",
+      emailPlaceholder: "tu@empresa.com",
+      subjectPlaceholder: "¿De qué se trata?",
+      messagePlaceholder: "Brevemente, ¿qué te gustaría discutir?",
+    },
     marquee:
       "Arquitectura de Software  /  Sistemas Distribuidos  /  Ingeniería Full-Stack  /  Estrategia de IA  /  Código Abierto  /  ",
     proposals: {
@@ -494,6 +550,14 @@ export const translations: Record<Lang, LangStrings> = {
         invalidKey: "Clave de propuesta inválida. Por favor intenta de nuevo.",
         networkError: "Error de red. Por favor verifica tu conexión.",
         rateLimitMsg: (s) => `Demasiados intentos. Por favor espera ${s} segundos.`,
+        expiresIn: "Expira en",
+        expired: "Expirada",
+        formalized: "Formalizada",
+        inProgress: "En curso",
+        onHold: "En pausa",
+        reContact: "Volver a contactar",
+        viewEngagement: "Ver compromiso →",
+        units: { d: "d", h: "h", m: "m", s: "s" },
       },
       viewer: {
         label: "Propuesta",

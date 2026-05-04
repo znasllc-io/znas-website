@@ -12,6 +12,8 @@ interface ProposalEntry {
   slug: string;
   clientName: string;
   projectTitle: string;
+  status: "active" | "formalized";
+  expiresAt?: string;
 }
 
 function loadProposalList(): ProposalEntry[] {
@@ -22,11 +24,13 @@ function loadProposalList(): ProposalEntry[] {
       .map((file) => {
         const raw = fs.readFileSync(path.join(dir, file), "utf-8");
         const data = JSON.parse(raw);
-        if (data.status !== "active") return null;
+        if (data.status !== "active" && data.status !== "formalized") return null;
         return {
           slug: data.slug,
           clientName: data.clientName,
           projectTitle: data.projectTitle,
+          status: data.status,
+          expiresAt: data.expiresAt,
         };
       })
       .filter(Boolean) as ProposalEntry[];
