@@ -1,0 +1,7 @@
+{
+  "weeklyHoursTotal": 50,
+  "allocations": [
+    { "label": "Visionarys", "hours": 20 },
+    { "label": "Haven", "hours": 5 }
+  ]
+}

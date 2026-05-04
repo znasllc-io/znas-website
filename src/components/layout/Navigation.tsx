@@ -7,6 +7,7 @@ import { useTheme, ACCENT_COLORS } from "@/hooks/useTheme";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
 import PageTransition from "@/components/layout/PageTransition";
+import { getAvailability, getAllocatedHours, getAvailableHours } from "@/lib/availability";
 
 interface NavLink {
   label: string;
@@ -42,8 +43,16 @@ export default function Navigation({
   const [statusOpen, setStatusOpen] = useState(false);
   const triggerExitRef = useRef<((href: string) => void) | null>(null);
 
-  // TODO: Replace with real API/system later
-  const isAvailable = true;
+  // Availability driven by `src/data/availability.json`. Edit that file to
+  // change the weekly cap or current commitments — the indicator + chart
+  // recompute automatically on next build.
+  const availability = getAvailability();
+  const allocatedHours = getAllocatedHours(availability);
+  const availableHours = getAvailableHours(availability);
+  const isAvailable = availableHours > 0;
+  // Distinct fills for chart segments. Cycles if more allocations than
+  // entries — the chart still reads as long as the labels are below it.
+  const ALLOCATION_COLORS = ["var(--color-accent)", "#14B8A6", "#A855F7", "#F97316"];
 
   // Close status popup on outside click
   useEffect(() => {
@@ -278,17 +287,153 @@ export default function Navigation({
                     {isAvailable ? t.nav.availablePartTime : t.nav.currentlyBooked}
                   </span>
                 </div>
-                <p
-                  style={{
-                    fontSize: "0.7rem",
-                    color: "var(--color-text-secondary)",
-                    lineHeight: 1.6,
-                    margin: 0,
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  {isAvailable ? t.nav.availabilityDesc : t.nav.unavailabilityDesc}
-                </p>
+                {/* Weekly allocation chart */}
+                <div style={{ marginTop: "0.85rem" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "baseline",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "0.6rem",
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "var(--color-text-tertiary)",
+                      }}
+                    >
+                      {t.nav.weeklyAllocation}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "0.6rem",
+                        letterSpacing: "0.06em",
+                        color: "var(--color-text-tertiary)",
+                      }}
+                    >
+                      {t.nav.hoursOfTotal(allocatedHours, availability.weeklyHoursTotal)}
+                    </span>
+                  </div>
+                  {/* Stacked horizontal bar */}
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      height: "6px",
+                      borderRadius: "1px",
+                      overflow: "hidden",
+                      backgroundColor: "var(--color-bg-surface)",
+                      gap: "1px",
+                    }}
+                  >
+                    {availability.allocations.map((a, i) => (
+                      <div
+                        key={a.label}
+                        style={{
+                          width: `${(a.hours / availability.weeklyHoursTotal) * 100}%`,
+                          backgroundColor: ALLOCATION_COLORS[i % ALLOCATION_COLORS.length],
+                        }}
+                      />
+                    ))}
+                    {availableHours > 0 && (
+                      <div
+                        style={{
+                          width: `${(availableHours / availability.weeklyHoursTotal) * 100}%`,
+                          backgroundColor: "transparent",
+                          backgroundImage:
+                            "repeating-linear-gradient(45deg, var(--color-text-ghost) 0px, var(--color-text-ghost) 1px, transparent 1px, transparent 4px)",
+                        }}
+                      />
+                    )}
+                  </div>
+                  {/* Allocations list */}
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      padding: 0,
+                      margin: "0.75rem 0 0 0",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.35rem",
+                    }}
+                  >
+                    {availability.allocations.map((a, i) => (
+                      <li
+                        key={a.label}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          fontSize: "0.7rem",
+                          color: "var(--color-text-secondary)",
+                        }}
+                      >
+                        <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                          <span
+                            style={{
+                              width: "8px",
+                              height: "8px",
+                              borderRadius: "1px",
+                              backgroundColor: ALLOCATION_COLORS[i % ALLOCATION_COLORS.length],
+                              flexShrink: 0,
+                            }}
+                          />
+                          {a.label}
+                        </span>
+                        <span
+                          style={{
+                            fontFamily: "var(--font-mono)",
+                            fontSize: "0.65rem",
+                            color: "var(--color-text-tertiary)",
+                            letterSpacing: "0.04em",
+                          }}
+                        >
+                          {a.hours}{t.nav.hoursShort}
+                        </span>
+                      </li>
+                    ))}
+                    <li
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        fontSize: "0.7rem",
+                        color: isAvailable ? "var(--color-text-primary)" : "var(--color-text-tertiary)",
+                        marginTop: "0.15rem",
+                        paddingTop: "0.4rem",
+                        borderTop: "1px solid var(--color-border)",
+                      }}
+                    >
+                      <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        <span
+                          style={{
+                            width: "8px",
+                            height: "8px",
+                            borderRadius: "1px",
+                            backgroundImage:
+                              "repeating-linear-gradient(45deg, var(--color-text-ghost) 0px, var(--color-text-ghost) 1px, transparent 1px, transparent 3px)",
+                            border: "1px solid var(--color-border)",
+                            flexShrink: 0,
+                          }}
+                        />
+                        {t.nav.available}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: "0.65rem",
+                          color: isAvailable ? "#FBBF24" : "var(--color-text-tertiary)",
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        {availableHours}{t.nav.hoursShort}
+                      </span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             )}
           </div>

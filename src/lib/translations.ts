@@ -57,6 +57,10 @@ export interface LangStrings {
     currentlyBooked: string;
     availabilityDesc: string;
     unavailabilityDesc: string;
+    weeklyAllocation: string;
+    available: string;
+    hoursOfTotal: (used: number, total: number) => string;
+    hoursShort: string;
     langButton: string;
     lightLabel: string;
     darkLabel: string;
@@ -140,6 +144,10 @@ export const translations: Record<Lang, LangStrings> = {
         "Jose is available 25 hours/week for consulting and architecture engagements.",
       unavailabilityDesc:
         "Jose is currently focused on existing projects. Check back soon.",
+      weeklyAllocation: "Weekly Allocation",
+      available: "Available",
+      hoursOfTotal: (used, total) => `${used}h of ${total}h`,
+      hoursShort: "h",
       langButton: "ES",
       lightLabel: "Light",
       darkLabel: "Dark",
@@ -388,6 +396,10 @@ export const translations: Record<Lang, LangStrings> = {
         "José está disponible 25 horas/semana para consultorías y proyectos de arquitectura.",
       unavailabilityDesc:
         "José está enfocado en proyectos existentes. Vuelve pronto.",
+      weeklyAllocation: "Distribución Semanal",
+      available: "Disponible",
+      hoursOfTotal: (used, total) => `${used}h de ${total}h`,
+      hoursShort: "h",
       langButton: "EN",
       lightLabel: "Claro",
       darkLabel: "Oscuro",
