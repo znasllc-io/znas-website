@@ -85,10 +85,17 @@ export async function POST(request: NextRequest) {
       }
       pdfName = attachment.filename;
     } else {
-      pdfName =
+      const fallbackPdf =
         lang === "es" && proposal.pdfFilenameEs
           ? proposal.pdfFilenameEs
           : proposal.pdfFilename;
+      if (!fallbackPdf) {
+        return NextResponse.json(
+          { error: "Invalid credentials" },
+          { status: 401, headers: SECURITY_HEADERS }
+        );
+      }
+      pdfName = fallbackPdf;
     }
     if (!/^[a-z0-9-]+\.pdf$/.test(pdfName)) {
       return NextResponse.json(

@@ -530,12 +530,12 @@ export default function Navigation({
               </a>
             ) : !isPortal && !hasNavOverride ? (
               <a
-                href="/proposals"
+                href="/engagements"
                 className="hidden md:inline-flex"
                 onClick={(e) => {
                   e.preventDefault();
-                  if (triggerExitRef.current) triggerExitRef.current("/proposals");
-                  else window.location.href = "/proposals";
+                  if (triggerExitRef.current) triggerExitRef.current("/engagements");
+                  else window.location.href = "/engagements";
                 }}
                 style={{
                   fontFamily: "var(--font-mono)",
@@ -719,9 +719,9 @@ export default function Navigation({
               {link.label}
             </a>
           ))}
-          {/* Proposals link — mobile */}
+          {/* Engagements link — mobile */}
           <a
-            href="/proposals"
+            href="/engagements"
             className="text-heading"
             style={{
               color: "var(--color-accent)",

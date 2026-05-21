@@ -157,7 +157,7 @@ export default function ProposalPageClient({
                 ? [{ label: t.proposals.viewer.nav.realEstateAgent, href: "#realEstateAgent" }]
                 : []),
             ]}
-            backHref="/proposals"
+            backHref="/engagements"
             backLabel={t.nav.back}
           />
           <ProposalViewer proposal={proposal} onDownload={handleDownload} />

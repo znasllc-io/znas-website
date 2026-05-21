@@ -20,7 +20,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
   useEffect(() => {
     // Handle bfcache restore (browser back/forward).
-    // If we're returning from /proposals (flag set), bfcache would restore
+    // If we're returning from /engagements (flag set), bfcache would restore
     // Home's DOM in a weird mid-initial state (GSAP transforms reverted,
     // useEffect doesn't re-run, preloader stuck covering the page). Force
     // a hard reload so the Preloader mounts fresh and plays the short
@@ -28,7 +28,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     // just complete the preloader since the page is already fully rendered.
     const handlePageShow = (e: PageTransitionEvent) => {
       if (!e.persisted) return;
-      // Bfcache restore: if we were returning from /proposals, Home's DOM
+      // Bfcache restore: if we were returning from /engagements, Home's DOM
       // was cached in a pre-useEffect state (panels covering, counter
       // visible, no GSAP transforms applied) — force a hard reload so
       // the Preloader mounts fresh and plays the welcome-back animation.
@@ -46,7 +46,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       return () => window.removeEventListener("pageshow", handlePageShow);
     }
 
-    // Returning from an in-app transition (e.g. back from /proposals).
+    // Returning from an in-app transition (e.g. back from /engagements).
     // Play a shorter welcome-back animation that still covers the ~1-2s
     // of home-page rebuild work (Lenis, ScrollTriggers, FlipClocks, etc.)
     // so the user doesn't see a janky/unresponsive home page.

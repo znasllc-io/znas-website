@@ -1,7 +1,8 @@
 {
   "weeklyHoursTotal": 50,
   "allocations": [
-    { "label": "Visionarys", "hours": 20 },
+    { "label": "Visionarys", "hours": 15 },
+    { "label": "Aluminio Azteca", "hours": 5 },
     { "label": "Haven", "hours": 5 }
   ]
 }

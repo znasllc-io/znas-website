@@ -156,20 +156,31 @@ export interface Proposal {
   projectTitle: string;
   projectTitle_es?: string;
   // Argon2id hash of the access code. Never stored or transmitted in plaintext.
-  passwordHash: string;
+  // Optional for `completed` engagements — historical records with no gated content.
+  passwordHash?: string;
   // Lifecycle:
-  //   draft     — internal, hidden from listing
-  //   active    — published; if expiresAt has passed, the listing card
-  //               renders an "On Hold" + Re-contact variant instead of
-  //               the password-entry flow
+  //   draft      — internal, hidden from listing
+  //   active     — published; if expiresAt has passed, the listing card
+  //                renders an "Unrealized" + Reengage variant instead of
+  //                the password-entry flow
   //   formalized — proposal converted to an active engagement; listing
-  //               renders a quieter "in progress" badge
-  //   archived  — hidden from listing
-  status: "active" | "draft" | "archived" | "formalized";
+  //                renders a quieter "in progress" badge
+  //   completed  — engagement finished; rendered in the Inactive section
+  //                as a muted, read-only historical record
+  //   archived   — hidden from listing
+  status: "active" | "draft" | "archived" | "formalized" | "completed";
   // Optional ISO date (YYYY-MM-DD or full ISO). Drives the live
-  // countdown on Active cards and the Expired/On-Hold transition.
+  // countdown on Active cards and the Expired/Unrealized transition.
   expiresAt?: string;
-  pdfFilename: string;
+  // Optional ISO date for `completed` engagements. Used to sort the
+  // Inactive section (most recent first).
+  completedAt?: string;
+  // Optional short summary surfaced on Inactive (completed) cards in place
+  // of the password-entry flow. One sentence — what the engagement covered.
+  summary?: string;
+  summary_es?: string;
+  // Optional. Completed engagements don't need a PDF.
+  pdfFilename?: string;
   pdfFilenameEs?: string;
   // Optional supplementary downloads (rendered as additional buttons next
   // to the main PDF download). Same auth + path validation rules apply.
@@ -182,6 +193,10 @@ export interface Proposal {
   // quiet body text (no card, no badge). Used to surface a small
   // pricing/terms reassurance without giving it its own section.
   closingNote?: string;
+  // Required at the type level even though completed engagements omit it
+  // in their JSON. The runtime invariant: only `active`/`formalized` entries
+  // ever flow through code paths that read `sections` (the viewer + its
+  // server fetch), so the missing field on a completed JSON is unreachable.
   sections: ProposalSections;
   sections_es?: ProposalSections;
 }
@@ -222,22 +237,54 @@ export function loadProposal(slug: string): Proposal | null {
   }
 }
 
+export type ProposalListEntry = Pick<
+  SafeProposal,
+  "slug" | "clientName" | "projectTitle" | "projectTitle_es" | "expiresAt" | "completedAt" | "summary" | "summary_es"
+> & {
+  // Narrower than Proposal.status — the loader filters out `draft`,
+  // so consumers of the list never see drafts.
+  status: "active" | "formalized" | "completed" | "archived";
+  // Whether the entry has gated content available to view. Derived from
+  // `passwordHash` presence — completed engagements and lightweight
+  // "in progress" placeholders with no PDF/password set this to false so
+  // the card renders as non-interactive (no password input).
+  hasAccess: boolean;
+};
+
 /**
  * Load all proposals (for the list page). Returns safe data only (no passwords).
+ * Includes active, formalized, and completed entries — `draft` and `archived`
+ * remain hidden.
  */
-export function loadAllProposals(): Pick<SafeProposal, "slug" | "clientName" | "projectTitle" | "status">[] {
+export function loadAllProposals(): ProposalListEntry[] {
   try {
     const files = fs.readdirSync(PROPOSALS_DIR).filter((f) => f.endsWith(".json"));
-    return files.map((file) => {
+    const entries: ProposalListEntry[] = [];
+    for (const file of files) {
       const raw = fs.readFileSync(path.join(PROPOSALS_DIR, file), "utf-8");
       const proposal = JSON.parse(raw) as Proposal;
-      return {
+      if (
+        proposal.status !== "active" &&
+        proposal.status !== "formalized" &&
+        proposal.status !== "completed" &&
+        proposal.status !== "archived"
+      ) {
+        continue;
+      }
+      entries.push({
         slug: proposal.slug,
         clientName: proposal.clientName,
         projectTitle: proposal.projectTitle,
+        projectTitle_es: proposal.projectTitle_es,
         status: proposal.status,
-      };
-    }).filter((p) => p.status === "active" || p.status === "formalized");
+        expiresAt: proposal.expiresAt,
+        completedAt: proposal.completedAt,
+        summary: proposal.summary,
+        summary_es: proposal.summary_es,
+        hasAccess: Boolean(proposal.passwordHash),
+      });
+    }
+    return entries;
   } catch {
     return [];
   }

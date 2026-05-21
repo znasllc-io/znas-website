@@ -35,6 +35,27 @@ const CSP = [
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  async redirects() {
+    return [
+      // Legacy URL → new canonical route. The user-facing section was
+      // renamed from "Proposals" to "Engagements" but external links Jose
+      // shared (e.g. /proposals/haven) need to keep resolving. Permanent
+      // redirect preserves SEO and tells browsers to update their cache.
+      // API routes (/api/proposals/*) and internal storage (data/proposals/,
+      // session cookie path) intentionally stay on the old name — they're
+      // not user-facing and renaming them would invalidate active sessions.
+      {
+        source: '/proposals',
+        destination: '/engagements',
+        permanent: true,
+      },
+      {
+        source: '/proposals/:slug',
+        destination: '/engagements/:slug',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
@@ -62,7 +83,7 @@ const nextConfig: NextConfig = {
       },
       {
         // Disable bfcache on home so the Preloader always mounts fresh
-        // when users navigate back from /proposals. Without this, bfcache
+        // when users navigate back from /engagements. Without this, bfcache
         // restores Home's cached DOM in a pre-useEffect state (panels
         // covering, "000" counter visible) and the preloader never plays.
         source: '/',

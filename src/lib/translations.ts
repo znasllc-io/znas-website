@@ -21,6 +21,26 @@ export interface ProposalListStrings {
   reContact: string;
   viewEngagement: string;
   units: { d: string; h: string; m: string; s: string };
+  // Sectioning + completed/archived lifecycle (new)
+  activeHeader: string;
+  archivedHeader: string;
+  completedHeader: string;
+  completed: string;
+  archived: string;
+  contactUs: string;
+  // Restart modal copy
+  restartTitle: string;
+  restartSubhead: (project: string, client: string) => string;
+  restartNameLabel: string;
+  restartEmailLabel: string;
+  restartMessageLabel: string;
+  restartNamePlaceholder: string;
+  restartEmailPlaceholder: string;
+  restartMessagePlaceholder: string;
+  restartSend: string;
+  restartClose: string;
+  restartEmailFallback: string;
+  restartEmailLink: string;
 }
 
 export interface ProposalViewerStrings {
@@ -135,7 +155,7 @@ export const translations: Record<Lang, LangStrings> = {
         { label: "Testimonials", href: "#testimonials" },
         { label: "Contact", href: "#contact" },
       ],
-      proposals: "Proposals",
+      proposals: "Engagements",
       back: "Back",
       partTime: "Part-Time",
       availablePartTime: "Available Part-Time",
@@ -299,14 +319,14 @@ export const translations: Record<Lang, LangStrings> = {
       "Software Architecture  /  Distributed Systems  /  Full-Stack Engineering  /  AI Strategy  /  Open Source  /  ",
     proposals: {
       list: {
-        title: "Proposals",
-        subtitle: "Select your organization to access your proposal.",
+        title: "Engagements",
+        subtitle: "Active and past engagements with ZNAS.",
         viewProposal: "View Proposal →",
         enterKey: "Enter your proposal key",
         access: "Access",
         cancel: "Cancel",
         verifying: "Verifying...",
-        noProposals: "No active proposals at this time.",
+        noProposals: "No engagements at this time.",
         invalidKey: "Invalid proposal key. Please try again.",
         networkError: "Network error. Please check your connection.",
         rateLimitMsg: (s) => `Too many attempts. Please wait ${s} seconds.`,
@@ -318,6 +338,25 @@ export const translations: Record<Lang, LangStrings> = {
         reContact: "Re-contact",
         viewEngagement: "View engagement →",
         units: { d: "d", h: "h", m: "m", s: "s" },
+        activeHeader: "Active",
+        archivedHeader: "Archived",
+        completedHeader: "Completed",
+        completed: "Completed",
+        archived: "Archived",
+        contactUs: "Contact us",
+        restartTitle: "Want to restart this engagement?",
+        restartSubhead: (project, client) =>
+          `We'd love to pick up where we left off on ${project} for ${client}.`,
+        restartNameLabel: "Name",
+        restartEmailLabel: "Email",
+        restartMessageLabel: "Message",
+        restartNamePlaceholder: "Your name",
+        restartEmailPlaceholder: "you@company.com",
+        restartMessagePlaceholder: "What's changed since we last spoke?",
+        restartSend: "Send →",
+        restartClose: "Close",
+        restartEmailFallback: "Prefer email? Reach us directly at",
+        restartEmailLink: "znas@znas.io",
       },
       viewer: {
         label: "Proposal",
@@ -387,7 +426,7 @@ export const translations: Record<Lang, LangStrings> = {
         { label: "Testimonios", href: "#testimonials" },
         { label: "Contacto", href: "#contact" },
       ],
-      proposals: "Propuestas",
+      proposals: "Compromisos",
       back: "Volver",
       partTime: "Medio Tiempo",
       availablePartTime: "Disponible Medio Tiempo",
@@ -551,14 +590,14 @@ export const translations: Record<Lang, LangStrings> = {
       "Arquitectura de Software  /  Sistemas Distribuidos  /  Ingeniería Full-Stack  /  Estrategia de IA  /  Código Abierto  /  ",
     proposals: {
       list: {
-        title: "Propuestas",
-        subtitle: "Selecciona tu organización para acceder a tu propuesta.",
+        title: "Compromisos",
+        subtitle: "Compromisos activos y pasados con ZNAS.",
         viewProposal: "Ver Propuesta →",
         enterKey: "Ingresa tu clave de propuesta",
         access: "Acceder",
         cancel: "Cancelar",
         verifying: "Verificando...",
-        noProposals: "No hay propuestas activas en este momento.",
+        noProposals: "No hay compromisos en este momento.",
         invalidKey: "Clave de propuesta inválida. Por favor intenta de nuevo.",
         networkError: "Error de red. Por favor verifica tu conexión.",
         rateLimitMsg: (s) => `Demasiados intentos. Por favor espera ${s} segundos.`,
@@ -570,6 +609,25 @@ export const translations: Record<Lang, LangStrings> = {
         reContact: "Volver a contactar",
         viewEngagement: "Ver compromiso →",
         units: { d: "d", h: "h", m: "m", s: "s" },
+        activeHeader: "Activos",
+        archivedHeader: "Archivados",
+        completedHeader: "Completados",
+        completed: "Completado",
+        archived: "Archivado",
+        contactUs: "Contáctanos",
+        restartTitle: "¿Quieres reactivar este compromiso?",
+        restartSubhead: (project, client) =>
+          `Nos encantaría retomar donde lo dejamos en ${project} para ${client}.`,
+        restartNameLabel: "Nombre",
+        restartEmailLabel: "Email",
+        restartMessageLabel: "Mensaje",
+        restartNamePlaceholder: "Tu nombre",
+        restartEmailPlaceholder: "tu@empresa.com",
+        restartMessagePlaceholder: "¿Qué ha cambiado desde la última vez?",
+        restartSend: "Enviar →",
+        restartClose: "Cerrar",
+        restartEmailFallback: "¿Prefieres correo? Escríbenos directamente a",
+        restartEmailLink: "znas@znas.io",
       },
       viewer: {
         label: "Propuesta",

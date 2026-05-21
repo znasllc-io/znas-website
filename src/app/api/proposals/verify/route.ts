@@ -40,8 +40,9 @@ export async function POST(request: NextRequest) {
 
     // Load proposal — returns null if slug invalid or file not found
     const proposal = loadProposal(slug);
-    if (!proposal) {
+    if (!proposal || !proposal.passwordHash) {
       // Return same error shape as wrong password — prevents slug enumeration
+      // (also catches `completed` engagements that intentionally have no hash).
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401, headers: SECURITY_HEADERS }

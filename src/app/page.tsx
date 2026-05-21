@@ -38,7 +38,7 @@ export default function Home() {
   // whatever state they're in rather than looping forever.
   useEffect(() => {
     // Interval-based watchdog. Runs every 400ms. Checks if:
-    //  - The return flag is set (user came from /proposals)
+    //  - The return flag is set (user came from /engagements)
     //  - The Preloader element exists and is in its stuck pattern:
     //      counter text is "000" AND counter opacity is "1"
     //  - We haven't already reloaded once to try to fix it.
