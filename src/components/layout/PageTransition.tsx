@@ -67,7 +67,19 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
 
     const cameFromTransition = sessionStorage.getItem("znas-page-transition");
 
-    if (cameFromTransition) {
+    // Hard refresh / browser reload should NOT play the reveal animation.
+    // The flag in sessionStorage survives reloads (that's its point — it
+    // signals the next page should welcome the user back), but a reload
+    // is the user explicitly asking for a fresh page, not the tail end of
+    // an in-app navigation. Without this guard, refreshing /engagements
+    // shows a ~1s opaque-panel reveal that looks like a freeze (and
+    // actually blocks interaction during that window).
+    const navEntry = performance.getEntriesByType("navigation")[0] as
+      | PerformanceNavigationTiming
+      | undefined;
+    const isReload = navEntry?.type === "reload";
+
+    if (cameFromTransition && !isReload) {
       sessionStorage.removeItem("znas-page-transition");
 
       // On home, the Preloader plays the "welcome back" animation and
@@ -89,7 +101,10 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
         tl.to(bottom, { yPercent: 100, duration: 0.6, ease: "power3.inOut" }, "<");
       }
     } else {
-      // No transition — panels hidden
+      // No transition — panels hidden. Clean up the flag in case this is
+      // a reload that found it stale (so a subsequent normal navigation
+      // away + back doesn't pick up the wrong intent).
+      if (isReload) sessionStorage.removeItem("znas-page-transition");
       gsap.set(top, { yPercent: -100 });
       gsap.set(bottom, { yPercent: 100 });
     }

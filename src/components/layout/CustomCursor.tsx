@@ -75,34 +75,40 @@ function CustomCursor() {
 
     let typewriterTween: gsap.core.Tween | null = null;
 
+    // Track the last interactive / code-comment element the cursor entered
+    // so we can detect when it gets removed from the DOM without a matching
+    // `mouseout` (e.g. a modal closing while the cursor sits on its ✕
+    // button). On every mousemove we just check `document.contains(ref)` —
+    // much cheaper than `elementFromPoint`, which forces a synchronous
+    // layout flush. With 5+ hover-eligible cards on /engagements, this
+    // matters: at 60–120 Hz the layout-flushing version was making the
+    // page feel sluggish during cursor movement.
+    let lastInteractive: Element | null = null;
+    let lastComment: Element | null = null;
+
+    const clearCommentState = () => {
+      cursor.classList.remove("is-code-comment");
+      typewriterTween?.kill();
+      tooltip.style.opacity = "0";
+      tooltip.style.transform = "translateY(4px)";
+    };
+
     const handleMove = (e: MouseEvent) => {
       xTo(e.clientX);
       yTo(e.clientY);
       txTo(e.clientX + 28);
       tyTo(e.clientY - 8);
 
-      // Backstop for stale hover state. When a hovered element is removed
-      // from the DOM (e.g. a modal closing while the cursor is on its X
-      // button) the browser does NOT fire `mouseout`, so the cursor would
-      // otherwise be stuck in its `is-active` / `is-code-comment` form
-      // until the user moves into another interactive element. On every
-      // mousemove, re-check what's actually under the pointer via
-      // elementFromPoint and clear stale state if needed. We only run the
-      // check when a state class is set, so the hit-test cost is paid
-      // only during hover-active frames, not every idle move.
-      const hasActive = cursor.classList.contains("is-active");
-      const hasComment = cursor.classList.contains("is-code-comment");
-      if (hasActive || hasComment) {
-        const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
-        if (hasActive && (!el || !el.closest(interactiveSelector))) {
-          cursor.classList.remove("is-active");
-        }
-        if (hasComment && (!el || !el.closest("[data-code-comment]"))) {
-          cursor.classList.remove("is-code-comment");
-          typewriterTween?.kill();
-          tooltip.style.opacity = "0";
-          tooltip.style.transform = "translateY(4px)";
-        }
+      // Backstop: if either tracked element has been removed from the DOM,
+      // clear its corresponding state. Skipped entirely when nothing is
+      // tracked, so idle moves pay zero cost.
+      if (lastInteractive && !document.contains(lastInteractive)) {
+        cursor.classList.remove("is-active");
+        lastInteractive = null;
+      }
+      if (lastComment && !document.contains(lastComment)) {
+        clearCommentState();
+        lastComment = null;
       }
     };
 
@@ -110,13 +116,16 @@ function CustomCursor() {
       const target = e.target as HTMLElement;
 
       // Interactive element hover
-      if (target.closest(interactiveSelector)) {
+      const interactive = target.closest(interactiveSelector);
+      if (interactive) {
         cursor.classList.add("is-active");
+        lastInteractive = interactive;
       }
 
       // Code comment hover
       const commentEl = target.closest("[data-code-comment]") as HTMLElement | null;
       if (commentEl) {
+        lastComment = commentEl;
         // Skip if element or ancestor is still invisible (pre-animation)
         const style = window.getComputedStyle(commentEl);
         if (parseFloat(style.opacity) < 0.1) return;
@@ -164,19 +173,17 @@ function CustomCursor() {
       const related = e.relatedTarget as HTMLElement | null;
 
       // Interactive leave
-      if (target.closest(interactiveSelector)) {
-        if (!related || !target.closest(interactiveSelector)?.contains(related)) {
-          cursor.classList.remove("is-active");
-        }
+      const interactive = target.closest(interactiveSelector);
+      if (interactive && (!related || !interactive.contains(related))) {
+        cursor.classList.remove("is-active");
+        if (lastInteractive === interactive) lastInteractive = null;
       }
 
       // Code comment leave
       const commentEl = target.closest("[data-code-comment]");
       if (commentEl && (!related || !commentEl.contains(related))) {
-        cursor.classList.remove("is-code-comment");
-        typewriterTween?.kill();
-        tooltip.style.opacity = "0";
-        tooltip.style.transform = "translateY(4px)";
+        clearCommentState();
+        if (lastComment === commentEl) lastComment = null;
       }
     };
 
