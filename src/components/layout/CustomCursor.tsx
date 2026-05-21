@@ -69,18 +69,42 @@ function CustomCursor() {
       ease: "power2.out",
     });
 
-    const handleMove = (e: MouseEvent) => {
-      xTo(e.clientX);
-      yTo(e.clientY);
-      txTo(e.clientX + 28);
-      tyTo(e.clientY - 8);
-    };
-
     // Event delegation — no MutationObserver needed
     const interactiveSelector =
       "a, button, [role='button'], input, textarea, select";
 
     let typewriterTween: gsap.core.Tween | null = null;
+
+    const handleMove = (e: MouseEvent) => {
+      xTo(e.clientX);
+      yTo(e.clientY);
+      txTo(e.clientX + 28);
+      tyTo(e.clientY - 8);
+
+      // Backstop for stale hover state. When a hovered element is removed
+      // from the DOM (e.g. a modal closing while the cursor is on its X
+      // button) the browser does NOT fire `mouseout`, so the cursor would
+      // otherwise be stuck in its `is-active` / `is-code-comment` form
+      // until the user moves into another interactive element. On every
+      // mousemove, re-check what's actually under the pointer via
+      // elementFromPoint and clear stale state if needed. We only run the
+      // check when a state class is set, so the hit-test cost is paid
+      // only during hover-active frames, not every idle move.
+      const hasActive = cursor.classList.contains("is-active");
+      const hasComment = cursor.classList.contains("is-code-comment");
+      if (hasActive || hasComment) {
+        const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+        if (hasActive && (!el || !el.closest(interactiveSelector))) {
+          cursor.classList.remove("is-active");
+        }
+        if (hasComment && (!el || !el.closest("[data-code-comment]"))) {
+          cursor.classList.remove("is-code-comment");
+          typewriterTween?.kill();
+          tooltip.style.opacity = "0";
+          tooltip.style.transform = "translateY(4px)";
+        }
+      }
+    };
 
     const handleOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
