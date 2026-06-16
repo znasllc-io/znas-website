@@ -2,8 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import Navigation from "@/components/layout/Navigation";
-import CustomCursor from "@/components/layout/CustomCursor";
-import PageTransition from "@/components/layout/PageTransition";
+import { navigateWithTransition } from "@/lib/transition-nav";
 import RestartModal from "@/components/proposals/RestartModal";
 import { useLanguage } from "@/lib/language";
 import { translations, type ProposalListStrings } from "@/lib/translations";
@@ -125,7 +124,6 @@ export default function ProposalListClient({
     return () => clearInterval(id);
   }, []);
   const inputRef = useRef<HTMLInputElement>(null);
-  const triggerExitRef = useRef<((href: string) => void) | null>(null);
 
   useEffect(() => {
     sessionStorage.setItem("znas-page-transition", "1");
@@ -170,11 +168,7 @@ export default function ProposalListClient({
             `znas-proposal-${selectedSlug}`,
             JSON.stringify({ proposal: data.proposal })
           );
-          if (triggerExitRef.current) {
-            triggerExitRef.current(`/engagements/${selectedSlug}`);
-          } else {
-            window.location.href = `/engagements/${selectedSlug}`;
-          }
+          navigateWithTransition(`/engagements/${selectedSlug}`);
           return;
         }
 
@@ -374,7 +368,7 @@ export default function ProposalListClient({
                     color: "var(--color-accent)",
                     background: "transparent",
                     border: "1px solid var(--color-accent)",
-                    borderRadius: "2px",
+                    borderRadius: "9999px",
                     padding: "0.5rem 1rem",
                     cursor: "none",
                   }}
@@ -477,7 +471,7 @@ export default function ProposalListClient({
                   letterSpacing: "0.06em",
                   background: "var(--color-bg-surface)",
                   border: `1px solid ${error ? "#F87171" : "var(--color-border)"}`,
-                  borderRadius: "2px",
+                  borderRadius: "9999px",
                   padding: "0.65rem 0.75rem",
                   color: "var(--color-text-primary)",
                   outline: "none",
@@ -531,7 +525,7 @@ export default function ProposalListClient({
                     color: loading || !password.trim() ? "var(--color-text-ghost)" : "var(--color-bg-void)",
                     backgroundColor: loading || !password.trim() ? "transparent" : "var(--color-accent)",
                     border: `1px solid ${loading || !password.trim() ? "var(--color-border)" : "var(--color-accent)"}`,
-                    borderRadius: "2px",
+                    borderRadius: "9999px",
                     padding: "0.5rem 1.2rem",
                     cursor: loading || !password.trim() ? "default" : "none",
                     transition: "all 0.3s ease",
@@ -551,7 +545,7 @@ export default function ProposalListClient({
                     color: "var(--color-text-tertiary)",
                     backgroundColor: "transparent",
                     border: "1px solid var(--color-border)",
-                    borderRadius: "2px",
+                    borderRadius: "9999px",
                     padding: "0.5rem 1.2rem",
                     cursor: "none",
                     transition: "all 0.3s ease",
@@ -569,9 +563,7 @@ export default function ProposalListClient({
 
   return (
     <>
-      <CustomCursor />
-      <Navigation variant="portal" backHref="/" backLabel={t.nav.back} />
-      <PageTransition onReady={(fn) => { triggerExitRef.current = fn; }} />
+      <Navigation variant="portal" backHref="/portfolio" backLabel={t.nav.back} />
 
       <div
         style={{

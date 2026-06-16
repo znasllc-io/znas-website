@@ -294,33 +294,8 @@ export default function ProjectModal({
               href={project.url!}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                flex: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: 44,
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.7rem",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                textDecoration: "none",
-                color: "var(--color-bg-void)",
-                backgroundColor: "var(--color-accent)",
-                border: "1px solid var(--color-accent)",
-                transition:
-                  "background-color 0.3s, color 0.3s",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget;
-                el.style.backgroundColor = "transparent";
-                el.style.color = "var(--color-accent)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget;
-                el.style.backgroundColor = "var(--color-accent)";
-                el.style.color = "var(--color-bg-void)";
-              }}
+              className="fde-btn-solid"
+              style={{ flex: 1, height: 44 }}
             >
               {isGitHubUrl ? t.proposals.modal.visitGitHub : t.proposals.modal.visitWebsite}
             </a>

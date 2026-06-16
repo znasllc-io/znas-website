@@ -3,10 +3,9 @@
 import { useState, useCallback, useEffect } from "react";
 import type { SafeProposal } from "@/lib/proposals";
 import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import SiteFooter from "@/components/layout/SiteFooter";
 import PasswordGate from "./PasswordGate";
 import ProposalViewer from "./ProposalViewer";
-import CustomCursor from "@/components/layout/CustomCursor";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
 
@@ -117,7 +116,6 @@ export default function ProposalPageClient({
 
   return (
     <>
-      <CustomCursor />
 
       {!proposal ? (
         <PasswordGate
@@ -161,7 +159,7 @@ export default function ProposalPageClient({
             backLabel={t.nav.back}
           />
           <ProposalViewer proposal={proposal} onDownload={handleDownload} />
-          <Footer />
+          <SiteFooter />
         </>
       )}
     </>

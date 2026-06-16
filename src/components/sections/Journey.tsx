@@ -62,7 +62,11 @@ function Journey() {
         }).from(
           card,
           {
-            x: isMobile ? 30 : i % 2 === 0 ? -60 : 60,
+            // On mobile, reveal vertically — a horizontal (x) offset on the
+            // narrow viewport leaves un-revealed cards shifted right and causes
+            // a few px of horizontal page scroll. Desktop keeps the side-slide.
+            x: isMobile ? 0 : i % 2 === 0 ? -60 : 60,
+            y: isMobile ? 30 : 0,
             opacity: 0,
             duration: 0.8,
             ease: "power3.out",

@@ -82,8 +82,6 @@ export interface LangStrings {
     hoursOfTotal: (used: number, total: number) => string;
     hoursShort: string;
     langButton: string;
-    lightLabel: string;
-    darkLabel: string;
   };
   hero: {
     tagline: string;
@@ -169,8 +167,6 @@ export const translations: Record<Lang, LangStrings> = {
       hoursOfTotal: (used, total) => `${used}h of ${total}h`,
       hoursShort: "h",
       langButton: "ES",
-      lightLabel: "Light",
-      darkLabel: "Dark",
     },
     hero: {
       tagline: "Jose Sanz | Arizona, USA",
@@ -440,8 +436,6 @@ export const translations: Record<Lang, LangStrings> = {
       hoursOfTotal: (used, total) => `${used}h de ${total}h`,
       hoursShort: "h",
       langButton: "EN",
-      lightLabel: "Claro",
-      darkLabel: "Oscuro",
     },
     hero: {
       tagline: "José Sanz | Arizona, EE.UU.",

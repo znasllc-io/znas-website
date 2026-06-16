@@ -509,31 +509,11 @@ export default function Hero({ preloaderDone }: HeroProps) {
         >
           <a
             href="#contact"
+            className="fde-btn-primary"
+            style={{ padding: "0.85rem 2rem" }}
             onClick={(e) => {
               e.preventDefault();
               document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.75rem",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase" as const,
-              whiteSpace: "nowrap",
-              color: "var(--color-accent)",
-              border: "1px solid var(--color-accent)",
-              borderRadius: "2px",
-              padding: "0.6rem 1.4rem",
-              textDecoration: "none",
-              transition: "all 0.3s ease",
-              cursor: "none",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "var(--color-accent)";
-              e.currentTarget.style.color = "var(--color-bg-void)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.color = "var(--color-accent)";
             }}
           >
             {t.hero.cta}

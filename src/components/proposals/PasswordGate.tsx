@@ -249,7 +249,7 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
               letterSpacing: "0.08em",
               background: "var(--color-bg-surface)",
               border: `1px solid ${error ? "#F87171" : "var(--color-border)"}`,
-              borderRadius: "2px",
+              borderRadius: "9999px",
               padding: "0.75rem 1rem",
               color: "var(--color-text-primary)",
               textAlign: "center",
@@ -325,9 +325,9 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
             disabled={loading || countdown > 0 || !password.trim()}
             style={{
               width: "100%",
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.75rem",
-              letterSpacing: "0.08em",
+              fontFamily: '"General Sans", sans-serif',
+              fontSize: "0.72rem",
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
               color:
                 loading || countdown > 0 || !password.trim()
@@ -339,7 +339,7 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
                   ? "var(--color-border)"
                   : "var(--color-accent)"
               }`,
-              borderRadius: "2px",
+              borderRadius: "9999px",
               padding: "0.6rem 1.4rem",
               transition: "all 0.3s ease",
               cursor:

@@ -19,6 +19,9 @@ export function useLenis() {
     const lenis = new Lenis({
       lerp: 0.08,
       smoothWheel: true,
+      // Smooth-scroll same-page #hash anchors (e.g. /#contact) through
+      // Lenis instead of fighting native jump behavior.
+      anchors: true,
     });
 
     lenisRef.current = lenis;
