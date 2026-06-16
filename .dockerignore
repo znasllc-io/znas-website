@@ -1,0 +1,38 @@
+# Keep the Docker build context lean and prevent accidental inclusion of
+# local working files into the production image. The production PDFs in
+# data/proposals/pdfs/ are explicitly NOT excluded here — they need to
+# ship inside the container so the auth-gated /api/proposals/download
+# endpoint can serve them at runtime.
+
+# Local working PDFs and drafts (never ship to production)
+pdf files/
+*.pdf
+!data/proposals/pdfs/*.pdf
+*.zip
+Untitled*.png
+agent-output/
+
+# Build / runtime cruft
+node_modules/
+.next/
+out/
+build/
+.git/
+.github/
+
+# Editor and OS noise
+.DS_Store
+.vscode/
+.idea/
+
+# Env files (never bundle secrets into the image)
+.env
+.env.local
+.env.*.local
+
+# Tests / dev tooling
+coverage/
+*.tsbuildinfo
+
+# Local Claude Code state
+.claude/

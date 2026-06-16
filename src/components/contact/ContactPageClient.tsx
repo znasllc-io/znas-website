@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Navigation from "@/components/layout/Navigation";
-import CustomCursor from "@/components/layout/CustomCursor";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
 
@@ -65,8 +64,7 @@ export default function ContactPageClient() {
 
   return (
     <>
-      <CustomCursor />
-      <Navigation variant="portal" backHref="/" backLabel={t.nav.back} />
+      <Navigation variant="portal" backHref="/portfolio" backLabel={t.nav.back} />
 
       <div
         style={{

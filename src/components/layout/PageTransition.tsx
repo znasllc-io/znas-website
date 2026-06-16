@@ -2,23 +2,23 @@
 
 import { useRef, useCallback, useEffect } from "react";
 import { gsap } from "@/lib/gsap-config";
+import {
+  registerTriggerExit,
+  setTransitionFlag,
+  consumeTransitionFlag,
+} from "@/lib/transition-nav";
 
 /**
- * Standalone page transition overlay.
+ * Standalone page transition overlay, mounted once via SiteChrome.
  *
- * - On mount: checks sessionStorage for transition flag.
- *   If set, panels start covering the page then split apart (reveal).
- *   If not set, panels stay hidden.
- *
- * - exposeRef: parent can grab `triggerExit` via a ref callback
- *   to trigger the exit animation (panels slide in, then navigate).
+ * - On mount: consumeTransitionFlag() decides whether to play the
+ *   panels-split entrance (arriving from an in-app navigation) or keep
+ *   the panels hidden. On "/", HomePreloader consults the same flag and
+ *   skips itself when the entrance sweep plays — never both.
+ * - Exit: registered with the transition-nav singleton; any component
+ *   calls navigateWithTransition(href) to sweep panels in, then navigate.
  */
-
-interface PageTransitionProps {
-  onReady?: (triggerExit: (href: string) => void) => void;
-}
-
-export default function PageTransition({ onReady }: PageTransitionProps) {
+export default function PageTransition() {
   const topRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const isAnimatingRef = useRef(false);
@@ -35,11 +35,18 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
       return;
     }
 
-    sessionStorage.setItem("znas-page-transition", "1");
+    setTransitionFlag();
+
+    // Fallback: navigate even if rAF is throttled (background tab) and the
+    // sweep can't play — the click must always result in a navigation.
+    const fallback = setTimeout(() => {
+      window.location.href = href;
+    }, 1200);
 
     const tl = gsap.timeline({
       defaults: { force3D: true },
       onComplete: () => {
+        clearTimeout(fallback);
         window.location.href = href;
       },
     });
@@ -49,73 +56,36 @@ export default function PageTransition({ onReady }: PageTransitionProps) {
     tl.to(bottom, { yPercent: 0, duration: 0.5, ease: "power3.inOut" }, "<");
   }, []);
 
-  // Mount-only: reveal animation if coming from a transition.
-  //
-  // Critical: this effect MUST have [] deps. If it depended on `onReady` or
-  // `triggerExit`, any parent re-render that passes a fresh inline callback
-  // would re-fire this effect — and on a proposal-list page (which re-sets
-  // the "znas-page-transition" sessionStorage flag in its own mount effect
-  // so future navigations get the transition) the flag would still be set,
-  // causing the reveal animation to replay on every state change. That bug
-  // manifested as: clicking a proposal card to expand the inline password
-  // form triggers the panels-split animation even though no navigation
-  // happens. Keep mount logic isolated from prop deps.
+  // Mount-only: reveal animation if coming from a transition. MUST have []
+  // deps — see consumeTransitionFlag(): the read is cached per page load so
+  // re-renders can never replay the entrance.
   useEffect(() => {
     const top = topRef.current;
     const bottom = bottomRef.current;
     if (!top || !bottom) return;
 
-    const cameFromTransition = sessionStorage.getItem("znas-page-transition");
+    if (consumeTransitionFlag()) {
+      // Arriving from an in-app navigation (any page, including "/"):
+      // panels cover, then split apart.
+      gsap.set(top, { yPercent: 0, force3D: true });
+      gsap.set(bottom, { yPercent: 0, force3D: true });
 
-    // Hard refresh / browser reload should NOT play the reveal animation.
-    // The flag in sessionStorage survives reloads (that's its point — it
-    // signals the next page should welcome the user back), but a reload
-    // is the user explicitly asking for a fresh page, not the tail end of
-    // an in-app navigation. Without this guard, refreshing /engagements
-    // shows a ~1s opaque-panel reveal that looks like a freeze (and
-    // actually blocks interaction during that window).
-    const navEntry = performance.getEntriesByType("navigation")[0] as
-      | PerformanceNavigationTiming
-      | undefined;
-    const isReload = navEntry?.type === "reload";
+      const tl = gsap.timeline({ defaults: { force3D: true } });
+      tl.to(top, { yPercent: -100, duration: 0.6, ease: "power3.inOut" });
+      tl.to(bottom, { yPercent: 100, duration: 0.6, ease: "power3.inOut" }, "<");
 
-    if (cameFromTransition && !isReload) {
-      sessionStorage.removeItem("znas-page-transition");
-
-      // On home, the Preloader plays the "welcome back" animation and
-      // covers the page while it rebuilds. PageTransition panels stay
-      // hidden to avoid double-covering the viewport.
-      const isHome =
-        typeof window !== "undefined" && window.location.pathname === "/";
-
-      if (isHome) {
-        gsap.set(top, { yPercent: -100 });
-        gsap.set(bottom, { yPercent: 100 });
-      } else {
-        // Proposal pages: panels cover, then split apart
-        gsap.set(top, { yPercent: 0, force3D: true });
-        gsap.set(bottom, { yPercent: 0, force3D: true });
-
-        const tl = gsap.timeline({ defaults: { force3D: true } });
-        tl.to(top, { yPercent: -100, duration: 0.6, ease: "power3.inOut" });
-        tl.to(bottom, { yPercent: 100, duration: 0.6, ease: "power3.inOut" }, "<");
-      }
+      // rAF-throttle fallback: never leave the panels covering the page.
+      const fallback = setTimeout(() => tl.progress(1, false), 1500);
+      return () => clearTimeout(fallback);
     } else {
-      // No transition — panels hidden. Clean up the flag in case this is
-      // a reload that found it stale (so a subsequent normal navigation
-      // away + back doesn't pick up the wrong intent).
-      if (isReload) sessionStorage.removeItem("znas-page-transition");
       gsap.set(top, { yPercent: -100 });
       gsap.set(bottom, { yPercent: 100 });
     }
   }, []);
 
-  // Separately: re-register triggerExit with the parent whenever onReady
-  // changes. Idempotent — just stores a stable function reference. Safe to
-  // re-run on prop changes; cannot trigger animations.
   useEffect(() => {
-    onReady?.(triggerExit);
-  }, [onReady, triggerExit]);
+    registerTriggerExit(triggerExit);
+  }, [triggerExit]);
 
   return (
     <>

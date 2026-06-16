@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/data/content";
-import { ThemeProvider } from "@/hooks/useTheme";
 import { LanguageProvider } from "@/lib/language";
+import SiteChrome from "@/components/layout/SiteChrome";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -32,7 +32,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider><LanguageProvider>{children}</LanguageProvider></ThemeProvider>
+        <LanguageProvider>
+          <SiteChrome />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -104,11 +104,18 @@ function About() {
         <SectionLabel number=".01" label={t.about.label} />
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-16">
-          <div className="md:col-span-3">
+          <div className="md:col-span-3" style={{ minWidth: 0 }}>
             <h2
               ref={headlineRef}
               className="text-display"
               data-code-comment="// systems.Build() // nil err"
+              style={{
+                // Archivo 900 is much wider than the old Clash — cap the size so
+                // long words (e.g. "ORGANIZATIONS") fit this column instead of
+                // bleeding into the stats card; break-word is a final safeguard.
+                fontSize: "clamp(2rem, 4vw, 3.75rem)",
+                overflowWrap: "break-word",
+              }}
             >
               {t.about.statement}
             </h2>
@@ -125,9 +132,8 @@ function About() {
 
             {/* Stats grid */}
             <div
-              className="stat-grid grid grid-cols-2 gap-px"
+              className="stat-grid fde-card-grad grid grid-cols-2 gap-px"
               style={{
-                border: "1px solid var(--color-border)",
                 borderRadius: "0.5rem",
                 overflow: "hidden",
               }}

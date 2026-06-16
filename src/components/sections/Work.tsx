@@ -71,7 +71,7 @@ function Work() {
               ref={(el) => {
                 if (el) cardsRef.current[i] = el;
               }}
-              className="blueprint-card group"
+              className="blueprint-card fde-card-grad group"
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -87,10 +87,8 @@ function Work() {
               style={{
                 position: "relative",
                 padding: "2rem",
-                border: "1px solid var(--color-border)",
                 borderRadius: 0,
-                backgroundColor: "transparent",
-                transition: "border-color 0.4s",
+                transition: "box-shadow 0.4s",
                 cursor: "none",
                 outline: "none",
               }}
@@ -102,10 +100,10 @@ function Work() {
                 });
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "var(--color-accent)";
+                e.currentTarget.style.boxShadow = "0 0 30px rgba(46, 134, 247, 0.18)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "var(--color-border)";
+                e.currentTarget.style.boxShadow = "none";
               }}
             >
               {/* Corner registration marks */}

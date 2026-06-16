@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap-config";
 import { siteConfig } from "@/data/content";
-import { useTheme, ACCENT_COLORS } from "@/hooks/useTheme";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
-import PageTransition from "@/components/layout/PageTransition";
+import { navigateWithTransition } from "@/lib/transition-nav";
+import BrandLockup from "@/components/layout/BrandLockup";
 import { getAvailability, getAllocatedHours, getAvailableHours } from "@/lib/availability";
 
 interface NavLink {
@@ -31,17 +31,21 @@ export default function Navigation({
 }: NavigationProps) {
   const isPortal = variant === "portal";
   const hasNavOverride = !!navOverride;
+  // The portfolio (home variant, no override) packs the most into the bar:
+  // brand + availability badge + section links + Engagements + ES. It needs
+  // a higher collapse breakpoint (lg) than the lighter portal/override navs (md).
+  const denseHome = !isPortal && !hasNavOverride;
+  const linkRowClass = denseHome ? "hidden lg:flex" : "hidden md:flex";
+  const burgerClass = denseHome ? "lg:hidden" : "md:hidden";
   const navRef = useRef<HTMLElement>(null);
   const isScrolledRef = useRef(false);
   const [activeSection, setActiveSection] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileLinksRef = useRef<HTMLAnchorElement[]>([]);
-  const { resolved, cycle, accent, setAccent } = useTheme();
   const { lang, toggle: toggleLang } = useLanguage();
   const t = translations[lang];
   const [statusOpen, setStatusOpen] = useState(false);
-  const triggerExitRef = useRef<((href: string) => void) | null>(null);
 
   // Availability driven by `src/data/availability.json`. Edit that file to
   // change the weekly cap or current commitments — the indicator + chart
@@ -146,8 +150,8 @@ export default function Navigation({
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
     } else {
-      // Section doesn't exist on this page — navigate to home page with hash
-      window.location.href = "/" + href;
+      // Section doesn't exist on this page — navigate to the portfolio page with hash
+      window.location.href = "/portfolio" + href;
     }
   };
 
@@ -158,18 +162,21 @@ export default function Navigation({
         className="nav"
         style={{ opacity: visible ? 1 : 0 }}
       >
-        <div className="container flex items-center justify-between">
+        <div
+          className="flex items-center gap-3"
+          style={{
+            width: "100%",
+            paddingLeft: "clamp(1.25rem, 4vw, 3rem)",
+            paddingRight: "clamp(1.25rem, 4vw, 3rem)",
+          }}
+        >
           <a
             href="/"
             onClick={(e: React.MouseEvent) => {
               e.preventDefault();
-              // On home page: scroll to top; otherwise navigate home
-              if (!isPortal && !hasNavOverride) {
-                window.scrollTo({ top: 0, behavior: "smooth" });
-                return;
-              }
-              if (triggerExitRef.current) triggerExitRef.current("/");
-              else window.location.href = "/";
+              // Logo always leads back to the main site (the portfolio now
+              // lives under /portfolio, so the owl is the way home).
+              navigateWithTransition("/");
             }}
             aria-label={`${siteConfig.name}, go to homepage`}
             style={{
@@ -178,17 +185,17 @@ export default function Navigation({
               alignItems: "center",
               minWidth: "44px",
               minHeight: "44px",
+              // Pin the brand far-left and never let its wordmark shrink/overflow
+              // onto neighbouring items (this was the source of the overlap bug).
+              order: 0,
+              flexShrink: 0,
+              marginRight: "auto",
             }}
           >
-            <img
-              src="/logo.png"
-              alt=""
-              className="logo-img"
-              style={{ height: "32px", width: "auto" }}
-            />
+            <BrandLockup compact={denseHome} />
           </a>
           {!isPortal && !hasNavOverride && (
-          <div className="hidden md:flex items-center ml-3 relative">
+          <div className="hidden lg:flex items-center relative" style={{ order: 2 }}>
             <button
               onClick={() => setStatusOpen(!statusOpen)}
               className="status-badge"
@@ -244,8 +251,8 @@ export default function Navigation({
                 style={{
                   position: "absolute",
                   top: "calc(100% + 0.75rem)",
-                  left: "50%",
-                  transform: "translateX(-50%)",
+                  right: 0,
+                  left: "auto",
                   background: "var(--color-bg-elevated)",
                   border: "1px solid var(--color-border)",
                   borderRadius: "12px",
@@ -441,33 +448,21 @@ export default function Navigation({
 
           {/* Nav links: shown on home (default links) or when navOverride provided */}
           {(!isPortal || hasNavOverride) && (
-            <div className="hidden md:flex items-center gap-4 lg:gap-8">
-              {/* Accent Color Picker (home only) */}
-              {!hasNavOverride && <div className="hidden lg:flex" style={{ alignItems: "center", gap: "0.35rem" }}>
-                {ACCENT_COLORS.map((color) => (
-                  <button
-                    key={color.id}
-                    onClick={() => setAccent(color.id)}
-                    aria-label={`Switch accent to ${color.label}`}
-                    style={{
-                      width: accent === color.id ? "14px" : "10px",
-                      height: accent === color.id ? "14px" : "10px",
-                      borderRadius: "50%",
-                      backgroundColor: color.swatch,
-                      border: accent === color.id
-                        ? "2px solid var(--color-text-primary)"
-                        : "1px solid transparent",
-                      cursor: "none",
-                      transition: "all 0.2s ease",
-                      padding: 0,
-                      boxShadow: accent === color.id
-                        ? `0 0 8px ${color.swatch}60`
-                        : "none",
-                    }}
-                  />
-                ))}
-              </div>}
-
+            <div className={`${linkRowClass} items-center gap-4 xl:gap-6`} style={{ order: 1 }}>
+              {/* Back to the new main site (portfolio is a sub-section now) */}
+              {!hasNavOverride && (
+                <a
+                  href="/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateWithTransition("/");
+                  }}
+                  className="nav-link hidden xl:inline-flex"
+                  style={{ color: "var(--color-accent)", whiteSpace: "nowrap" }}
+                >
+                  {lang === "es" ? "← Sitio Principal" : "← Main Site"}
+                </a>
+              )}
               {(navOverride || t.nav.links).map((link) => (
                 <a
                   key={link.href}
@@ -489,25 +484,24 @@ export default function Navigation({
           )}
 
           {/* Shared: context-aware button + theme toggle (same position on ALL pages) */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3" style={{ order: 3 }}>
             {/* Context-aware button: Back when backHref provided, Proposals otherwise */}
             {backHref ? (
               <a
                 href={backHref}
                 onClick={(e) => {
                   e.preventDefault();
-                  if (triggerExitRef.current) triggerExitRef.current(backHref);
-                  else window.location.href = backHref;
+                  navigateWithTransition(backHref);
                 }}
                 style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.1em",
+                  fontFamily: '"General Sans", sans-serif',
+                  fontSize: "0.66rem",
+                  letterSpacing: "0.16em",
                   textTransform: "uppercase",
                   color: "var(--color-accent)",
                   textDecoration: "none",
                   border: "1px solid var(--color-accent)",
-                  borderRadius: "2px",
+                  borderRadius: "9999px",
                   padding: "0.4rem 0.9rem",
                   minWidth: "96px",
                   display: "inline-flex",
@@ -531,21 +525,20 @@ export default function Navigation({
             ) : !isPortal && !hasNavOverride ? (
               <a
                 href="/engagements"
-                className="hidden md:inline-flex"
+                className="hidden lg:inline-flex"
                 onClick={(e) => {
                   e.preventDefault();
-                  if (triggerExitRef.current) triggerExitRef.current("/engagements");
-                  else window.location.href = "/engagements";
+                  navigateWithTransition("/engagements");
                 }}
                 style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.1em",
+                  fontFamily: '"General Sans", sans-serif',
+                  fontSize: "0.66rem",
+                  letterSpacing: "0.16em",
                   textTransform: "uppercase",
                   color: "var(--color-accent)",
                   textDecoration: "none",
                   border: "1px solid var(--color-accent)",
-                  borderRadius: "2px",
+                  borderRadius: "9999px",
                   padding: "0.4rem 0.9rem",
                   minWidth: "96px",
                   alignItems: "center",
@@ -566,43 +559,6 @@ export default function Navigation({
                 {t.nav.proposals}
               </a>
             ) : null}
-
-            {/* Theme Toggle */}
-            <button
-              onClick={cycle}
-              aria-label={resolved === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "1.15rem",
-                lineHeight: 1,
-                color: "var(--color-text-secondary)",
-                background: "var(--color-bg-surface)",
-                border: "1px solid var(--color-border)",
-                borderRadius: "6px",
-                padding: 0,
-                width: "36px",
-                height: "36px",
-                minWidth: "unset",
-                minHeight: "unset",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "all 0.3s ease",
-                cursor: "none",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "var(--color-text-primary)";
-                e.currentTarget.style.borderColor = "var(--color-accent)";
-                e.currentTarget.style.backgroundColor = "var(--color-bg-elevated)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "var(--color-text-secondary)";
-                e.currentTarget.style.borderColor = "var(--color-border)";
-                e.currentTarget.style.backgroundColor = "var(--color-bg-surface)";
-              }}
-            >
-              {resolved === "dark" ? "☀" : "☾"}
-            </button>
 
             {/* Language Toggle */}
             <button
@@ -645,7 +601,7 @@ export default function Navigation({
 
           {/* Hamburger / Close X (home only) */}
           {!isPortal && <button
-            className="md:hidden flex flex-col items-center justify-center"
+            className={`${burgerClass} flex flex-col items-center justify-center`}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
             aria-expanded={mobileOpen}
@@ -654,6 +610,7 @@ export default function Navigation({
               height: "44px",
               padding: "10px",
               position: "relative",
+              order: 4,
               zIndex: mobileOpen ? 10001 : "auto",
               cursor: "none",
             }}
@@ -699,6 +656,38 @@ export default function Navigation({
       {/* Mobile Menu (home only) */}
       {!isPortal && mobileOpen && (
         <div ref={mobileMenuRef} className="mobile-menu">
+          {denseHome && (
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.6rem",
+                alignSelf: "flex-start",
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.7rem",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: isAvailable ? "#FBBF24" : "#F87171",
+                background: isAvailable ? "rgba(251, 191, 36, 0.08)" : "rgba(248, 113, 113, 0.08)",
+                border: `1px solid ${isAvailable ? "rgba(251, 191, 36, 0.25)" : "rgba(248, 113, 113, 0.25)"}`,
+                borderRadius: "9999px",
+                padding: "0.4rem 0.9rem",
+                marginBottom: "0.5rem",
+              }}
+            >
+              <span className="status-dot" style={{ backgroundColor: isAvailable ? "#FBBF24" : "#F87171" }} />
+              {isAvailable
+                ? `${t.nav.partTime} · ${availableHours}${t.nav.hoursShort}`
+                : t.nav.currentlyBooked}
+            </div>
+          )}
+          <a
+            href="/"
+            className="text-heading"
+            style={{ color: "var(--color-accent)", textDecoration: "none" }}
+          >
+            {lang === "es" ? "← Sitio Principal" : "← Main Site"}
+          </a>
           {t.nav.links.map((link, i) => (
             <a
               key={link.href}
@@ -733,22 +722,6 @@ export default function Navigation({
           </a>
 
           <button
-            onClick={cycle}
-            className="text-heading mt-4"
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.85rem",
-              letterSpacing: "0.1em",
-              color: "var(--color-text-tertiary)",
-              background: "none",
-              border: "none",
-              textAlign: "left",
-            }}
-          >
-            {resolved === "dark" ? `☀ ${t.nav.lightLabel}` : `☾ ${t.nav.darkLabel}`}
-          </button>
-
-          <button
             onClick={toggleLang}
             className="text-heading"
             style={{
@@ -759,54 +732,15 @@ export default function Navigation({
               background: "none",
               border: "none",
               textAlign: "left",
+              padding: "0.75rem 0",
+              minHeight: "44px",
             }}
           >
             {t.nav.langButton === "ES" ? "☾ Español" : "☾ English"}
           </button>
 
-          {/* Mobile Accent Color Picker */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              flexWrap: "wrap",
-              justifyContent: "center",
-            }}
-            role="group"
-            aria-label="Accent color"
-          >
-            {ACCENT_COLORS.map((color) => (
-              <div
-                key={color.id}
-                style={{ padding: "10px" }}
-              >
-                <button
-                  onClick={() => setAccent(color.id)}
-                  aria-label={`Switch accent to ${color.label}`}
-                  style={{
-                    width: accent === color.id ? "18px" : "14px",
-                    height: accent === color.id ? "18px" : "14px",
-                    borderRadius: "50%",
-                    backgroundColor: color.swatch,
-                    border: accent === color.id
-                      ? "2px solid var(--color-text-primary)"
-                      : "1px solid transparent",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    padding: 0,
-                    display: "block",
-                    boxShadow: accent === color.id
-                      ? `0 0 10px ${color.swatch}70`
-                      : "none",
-                  }}
-                />
-              </div>
-            ))}
-          </div>
         </div>
       )}
-      <PageTransition onReady={(fn) => { triggerExitRef.current = fn; }} />
     </>
   );
 }

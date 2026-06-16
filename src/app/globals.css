@@ -1,28 +1,34 @@
 /* ── Fonts ── */
 @import url("https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&display=swap");
-@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&display=swap");
 
 @import "tailwindcss";
 
 /* ── Tailwind v4 Theme ── */
 @theme {
-  --color-bg-void: #050508;
-  --color-bg-primary: #0A0D14;
-  --color-bg-elevated: #111621;
-  --color-bg-surface: #1A1F2E;
+  /* Canon brand palette — single source of truth for BOTH sites.
+     Values match the FDE design doc; the --fde-* names alias these. */
+  --color-bg-void: #000000;
+  --color-bg-primary: #04070c;
+  --color-bg-elevated: #0a0e17;
+  --color-bg-surface: #101624;
 
-  --color-text-primary: #F0F0F3;
-  --color-text-secondary: #9CA3B4;
-  --color-text-tertiary: #5A6278;
+  --color-text-primary: #f5f6f8;
+  --color-text-secondary: #9aa1ad;
+  --color-text-tertiary: #6b7280;
   --color-text-ghost: #2A3040;
 
-  --color-accent: #4F9CF7;
-  --color-accent-glow: #4F9CF720;
-  --color-accent-hover: #6BB0FF;
+  --color-accent: #2e86f7;
+  --color-accent-glow: #2e86f720;
+  --color-accent-hover: #4496ff;
+  --color-accent-cyan: #5bc9de;
 
-  --color-border: #1E2433;
+  --color-border: #1b2230;
   --color-border-hover: #2E3548;
+
+  --grad-brand: linear-gradient(90deg, #5bc9de 0%, #2e86f7 100%);
 
   --font-display: "Clash Display", sans-serif;
   --font-body: "General Sans", sans-serif;
@@ -75,67 +81,6 @@
   margin-bottom: 1.75rem;
 }
 
-[data-theme="light"] .logo-lockup-text--hero {
-  color: var(--color-text-tertiary);
-}
-
-[data-theme="light"] .logo-img {
-  mix-blend-mode: multiply;
-  filter: invert(1);
-}
-
-/* ── Light Theme Overrides ── */
-[data-theme="light"] {
-  --color-bg-void: #F2F2F4;
-  --color-bg-primary: #F8F8FA;
-  --color-bg-elevated: #FFFFFF;
-  --color-bg-surface: #E8E8EC;
-
-  --color-text-primary: #141418;
-  --color-text-secondary: #3A3A45;
-  --color-text-tertiary: #5A5A68;
-  --color-text-ghost: #A0A0AD;
-
-  --color-accent: #2E7BD6;
-  --color-accent-glow: #2E7BD620;
-  --color-accent-hover: #1A65BE;
-
-  --color-border: #D0D0D8;
-  --color-border-hover: #B8B8C4;
-}
-
-/* ── Theme Transition (View Transitions API) ── */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-::view-transition-old(root) {
-  z-index: 1;
-}
-
-::view-transition-new(root) {
-  z-index: 9999;
-  animation: theme-sweep 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes theme-sweep {
-  from {
-    clip-path: polygon(-15% -15%, -15% -15%, -30% 100%, -30% 100%);
-  }
-  to {
-    clip-path: polygon(-15% -15%, 115% -15%, 100% 115%, -30% 115%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none !important;
-  }
-}
-
 /* ── Base Styles ── */
 *,
 *::before,
@@ -155,6 +100,32 @@ body {
   color: var(--color-text-primary);
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ── Unified Scrollbar (desktop pointers only) ── */
+@media (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg-void);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-bg-surface);
+    border-radius: 5px;
+    border: 2px solid var(--color-bg-void);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+  }
+
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-bg-surface) var(--color-bg-void);
+  }
 }
 
 /* ── Focus States (Accessibility) ── */
@@ -236,52 +207,61 @@ body {
   color: var(--color-bg-void);
 }
 
-/* ── Typography Scale ── */
+/* ── Typography Scale ──
+ * Headlines are standardized on the FDE brand voice: Archivo 900, uppercase,
+ * tight tracking (matches .fde-headline) so the portfolio and main site read
+ * as one brand. Clash Display is retired from headlines. */
 .text-hero {
-  font-family: var(--font-display);
+  font-family: "Archivo", sans-serif;
   font-size: clamp(4rem, 8vw, 9rem);
-  font-weight: 600;
+  font-weight: 900;
+  text-transform: uppercase;
   line-height: 0.95;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.01em;
   color: var(--color-text-primary);
 }
 
 .text-hero-inline {
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 4.2vw, 4.5rem);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  font-family: "Archivo", sans-serif;
+  font-size: clamp(1.6rem, 4.2vw, 3.6rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
   color: var(--color-text-primary);
-}
-
-@media (min-width: 769px) {
-  .text-hero-inline {
-    white-space: nowrap;
-  }
+  /* The cycling titles vary a lot in length (especially in Spanish). In the
+     heavier Archivo voice they no longer fit one line, so allow wrapping to
+     avoid overflow and reserve two lines so the flip-clock never shifts the
+     content beneath it. */
+  min-height: 2.1em;
 }
 
 .text-display {
-  font-family: var(--font-display);
+  font-family: "Archivo", sans-serif;
   font-size: clamp(2.5rem, 5vw, 5rem);
-  font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.02;
+  letter-spacing: -0.005em;
 }
 
 .text-heading {
-  font-family: var(--font-display);
+  font-family: "Archivo", sans-serif;
   font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.06;
+  letter-spacing: -0.005em;
 }
 
+/* Subhead: a lighter Archivo tier (not uppercase) so hierarchy survives below
+ * the loud 900-caps headings. */
 .text-subhead {
-  font-family: var(--font-display);
+  font-family: "Archivo", sans-serif;
   font-size: clamp(1.125rem, 1.5vw, 1.5rem);
   font-weight: 600;
   line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 .text-body {
@@ -305,7 +285,9 @@ body {
 
 /* ── Container ── */
 .container {
-  max-width: 1400px;
+  /* Matches the FDE main site's .fde-container width so the portfolio,
+     proposals, and contact share one body measure with the main site. */
+  max-width: 1120px;
   margin: 0 auto;
   padding-left: clamp(1.5rem, 4vw, 4rem);
   padding-right: clamp(1.5rem, 4vw, 4rem);
@@ -339,6 +321,12 @@ body {
 }
 
 /* ── Custom Cursor ── */
+@media (pointer: coarse) {
+  .cursor-dot {
+    display: none !important;
+  }
+}
+
 .cursor-dot {
   position: fixed;
   top: 0;
@@ -424,51 +412,6 @@ body {
   }
 }
 
-/* ── Preloader ── */
-.preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.preloader-line {
-  width: 0%;
-  height: 1px;
-  background-color: var(--color-accent);
-}
-
-.preloader-counter {
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  color: var(--color-text-tertiary);
-  margin-top: 1.5rem;
-  letter-spacing: 0.1em;
-}
-
-.preloader-top,
-.preloader-bottom {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background-color: var(--color-bg-void);
-  pointer-events: auto;
-}
-
-.preloader-top {
-  top: 0;
-}
-
-.preloader-bottom {
-  bottom: 0;
-}
-
 /* ── Scroll Progress ── */
 .scroll-progress {
   position: fixed;
@@ -476,7 +419,7 @@ body {
   left: 0;
   right: 0;
   height: 2px;
-  background-color: var(--color-accent);
+  background: var(--grad-brand);
   transform-origin: left;
   z-index: 99990;
 }
@@ -488,7 +431,7 @@ body {
   left: 0;
   right: 0;
   z-index: 9999;
-  padding: 1.25rem 0;
+  padding: 0.95rem 0;
   overflow: visible;
   transition: background-color 0.4s var(--ease-reveal);
 }
@@ -497,19 +440,24 @@ body {
   background-color: color-mix(in srgb, var(--color-bg-void) 85%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  /* Match the FDE nav's bottom hairline so both navs read as one frame */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .nav-link {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
+  font-family: "General Sans", sans-serif;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-text-tertiary);
   transition: color 0.3s var(--ease-reveal);
   position: relative;
 }
 
-.nav-link:hover,
+.nav-link:hover {
+  color: var(--fde-cyan);
+}
+
 .nav-link.is-active {
   color: var(--color-text-primary);
 }
@@ -685,9 +633,6 @@ body {
     transition-duration: 0.01ms !important;
   }
 
-  .preloader {
-    display: none !important;
-  }
 }
 
 /* ── Mobile Timeline ── */
@@ -732,3 +677,395 @@ body {
 }
 
 
+
+/* ════════════════════════════════════════════════════════════════
+   FDE Home — main site (Forward Deployed Engineering design)
+   Scoped under .fde to stay independent of the portfolio theme.
+   Treatments matched to the "Streaming the dream" design doc:
+   cyan→blue gradient hairlines, gradient-border panels, pill
+   buttons with circled arrows, letterspaced grotesque labels.
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* FDE aliases of the canon palette — kept so .fde-* classes work on
+     every page (portfolio, proposals, contact), not just inside .fde. */
+  --fde-black: var(--color-bg-void);
+  --fde-panel-bg: var(--color-bg-primary);
+  --fde-border: var(--color-border);
+  --fde-white: var(--color-text-primary);
+  --fde-gray: var(--color-text-secondary);
+  --fde-gray-dim: var(--color-text-tertiary);
+  --fde-blue: var(--color-accent);
+  --fde-blue-deep: #2b6be0;
+  --fde-blue-light: #8ec5ff;
+  --fde-cyan: var(--color-accent-cyan);
+  --fde-grad: var(--grad-brand);
+}
+
+.fde {
+  background: var(--fde-black);
+  color: var(--fde-white);
+  font-family: "General Sans", sans-serif;
+}
+
+html:has(.fde) {
+  background: #000;
+}
+
+/* ── Typography ── */
+.fde-headline {
+  font-family: "Archivo", sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  line-height: 1.02;
+}
+
+.fde-label {
+  font-family: "General Sans", sans-serif;
+  font-weight: 400;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.fde-blue { color: var(--fde-blue); }
+
+.fde-gradient-text {
+  background: var(--fde-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Step titles: light, wide-tracked, gradient (How It Works cards) */
+.fde-step-title {
+  font-family: "General Sans", sans-serif;
+  font-weight: 400;
+  font-size: 1.35rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.45;
+}
+
+/* ── Gradient hairline (signature section divider) ── */
+.fde-hairline {
+  display: block;
+  height: 1px;
+  border: none;
+  background: var(--fde-grad);
+}
+
+.fde-hairline--dim { opacity: 0.45; }
+
+.fde-hairline--gray {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+}
+
+/* ── Buttons ── */
+.fde-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  font-family: "General Sans", sans-serif;
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: linear-gradient(90deg, #5bc9de 0%, #2b6be0 100%);
+  border-radius: 9999px;
+  padding: 1rem 2.4rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 0 26px rgba(46, 134, 247, 0.28);
+  white-space: nowrap;
+}
+
+.fde-btn-primary:hover {
+  box-shadow: 0 0 46px rgba(46, 134, 247, 0.55);
+  transform: translateY(-1px);
+}
+
+/* Black circled arrow inside gradient pills */
+.fde-btn-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: -1.1rem;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* Solid blue pill (scoping-call form) */
+.fde-btn-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: "General Sans", sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: var(--fde-blue);
+  border-radius: 9999px;
+  padding: 0.95rem 2rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s ease, box-shadow 0.3s ease;
+}
+
+.fde-btn-solid:hover {
+  background: #4496ff;
+  box-shadow: 0 0 30px rgba(46, 134, 247, 0.4);
+}
+
+.fde-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: "General Sans", sans-serif;
+  font-weight: 400;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fde-white);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.fde-btn-ghost:hover { color: var(--fde-cyan); }
+
+.fde-btn-ghost .fde-circle-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--fde-blue);
+  box-shadow: 0 0 10px rgba(46, 134, 247, 0.35);
+  color: #fff;
+  font-size: 0.75rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fde-btn-ghost:hover .fde-circle-arrow {
+  border-color: var(--fde-cyan);
+  box-shadow: 0 0 16px rgba(91, 201, 222, 0.5);
+}
+
+/* ── Nav ── */
+.fde-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.95rem clamp(1.25rem, 4vw, 3rem);
+  background: rgba(0, 0, 0, 0.84);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.fde-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: "General Sans", sans-serif;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fde-white);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.25s ease;
+}
+
+.fde-nav-brand:hover { opacity: 0.75; }
+
+.fde-nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.9rem, 3vw, 2.75rem);
+}
+
+.fde-nav-link {
+  font-family: "General Sans", sans-serif;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fde-white);
+  text-decoration: none;
+  transition: color 0.25s ease;
+  /* Comfortable touch target without changing the visual size */
+  padding: 0.65rem 0.1rem;
+}
+
+.fde-nav-link:hover { color: var(--fde-cyan); }
+
+/* ── Gradient-border panel (cards) ──
+   Near-black interior, 1px border that runs cyan→blue and fades out
+   toward the bottom-right, large radius. */
+.fde-panel {
+  border: 1px solid transparent;
+  border-radius: 26px;
+  background:
+    linear-gradient(var(--fde-panel-bg), var(--fde-panel-bg)) padding-box,
+    linear-gradient(150deg, rgba(91, 201, 222, 0.85) 0%, rgba(46, 134, 247, 0.55) 38%, rgba(46, 134, 247, 0.18) 75%, rgba(46, 134, 247, 0.1) 100%) border-box;
+  padding: 1.8rem 1.7rem;
+}
+
+/* Highlight panel: radial blue bloom from the top-left (Handoff card) */
+.fde-panel--bloom {
+  background:
+    radial-gradient(115% 105% at 0% 0%, #2e86f7 0%, #1a55c4 20%, #0a1d45 45%, #04070c 70%) padding-box,
+    linear-gradient(150deg, rgba(142, 197, 255, 0.95) 0%, rgba(46, 134, 247, 0.7) 45%, rgba(46, 134, 247, 0.3) 100%) border-box;
+}
+
+/* Gradient-border utility — the FDE panel's signature cyan→blue edge applied
+   to existing surfaces WITHOUT forcing the panel's radius/padding. Used to
+   bring the brand surface to the portfolio's bespoke cards (blueprint cards,
+   stat grid) while keeping their own corners and internal layout. The fill
+   defaults to the elevated surface; set --fde-card-fill to override. */
+.fde-card-grad {
+  --fde-card-fill: var(--color-bg-elevated);
+  border: 1px solid transparent !important;
+  background:
+    linear-gradient(var(--fde-card-fill), var(--fde-card-fill)) padding-box,
+    linear-gradient(150deg, rgba(91, 201, 222, 0.7) 0%, rgba(46, 134, 247, 0.45) 45%, rgba(46, 134, 247, 0.12) 100%) border-box !important;
+}
+
+/* ── Section reveal ── */
+.fde-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fde-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fde-reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ── Inputs ── */
+.fde-input,
+.fde-textarea {
+  width: 100%;
+  background: #0b0e13;
+  border: 1px solid #262c38;
+  border-radius: 8px;
+  color: var(--fde-white);
+  font-family: "General Sans", sans-serif;
+  font-size: 0.85rem;
+  padding: 0.7rem 0.9rem;
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+
+.fde-input:focus,
+.fde-textarea:focus { border-color: var(--fde-blue); }
+
+.fde-input::placeholder,
+.fde-textarea::placeholder { color: #4a5160; }
+
+/* ── FAQ table ── */
+.fde-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  background: #0b0f17;
+  border: 1px solid var(--fde-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.fde-table th,
+.fde-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #141a26;
+}
+
+.fde-table tr:last-child td { border-bottom: none; }
+
+.fde-table th {
+  font-family: "General Sans", sans-serif;
+  font-weight: 400;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fde-gray-dim);
+}
+
+.fde-table thead th:last-child { color: var(--fde-blue); }
+
+.fde-table td { color: var(--fde-gray); }
+
+.fde-table td:last-child { color: var(--fde-white); }
+
+.fde-table td.fde-td-label {
+  font-family: "General Sans", sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fde-gray-dim);
+  white-space: nowrap;
+}
+
+/* ── Misc ── */
+.fde-container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-left: clamp(1.25rem, 4vw, 2.5rem);
+  padding-right: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.fde-quote-mark {
+  font-family: "Archivo", sans-serif;
+  font-weight: 900;
+  font-size: 4.6rem;
+  line-height: 0.5;
+  background: linear-gradient(110deg, #f5f6f8 0%, #8ec5ff 55%, #2e86f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Underlined contact links with line-art icons */
+.fde-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--fde-white);
+  font-size: 1.05rem;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+  transition: color 0.25s ease;
+}
+
+.fde-contact-link:hover { color: var(--fde-cyan); }
+
+.fde-contact-link svg { flex-shrink: 0; }
