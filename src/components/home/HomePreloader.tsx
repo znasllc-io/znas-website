@@ -108,6 +108,20 @@ export default function HomePreloader() {
     };
   }, [shouldPlay]);
 
+  // bfcache safety: if the page is restored from back/forward cache while this
+  // fixed, full-screen overlay is still covering (e.g. you navigated away
+  // before the preloader finished), hide it on restore — same bug class as the
+  // page-transition panels. Without this it could be frozen covering on Back.
+  useEffect(() => {
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted && containerRef.current) {
+        containerRef.current.style.display = "none";
+      }
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
+
   if (!shouldPlay) return null;
 
   const panelStyle: React.CSSProperties = {
