@@ -1,6 +1,7 @@
 "use client";
 
 import Reveal from "./Reveal";
+import OwlMark from "@/components/shared/OwlMark";
 import { useLanguage } from "@/lib/language";
 import { homeTranslations } from "@/lib/home-translations";
 
@@ -13,11 +14,7 @@ export default function Engineer() {
       <Reveal>
         <div className="grid md:grid-cols-[280px_1fr] items-center" style={{ gap: "3.5rem" }}>
           <div className="text-center">
-            <img
-              src="/logo.png"
-              alt="ZNAS owl"
-              style={{ height: "160px", width: "auto", margin: "0 auto" }}
-            />
+            <OwlMark height={160} style={{ margin: "0 auto" }} />
             <div
               style={{
                 fontFamily: '"General Sans", sans-serif',

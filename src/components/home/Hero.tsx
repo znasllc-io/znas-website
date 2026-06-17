@@ -2,6 +2,7 @@
 
 import Reveal from "./Reveal";
 import ConstellationField from "@/components/shared/ConstellationField";
+import OwlMark from "@/components/shared/OwlMark";
 import { useLanguage } from "@/lib/language";
 import { homeTranslations } from "@/lib/home-translations";
 
@@ -22,11 +23,7 @@ export default function Hero() {
         style={{ position: "relative", zIndex: 2 }}
       >
       <Reveal>
-        <img
-          src="/logo.png"
-          alt="ZNAS owl"
-          style={{ height: "100px", width: "auto", margin: "0 auto" }}
-        />
+        <OwlMark height={100} style={{ margin: "0 auto" }} />
         <div
           style={{
             fontFamily: '"General Sans", sans-serif',
