@@ -87,6 +87,25 @@ export default function PageTransition() {
     registerTriggerExit(triggerExit);
   }, [triggerExit]);
 
+  // Back/forward bfcache restore: the page may have been frozen mid-exit with
+  // the panels covering the screen (the exit sweep sets yPercent:0 then
+  // navigates). bfcache restores that frozen state without re-running the
+  // mount effect, leaving a blank screen — reset the panels open on restore.
+  useEffect(() => {
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (!e.persisted) return;
+      const top = topRef.current;
+      const bottom = bottomRef.current;
+      if (top && bottom) {
+        gsap.set(top, { yPercent: -100 });
+        gsap.set(bottom, { yPercent: 100 });
+      }
+      isAnimatingRef.current = false;
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
+
   return (
     <>
       <div

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap, SplitText } from "@/lib/gsap-config";
 import FlipClock from "@/components/ui/FlipClock";
+import OwlMark from "@/components/shared/OwlMark";
 import { siteConfig } from "@/data/content";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
@@ -51,7 +52,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const taglineRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLImageElement>(null);
+  const logoRef = useRef<HTMLVideoElement>(null);
   const logoTextRef = useRef<HTMLSpanElement>(null);
   const flipClockRef = useRef<HTMLDivElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
@@ -450,12 +451,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
       <div className="hero-content container relative pb-16 md:pb-24" style={{ zIndex: 5, willChange: "transform", opacity: 0 }}>
         {/* Logo lockup */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "fit-content" }}>
-          <img
-            ref={logoRef}
-            src="/logo.png"
-            alt=""
-            className="logo-img logo-hero"
-          />
+          <OwlMark ref={logoRef} className="logo-img logo-hero" />
           <span
             ref={logoTextRef}
             className="logo-lockup-text logo-lockup-text--hero"

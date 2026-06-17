@@ -36,7 +36,10 @@ export function useSplitReveal(
     let split: InstanceType<typeof SplitText> | null = null;
 
     const ctx = gsap.context(() => {
-      split = SplitText.create(el, { type: "chars" });
+      // "words,chars" (not just "chars") so the line only breaks at spaces —
+      // splitting into bare chars lets the browser break mid-word (e.g.
+      // "SYS\nTEM"). Words wrap as units; we still animate the individual chars.
+      split = SplitText.create(el, { type: "words,chars" });
       const chars = split.chars;
 
       if (el.classList.contains("fde-gradient-text")) {

@@ -1,6 +1,7 @@
 "use client";
 
 import Reveal from "./Reveal";
+import OwlMark from "@/components/shared/OwlMark";
 import { useLanguage } from "@/lib/language";
 import { homeTranslations } from "@/lib/home-translations";
 
@@ -18,13 +19,7 @@ export default function Quotes() {
             <span className="fde-gradient-text">{t.h2b}</span> {t.h2c}{" "}
             <span style={{ color: "var(--fde-blue)" }}>{t.h2d}</span>
           </h2>
-          <img
-            src="/logo.png"
-            alt=""
-            aria-hidden
-            className="hidden md:block"
-            style={{ height: "120px", width: "auto", opacity: 0.95 }}
-          />
+          <OwlMark height={120} className="hidden md:block" style={{ opacity: 0.95 }} />
         </div>
       </Reveal>
 
