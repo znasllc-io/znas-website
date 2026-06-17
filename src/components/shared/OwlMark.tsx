@@ -28,6 +28,7 @@ const OwlMark = forwardRef<HTMLVideoElement, OwlMarkProps>(function OwlMark(
   useEffect(() => {
     const v = innerRef.current;
     if (!v) return;
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       v.removeAttribute("autoplay");
       v.pause();
@@ -36,7 +37,22 @@ const OwlMark = forwardRef<HTMLVideoElement, OwlMarkProps>(function OwlMark(
       } catch {
         /* poster shows regardless */
       }
+      return;
     }
+
+    // Force muted + start playback. React's `muted` JSX prop is a property, not
+    // a reflected attribute, so it can be applied too late for the browser's
+    // autoplay gate — leaving the video paused on its poster ("not moving").
+    // Setting it imperatively and calling play() makes muted autoplay reliable.
+    v.muted = true;
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+    tryPlay();
+    // If metadata wasn't ready on first try, play once it can.
+    v.addEventListener("canplay", tryPlay, { once: true });
+    return () => v.removeEventListener("canplay", tryPlay);
   }, []);
 
   const setRefs = (el: HTMLVideoElement | null) => {
