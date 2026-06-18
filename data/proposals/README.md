@@ -6,7 +6,7 @@ argon2id password hash. Never commit them.
 
 ## Schema
 
-See `alebrije.example.json` for the full schema. Required fields:
+See `proposal.example.json` for the full schema. Required fields:
 
 - `slug` — URL segment. Must match `^[a-z0-9-]+$`. The filename must be
   `<slug>.json`.
@@ -23,7 +23,7 @@ See `alebrije.example.json` for the full schema. Required fields:
 
 ### Creating a new proposal
 
-1. `cp data/proposals/alebrije.example.json data/proposals/<slug>.json`
+1. `cp data/proposals/proposal.example.json data/proposals/<slug>.json`
 2. Fill in the content.
 3. Generate a fresh access code + hash:
    `node scripts/hash-password.mjs`
@@ -43,7 +43,7 @@ See `alebrije.example.json` for the full schema. Required fields:
 
 ## Why this file isn't in git
 
-Prior to the Q2 2026 security hardening pass, `alebrije.json` was
+Prior to the Q2 2026 security hardening pass, a proposal JSON was
 committed to the repo with a plaintext password (and that password
 happened to be the RFC 4122 example UUID). Moving proposal JSONs out
 of version control means:

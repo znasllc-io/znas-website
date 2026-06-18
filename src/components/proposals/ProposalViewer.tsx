@@ -122,10 +122,10 @@ export default function ProposalViewer({
       </section>
 
       {/* Sections render in canonical order. Numbering is computed by
-          which sections are actually present on this proposal — so Haven
-          (Summary, HowItWorks, Team, Initiative) gets .01–.04, while
-          Alebrije (Summary, Roadmap, Timeline, Investment) also gets
-          .01–.04 the way it always did. The `nextNumber()` helper below
+          which sections are actually present on this proposal — e.g. a
+          proposal with (Summary, HowItWorks, Team, Initiative) gets
+          .01–.04, while one with (Summary, Roadmap, Timeline, Investment)
+          also gets .01–.04. The `nextNumber()` helper below
           increments only when the conditional renders, because React
           short-circuits `cond && <Component prop={fn()} />` before
           evaluating the JSX expression.

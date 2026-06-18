@@ -58,8 +58,8 @@ export default function ProposalPageClient({
   // attachmentId is optional — when present the server returns the matching
   // proposal.attachments[] entry; when absent it returns the main PDF.
   // Filename for the saved file comes from the server's Content-Disposition
-  // header so it stays correct per-proposal (the previous hardcoded
-  // "Alebrijes_*.pdf" would have saved Haven's PDF under the wrong name).
+  // header so it stays correct per-proposal (a previous hardcoded filename
+  // would have saved every proposal's PDF under the wrong name).
   const handleDownload = useCallback(
     async (attachmentId?: string) => {
       try {
