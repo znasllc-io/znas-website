@@ -1,0 +1,33 @@
+# ZNAS LLC — Forward Deployed AI Engineering
+
+> ZNAS LLC is a Forward Deployed AI Engineering firm led by José Sanz. It
+> embeds with a client's team, builds the AI system inside their actual
+> operation — with their data and constraints — and owns the outcome until it
+> runs in production. Based in Arizona, serving businesses across the United
+> States. Bilingual (EN/ES).
+
+José Sanz is a Forward Deployed AI Engineer and founder of ZNAS LLC, with 17
+years building production systems across healthcare, airlines, finance, and
+telecommunications, and AI Strategy certification from MIT Sloan. ZNAS
+engagements suit CEOs and founders of 20–200-person companies whose AI
+implementations stalled after a first vendor or consultant attempt.
+
+## Core pages
+- [Home](https://znas.io/): what Forward Deployed AI Engineering is and how an engagement works (scoping → prototyping → deployment → handoff).
+- [About José Sanz](https://znas.io/about): full bio, experience, and credentials.
+- [Technical portfolio](https://znas.io/portfolio): 17 years of distributed-systems and engineering work.
+- [Engagements](https://znas.io/engagements): active and past client engagements.
+- [Contact](https://znas.io/#contact): book a 30-minute scoping call.
+
+## Case studies
+- [Manufacturing — Safety & Productivity](https://znas.io/case-studies/manufacturing): GPU-accelerated computer-vision system on a production floor (PPE compliance, idle-equipment detection, searchable footage).
+- [Automotive Retail — Customer Engagement & Premises Security](https://znas.io/case-studies/automotive-retail): bilingual AI avatar/voice agent for lead capture plus AI security monitoring.
+
+## Open-source & products (created by ZNAS)
+- [MemQL](https://znas.io/memql): open-source, AI-native memory graph for production agent systems (declarative memory layer on PostgreSQL + TimescaleDB).
+- [CoPresent](https://znas.io/copresent): real-time multi-agent collaboration workspace.
+
+## Contact
+- Email: znas@znas.io
+- LinkedIn: https://www.linkedin.com/in/znas-io/
+- GitHub: https://github.com/znas-io
