@@ -19,7 +19,7 @@ export default function ProductPage({ product }: { product: "memql" | "copresent
   return (
     <div className="fde">
       <HomeNav />
-      <main className="fde-container text-center" style={{ paddingTop: "8rem", paddingBottom: "6rem" }}>
+      <main id="main-content" className="fde-container text-center" style={{ paddingTop: "8rem", paddingBottom: "6rem" }}>
         <Reveal>
           <h1
             className="fde-headline fde-gradient-text"
@@ -79,7 +79,7 @@ export default function ProductPage({ product }: { product: "memql" | "copresent
             <a
               href={
                 product === "memql"
-                  ? "https://github.com/znas-io"
+                  ? "https://memql.io"
                   : "mailto:znas@znas.io?subject=CoPresent%20guest%20list"
               }
               target={product === "memql" ? "_blank" : undefined}

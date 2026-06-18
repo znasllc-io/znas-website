@@ -249,7 +249,7 @@ export const homeTranslations: Record<Lang, HomeStrings> = {
     },
     createdBy: {
       headline: "Created by ZNAS",
-      memqlLabel: "Open Source · AI Infrastructure",
+      memqlLabel: "Open Source · AI Harness",
       copresentLabel: "Multi-Agent Workspace",
       knowMore: "Know More",
     },
@@ -335,12 +335,12 @@ export const homeTranslations: Record<Lang, HomeStrings> = {
     },
     products: {
       memql: {
-        label: "Open Source · AI Infrastructure",
+        label: "Open Source · AI Harness",
         h2a: "Distributed AI-native memory graph built",
         h2b: "for production agent systems",
         body: "Open-source memory layer for AI agents, built as a declarative language, not a library. You describe behavior (concepts, queries, automations, memory) and the engine runs it on PostgreSQL + TimescaleDB. Memory that behaves like a mind: episodic observations consolidate into semantic knowledge, and recall() blends recency × relevance in a single query. Event-driven, multi-tenant, distributed — and in production today.",
         byline: "Designed and built end-to-end by one founder",
-        cta: "View on GitHub",
+        cta: "Visit memql.io",
       },
       copresent: {
         label: "Multi-Agent Workspace",
@@ -505,7 +505,7 @@ export const homeTranslations: Record<Lang, HomeStrings> = {
     },
     createdBy: {
       headline: "Creado por ZNAS",
-      memqlLabel: "Open Source · Infraestructura de IA",
+      memqlLabel: "Open Source · AI Harness",
       copresentLabel: "Espacio de trabajo multiagente",
       knowMore: "Saber más",
     },
@@ -591,12 +591,12 @@ export const homeTranslations: Record<Lang, HomeStrings> = {
     },
     products: {
       memql: {
-        label: "Open Source · Infraestructura de IA",
+        label: "Open Source · AI Harness",
         h2a: "Grafo de memoria distribuido y nativo de IA,",
         h2b: "construido para sistemas de agentes en producción",
         body: "Capa de memoria open source para agentes de IA, construida como un lenguaje declarativo, no como una librería. Describes el comportamiento (conceptos, consultas, automatizaciones, memoria) y el motor lo ejecuta sobre PostgreSQL + TimescaleDB. Memoria que se comporta como una mente: las observaciones episódicas se consolidan en conocimiento semántico, y recall() combina recencia × relevancia en una sola consulta. Orientado a eventos, multi-tenant, distribuido — y hoy en producción.",
         byline: "Diseñado y construido de principio a fin por un solo fundador",
-        cta: "Ver en GitHub",
+        cta: "Visitar memql.io",
       },
       copresent: {
         label: "Espacio de trabajo multiagente",
