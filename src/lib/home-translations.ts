@@ -302,7 +302,7 @@ export const homeTranslations: Record<Lang, HomeStrings> = {
           a: "A Forward Deployed Engineer is an engineer who embeds directly with your team. He works with your real data, your real infrastructure, your real constraints and owns the outcome until the system is running in production. Not a consultant who delivers recommendations. The same person who scopes the problem builds and ships the solution.",
         },
         {
-          q: "What is the difference between a Forward Deployed Engineer and a Fractional CTO?",
+          q: "What is the difference between a Forward Deployed Engineer and a Technical Co-Founder?",
           a: "",
         },
         {
@@ -318,19 +318,19 @@ export const homeTranslations: Record<Lang, HomeStrings> = {
           a: "That's exactly the most common profile I work with. ChatGPT, Claude, or Gemini licenses give you access to the model. They don't give you the system. The difference between having access to AI and having AI integrated into your operation is exactly what I build.",
         },
       ],
-      tableHeadCto: "Fractional CTO",
+      tableHeadCto: "Technical Co-Founder",
       tableHeadFde: "Forward Deployed Engineer",
       tableRows: [
-        ["Primary focus", "Technical leadership and strategy", "Building and deploying in production"],
-        ["Deliverable", "Roadmap, architecture decisions, team direction", "Working system running in production"],
-        ["Writes code", "Rarely", "Yes — always"],
-        ["Owns the outcome", "Partially", "Total — stays until it runs"],
+        ["Primary focus", "Building the company and product from zero", "Building and deploying in production"],
+        ["Deliverable", "Company vision, product-market fit, founding team", "Working system running in production"],
+        ["Writes code", "Yes — until it's time to lead the team", "Yes — always"],
+        ["Owns the outcome", "Total — equity-level skin in the game", "Total — stays until it runs"],
         [
           "Ideal when",
-          "You need senior technical direction at the executive level",
+          "You're starting a company and need a builder-partner",
           "Your AI project is stuck or not reaching production",
         ],
-        ["Works from", "Meetings, documents, decisions", "Inside your stack, your data, your team"],
+        ["Works from", "Equity, vision, founding narrative", "Inside your stack, your data, your team"],
       ],
     },
     products: {
@@ -558,7 +558,7 @@ export const homeTranslations: Record<Lang, HomeStrings> = {
           a: "Un Forward Deployed Engineer es un ingeniero que se integra directamente con tu equipo. Trabaja con tus datos reales, tu infraestructura real, tus restricciones reales, y se hace cargo del resultado hasta que el sistema corre en producción. No es un consultor que entrega recomendaciones. La misma persona que define el problema construye y entrega la solución.",
         },
         {
-          q: "¿Cuál es la diferencia entre un Forward Deployed Engineer y un CTO fraccional?",
+          q: "¿Cuál es la diferencia entre un Forward Deployed Engineer y un Cofundador Técnico?",
           a: "",
         },
         {
@@ -574,19 +574,19 @@ export const homeTranslations: Record<Lang, HomeStrings> = {
           a: "Ese es exactamente el perfil más común con el que trabajo. Las licencias de ChatGPT, Claude o Gemini te dan acceso al modelo. No te dan el sistema. La diferencia entre tener acceso a la IA y tener la IA integrada en tu operación es exactamente lo que yo construyo.",
         },
       ],
-      tableHeadCto: "CTO fraccional",
+      tableHeadCto: "Cofundador Técnico",
       tableHeadFde: "Forward Deployed Engineer",
       tableRows: [
-        ["Enfoque principal", "Liderazgo técnico y estrategia", "Construir y desplegar en producción"],
-        ["Entregable", "Roadmap, decisiones de arquitectura, dirección del equipo", "Sistema funcionando en producción"],
-        ["Escribe código", "Rara vez", "Sí — siempre"],
-        ["Se hace cargo del resultado", "Parcialmente", "Total — se queda hasta que funciona"],
+        ["Enfoque principal", "Construir la empresa y el producto desde cero", "Construir y desplegar en producción"],
+        ["Entregable", "Visión de la empresa, product-market fit, equipo fundador", "Sistema funcionando en producción"],
+        ["Escribe código", "Sí — hasta que toca liderar el equipo", "Sí — siempre"],
+        ["Se hace cargo del resultado", "Total — riesgo a nivel de equity", "Total — se queda hasta que funciona"],
         [
           "Ideal cuando",
-          "Necesitas dirección técnica senior a nivel ejecutivo",
+          "Estás creando una empresa y necesitas un socio que construya",
           "Tu proyecto de IA está estancado o no llega a producción",
         ],
-        ["Trabaja desde", "Reuniones, documentos, decisiones", "Dentro de tu stack, tus datos, tu equipo"],
+        ["Trabaja desde", "Equity, visión, narrativa fundacional", "Dentro de tu stack, tus datos, tu equipo"],
       ],
     },
     products: {

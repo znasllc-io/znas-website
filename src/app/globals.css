@@ -1022,7 +1022,8 @@ html:has(.fde) {
 
 .fde-table td { color: var(--fde-gray); }
 
-.fde-table td:last-child { color: var(--fde-white); }
+/* FDE column highlighted blue (the ZNAS offering) */
+.fde-table td:last-child { color: var(--fde-blue); }
 
 .fde-table td.fde-td-label {
   font-family: "General Sans", sans-serif;
