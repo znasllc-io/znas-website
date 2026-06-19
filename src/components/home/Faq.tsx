@@ -82,19 +82,11 @@ export default function Faq() {
                           </tr>
                         </thead>
                         <tbody>
-                          {t.tableRows.map(([label, cto, fde], rowIdx) => (
+                          {t.tableRows.map(([label, cto, fde]) => (
                             <tr key={label}>
                               <td className="fde-td-label">{label}</td>
                               <td>{cto}</td>
-                              <td
-                                style={
-                                  rowIdx === 2 || rowIdx === 3
-                                    ? { color: "var(--fde-blue)" }
-                                    : undefined
-                                }
-                              >
-                                {fde}
-                              </td>
+                              <td>{fde}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -143,7 +135,7 @@ export default function Faq() {
                               >
                                 {t.tableHeadFde}
                               </span>
-                              <p style={{ marginTop: "0.2rem", fontSize: "0.86rem", lineHeight: 1.5, color: "var(--fde-white)", fontWeight: 500 }}>
+                              <p style={{ marginTop: "0.2rem", fontSize: "0.86rem", lineHeight: 1.5, color: "var(--fde-blue)", fontWeight: 500 }}>
                                 {fde}
                               </p>
                             </div>
