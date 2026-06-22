@@ -22,14 +22,18 @@ export default function HomeNav() {
         <TransitionLink href="/portfolio" className="fde-nav-link">
           {t.nav.portfolio}
         </TransitionLink>
-        {/* Hidden on phones — the hero CTA, contact section, and footer all
-            carry Book a Call there, and the Spanish label doesn't fit. */}
-        <TransitionLink href="/#contact" className="fde-nav-link hidden sm:inline-block">
+        {/* Shown only at lg (1024px+). The full wordmark + all links needs
+            ~898px on one line in Spanish ("Agenda una llamada"), which exceeds
+            every phone's landscape width (≤956px) — so on all phones, portrait
+            and landscape, the nav stays compact (brand + Portfolio + language)
+            and never overlaps. Book a Call and Engagements remain reachable via
+            the hero CTA, contact section, and footer. */}
+        <TransitionLink href="/#contact" className="fde-nav-link hidden lg:inline-block">
           {t.nav.bookACall}
         </TransitionLink>
-        {/* Hidden on phones (like Book a Call) so the nav doesn't overflow the
-            viewport — reachable on mobile via the footer's Navigation column. */}
-        <TransitionLink href="/engagements" className="fde-nav-link hidden sm:inline-block">
+        {/* Shown only at lg (like Book a Call) so the nav never wraps or
+            overflows — reachable on mobile via the footer's Navigation column. */}
+        <TransitionLink href="/engagements" className="fde-nav-link hidden lg:inline-block">
           {t.nav.engagements}
         </TransitionLink>
         <button

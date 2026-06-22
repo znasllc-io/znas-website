@@ -143,6 +143,11 @@ export default function ProjectModal({
         style={{
           position: "relative",
           width: "min(480px, 90vw)",
+          // Cap to the viewport and scroll internally so the modal stays fully
+          // reachable on short screens (e.g. phones in landscape, ~390px tall).
+          maxHeight: "90vh",
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
           backgroundColor: "var(--color-bg-elevated)",
           border: "1px solid var(--color-border)",
           padding: "2rem",
