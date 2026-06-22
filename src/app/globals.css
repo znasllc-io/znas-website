@@ -915,6 +915,9 @@ html:has(.fde) {
   transition: color 0.25s ease;
   /* Comfortable touch target without changing the visual size */
   padding: 0.65rem 0.1rem;
+  /* Never wrap a label to a second line — labels stay on one row and the
+     breakpoint logic (HomeNav) decides which appear so the bar never overflows. */
+  white-space: nowrap;
 }
 
 .fde-nav-link:hover { color: var(--fde-cyan); }
