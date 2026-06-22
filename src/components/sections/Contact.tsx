@@ -48,6 +48,14 @@ function Contact() {
         <div className="max-w-3xl">
           <h2
             className="text-display reveal-up"
+            style={{
+              // Lower the small-screen floor so long single words (e.g. the
+              // Spanish "CONSTRUYAMOS") fit instead of clipping; desktop max
+              // (5rem) is unchanged. break-word is the final safeguard on the
+              // narrowest phones. Mirrors the same fix in About.tsx.
+              fontSize: "clamp(1.8rem, 5vw, 5rem)",
+              overflowWrap: "break-word",
+            }}
           >
             {t.contact.headline.map((line, i) => (
               <span key={i} className="block">
