@@ -6,8 +6,13 @@ import SplitHeadline from "./SplitHeadline";
 import { useLanguage } from "@/lib/language";
 import { homeTranslations } from "@/lib/home-translations";
 
-/** CoPresent wordmark — the "o" is the blue orbit ring from the brand sheet. */
+/** CoPresent wordmark — the "o" is the blue orbit ring from the brand sheet.
+ *  `height` is the MAX size (desktop); the wordmark scales down by viewport on
+ *  narrow screens so "CoPresent" (~5x the font size wide) never overflows. */
 export function CoPresentWordmark({ height = 56 }: { height?: number }) {
+  // Cap at `height` on wide screens; below ~`height/0.16`px viewport, scale
+  // with 16vw so the glyphs fit the column instead of clipping on mobile.
+  const size = `min(${height}px, 16vw)`;
   return (
     <span
       style={{
@@ -15,10 +20,11 @@ export function CoPresentWordmark({ height = 56 }: { height?: number }) {
         alignItems: "center",
         fontFamily: '"General Sans", sans-serif',
         fontWeight: 400,
-        fontSize: `${height}px`,
+        fontSize: size,
         lineHeight: 1,
         color: "var(--fde-white)",
         letterSpacing: "0.01em",
+        whiteSpace: "nowrap",
       }}
     >
       C
@@ -26,9 +32,9 @@ export function CoPresentWordmark({ height = 56 }: { height?: number }) {
         src="/images/home/copresent-ring.png"
         alt="o"
         style={{
-          height: `${height * 0.72}px`,
+          height: `calc(${size} * 0.72)`,
           width: "auto",
-          margin: `0 ${height * 0.04}px`,
+          margin: `0 calc(${size} * 0.04)`,
           transform: "translateY(8%)",
         }}
       />
