@@ -67,7 +67,7 @@ const OwlMark = forwardRef<HTMLVideoElement, OwlMarkProps>(function OwlMark(
   return (
     <video
       ref={setRefs}
-      className={className}
+      className={`owl-mark${className ? ` ${className}` : ""}`}
       style={{
         height: h,
         width: "auto",
