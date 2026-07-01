@@ -74,8 +74,18 @@ export default function PageTransition() {
       tl.to(top, { yPercent: -100, duration: 0.6, ease: "power3.inOut" });
       tl.to(bottom, { yPercent: 100, duration: 0.6, ease: "power3.inOut" }, "<");
 
-      // rAF-throttle fallback: never leave the panels covering the page.
-      const fallback = setTimeout(() => tl.progress(1, false), 1500);
+      // Failsafe: on iOS Safari the split can fail to paint if GSAP's rAF ticks
+      // are throttled during the page's initial load, leaving the void panels
+      // covering the page (looks like the page "didn't load" until a refresh).
+      // After the sweep should have finished, force the panels open with a
+      // direct transform write — a plain style change the compositor applies
+      // even when the rAF-driven tween is stalled.
+      const fallback = setTimeout(() => {
+        gsap.set(top, { yPercent: -100 });
+        gsap.set(bottom, { yPercent: 100 });
+        top.style.transform = "translate3d(0, -100%, 0)";
+        bottom.style.transform = "translate3d(0, 100%, 0)";
+      }, 900);
       return () => clearTimeout(fallback);
     } else {
       gsap.set(top, { yPercent: -100 });
