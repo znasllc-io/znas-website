@@ -1,0 +1,14 @@
+{
+  "_comment": "Lightweight in-progress engagement placeholder — no gated page or PDF yet. No passwordHash => hasAccess:false => the listing card is non-interactive (name + 'IN PROGRESS' badge only). Add passwordHash/pdf/sections when the proposal materials exist.",
+  "slug": "anequim",
+  "clientName": "Anequim",
+  "projectTitle": "Scope in definition",
+  "projectTitle_es": "Alcance en definición",
+  "status": "formalized",
+  "sections": {
+    "summary": {
+      "headline": "",
+      "body": ""
+    }
+  }
+}
