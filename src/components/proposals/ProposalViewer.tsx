@@ -212,20 +212,24 @@ export default function ProposalViewer({
       {/* ── Closing note (optional) ── */}
       {proposal.closingNote && <ClosingNote text={proposal.closingNote} />}
 
-      {/* ── Download CTA ── */}
-      <DownloadSection
-        onDownload={onDownload}
-        attachments={
-          // Hide attachments already surfaced in the Initiative section so
-          // the same gameplan/document doesn't get a button in two places.
-          sections.initiative?.attachmentId
-            ? proposal.attachments?.filter(
-                (a) => a.id !== sections.initiative!.attachmentId
-              )
-            : proposal.attachments
-        }
-        cta={proposal.downloadCta}
-      />
+      {/* ── Download CTA ── only when there's a document to download. A
+          proposal still awaiting its PDF (e.g. a freshly-opened engagement)
+          renders its narrative sections without a dead "Download" button. */}
+      {proposal.pdfFilename && (
+        <DownloadSection
+          onDownload={onDownload}
+          attachments={
+            // Hide attachments already surfaced in the Initiative section so
+            // the same gameplan/document doesn't get a button in two places.
+            sections.initiative?.attachmentId
+              ? proposal.attachments?.filter(
+                  (a) => a.id !== sections.initiative!.attachmentId
+                )
+              : proposal.attachments
+          }
+          cta={proposal.downloadCta}
+        />
+      )}
     </div>
   );
 }
