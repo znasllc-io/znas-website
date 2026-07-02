@@ -1,10 +1,10 @@
 {
   "_comment": "Active engagement with the Haven-style key-entry form. No PDF yet (document pending) — the gated page shows a 'being finalized' summary and no download button (DownloadSection is gated on pdfFilename). passwordHash gates an empty placeholder page; ROTATE it (scripts/hash-password.mjs) when the real proposal document is added, and deliver the fresh code to the client securely. Add pdfFilename + full sections then.",
-  "slug": "anequim",
-  "clientName": "Anequim",
+  "slug": "fylo",
+  "clientName": "Fylo",
   "projectTitle": "Engagement Proposal",
   "projectTitle_es": "Propuesta de Colaboración",
-  "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$qjqLzKGPVsFXMk3/YwNj/Q$CEkFSWlXWO0/xuOppVnlKdVA2tUi07ZhY9+lF6KvWK4",
+  "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$RlA68imfRV0TAoXxPBmCPQ$nAUUrIqc3D2+i0bGZTf/5TBR9NpnFZ3RNqPTA5U7JNw",
   "status": "formalized",
   "sections": {
     "summary": {

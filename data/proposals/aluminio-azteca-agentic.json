@@ -4,7 +4,8 @@
   "projectTitle": "Agentic Solutions & Consulting",
   "projectTitle_es": "Soluciones Agénticas y Consultoría",
   "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$LOwVKJjA322BkYS36K3KVQ$TSvlULMCGBGT5EfdUccmLWbxTbId55v1yJuicJ/PTpM",
-  "status": "formalized",
+  "_status_note": "Set to draft to remove from the Active list — loadAllProposals filters out drafts. The completed Aluminio entry (aluminio-azteca-video.json) is left untouched. Restore to 'formalized' to bring this back.",
+  "status": "draft",
   "summary": "Ongoing engagement: agentic AI solutions and strategic consulting across the operation.",
   "summary_es": "Compromiso en curso: soluciones de IA agéntica y consultoría estratégica en la operación."
 }
