@@ -25,6 +25,18 @@ export default function PageTransition() {
 
   const triggerExit = useCallback((href: string) => {
     if (isAnimatingRef.current) return;
+
+    // Touch devices (phones/tablets): skip the panel sweep entirely. On iOS
+    // Safari the animated cover→split can fail to paint, leaving the void
+    // panels covering the page (the page looks like it "didn't load" until a
+    // refresh). Keep the flag so the home preloader still skips, but navigate
+    // immediately — the entrance opens the panels instantly on touch too.
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      setTransitionFlag();
+      window.location.href = href;
+      return;
+    }
+
     isAnimatingRef.current = true;
 
     const top = topRef.current;
@@ -63,6 +75,16 @@ export default function PageTransition() {
     const top = topRef.current;
     const bottom = bottomRef.current;
     if (!top || !bottom) return;
+
+    // Touch devices: never run the animated cover→split entrance — it can fail
+    // to paint on iOS Safari during initial load and leave the panels covering
+    // the page. Consume the flag so it doesn't linger, then open instantly.
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      consumeTransitionFlag();
+      gsap.set(top, { yPercent: -100, force3D: true });
+      gsap.set(bottom, { yPercent: 100, force3D: true });
+      return;
+    }
 
     if (consumeTransitionFlag()) {
       // Arriving from an in-app navigation (any page, including "/"):
