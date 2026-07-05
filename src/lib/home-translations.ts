@@ -358,7 +358,7 @@ export const homeTranslations: Record<Lang, HomeStrings> = {
       aboutParagraphs: [
         "José Sanz is a Forward Deployed AI Engineer and the founder of ZNAS LLC, a Forward Deployed AI Engineering firm based in Arizona serving businesses across the United States. With 17 years of experience building production systems across healthcare, airlines, finance, and telecommunications, and AI Strategy certification from MIT Sloan, José specializes in taking AI initiatives from stuck pilot to running production system.",
         "He embeds directly with client teams to scope the real problem, build production-grade AI systems — including retrieval pipelines, agent infrastructure, and LLM integrations into existing codebases — and owns the outcome until the team can operate the system independently.",
-        "ZNAS LLC engagements serve CEOs and founders of companies with 20 to 200 employees whose AI implementations have stalled after a first vendor or consultant attempt. José is also co-founder of Visionarys and the creator of open-source engineering tools including asyncapi-codegen and MemQL.",
+        "ZNAS LLC engagements serve CEOs and founders of companies with 20 to 200 employees whose AI implementations have stalled after a first vendor or consultant attempt. José is also co-founder of Visionarys, the creator of open-source engineering tools like MemQL, and a contributor to community projects such as asyncapi-codegen.",
       ],
       tagline1: "Forward Deployed AI Engineering",
       tagline2: "United States · Remote-Ready",
@@ -614,7 +614,7 @@ export const homeTranslations: Record<Lang, HomeStrings> = {
       aboutParagraphs: [
         "José Sanz es un ingeniero de IA Forward Deployed y fundador de ZNAS LLC, una firma de ingeniería de IA Forward Deployed con base en Arizona que atiende a empresas en todo Estados Unidos. Con 17 años de experiencia construyendo sistemas de producción en salud, aerolíneas, finanzas y telecomunicaciones, y certificación en Estrategia de IA por MIT Sloan, José se especializa en llevar iniciativas de IA de piloto estancado a sistema corriendo en producción.",
         "Se integra directamente con los equipos del cliente para definir el problema real, construir sistemas de IA de grado productivo —incluyendo pipelines de recuperación, infraestructura de agentes e integraciones de LLM en bases de código existentes— y se hace cargo del resultado hasta que el equipo puede operar el sistema de forma independiente.",
-        "Los proyectos de ZNAS LLC sirven a CEOs y fundadores de empresas de 20 a 200 empleados cuyas implementaciones de IA se estancaron tras un primer intento con un proveedor o consultor. José también es cofundador de Visionarys y creador de herramientas de ingeniería open source como asyncapi-codegen y MemQL.",
+        "Los proyectos de ZNAS LLC sirven a CEOs y fundadores de empresas de 20 a 200 empleados cuyas implementaciones de IA se estancaron tras un primer intento con un proveedor o consultor. José también es cofundador de Visionarys, creador de herramientas de ingeniería open source como MemQL y colaborador en proyectos comunitarios como asyncapi-codegen.",
       ],
       tagline1: "Ingeniería de IA Forward Deployed",
       tagline2: "Estados Unidos · Listo para remoto",

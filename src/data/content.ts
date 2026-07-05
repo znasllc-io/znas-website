@@ -166,10 +166,10 @@ export const workContent = {
       challenge:
         "Distributed systems teams waste weeks hand-writing async messaging boilerplate for every new service.",
       approach:
-        "Go code generator that reads AsyncAPI specs and produces production-ready client and server code automatically.",
+        "Contribution to lerenn/asyncapi-codegen — the open-source Go code generator that reads AsyncAPI specs and produces production-ready client and server code automatically.",
       impact:
-        "Open-source tool eliminating manual boilerplate. Ships messaging infrastructure 10x faster.",
-      tags: ["Go", "AsyncAPI", "Distributed Systems", "Open Source"],
+        "Contributed improvements to the community tool that eliminates manual boilerplate and ships messaging infrastructure 10x faster.",
+      tags: ["Go", "AsyncAPI", "Distributed Systems", "OSS Contribution"],
     },
     {
       title: "t4t: Tag-based Filesystem",
