@@ -24,6 +24,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (stored === "en" || stored === "es") setLangState(stored);
   }, []);
 
+  // Keep the document language in sync for screen readers / translators —
+  // the SSR html lang="en" is otherwise wrong whenever Spanish is active.
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   const setLang = (l: Lang) => {
     setLangState(l);
     localStorage.setItem("znas-lang", l);

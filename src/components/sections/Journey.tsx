@@ -22,17 +22,23 @@ function Journey() {
     const ctx = gsap.context(() => {
       const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-      // Progress line
-      gsap.to(progressRef.current, {
-        height: "100%",
-        ease: "none",
-        scrollTrigger: {
-          trigger: timelineRef.current,
-          start: "top 60%",
-          end: "bottom 40%",
-          scrub: 0.5,
-        },
-      });
+      // Progress line — scaleY instead of height: animating height forces a
+      // layout pass on every scrubbed scroll frame; scaleY stays on the
+      // compositor. Visually identical for a 1px-wide line.
+      gsap.fromTo(
+        progressRef.current,
+        { height: "100%", scaleY: 0, transformOrigin: "top center" },
+        {
+          scaleY: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: timelineRef.current,
+            start: "top 60%",
+            end: "bottom 40%",
+            scrub: 0.5,
+          },
+        }
+      );
 
       // Nodes and cards
       const milestones = journeyContent.milestones;

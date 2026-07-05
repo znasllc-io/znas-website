@@ -68,7 +68,7 @@ export default function ContactPageClient() {
 
       <div
         style={{
-          minHeight: "100vh",
+          minHeight: "100svh",
           backgroundColor: "var(--color-bg-void)",
           display: "flex",
           flexDirection: "column",

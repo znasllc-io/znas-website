@@ -51,6 +51,8 @@ export default function CaseStudies() {
                   <img
                     src={cs.image}
                     alt={cs.title}
+                    loading="lazy"
+                    decoding="async"
                     className="transition-transform duration-500 group-hover:scale-[1.03]"
                     style={{
                       width: "100%",

@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
     const pdfsDir = path.resolve(path.join(process.cwd(), "data", "proposals", "pdfs"));
     const pdfPath = path.resolve(path.join(pdfsDir, pdfName));
 
-    if (!pdfPath.startsWith(pdfsDir)) {
+    if (!pdfPath.startsWith(pdfsDir + path.sep)) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401, headers: SECURITY_HEADERS }

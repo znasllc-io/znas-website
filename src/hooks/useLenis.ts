@@ -9,12 +9,15 @@ export function useLenis() {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    // Touch-first devices get native scrolling: the old width gate
+    // (<=768px) let landscape iPhones and iPads run Lenis + a permanent
+    // gsap.ticker rAF loop. Pointer type, not width, is what matters.
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (isMobile || prefersReducedMotion) return;
+    if (isTouchDevice || prefersReducedMotion) return;
 
     const lenis = new Lenis({
       lerp: 0.08,

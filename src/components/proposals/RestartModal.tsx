@@ -117,7 +117,9 @@ export default function RestartModal({
           maxWidth: "520px",
           background: "var(--color-bg-void)",
           border: "1px solid var(--color-accent)",
-          borderRadius: "9999px",
+          // 9999px rendered the dialog as a giant pill with the close
+          // button floating outside the curve — clearly unintended.
+          borderRadius: "18px",
           padding: "2rem 1.75rem 1.75rem",
           position: "relative",
         }}

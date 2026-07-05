@@ -90,19 +90,23 @@ function memCheck(key: string, max: number, windowMs: number): { allowed: boolea
 }
 
 /**
- * Extract the client IP from proxy headers. This assumes deployment
- * behind a trusted proxy (Vercel, Cloudflare, nginx, Cloud Run front-end)
- * that populates X-Forwarded-For with the real source IP at the left.
+ * Extract the client IP from proxy headers.
+ *
+ * This deploys behind Cloud Run: Google's front end APPENDS the real
+ * client IP to whatever X-Forwarded-For the client sent, so the
+ * trustworthy value is the LAST entry. Taking the first entry (the old
+ * behavior) let an attacker send their own X-Forwarded-For and rotate
+ * per-IP rate-limit buckets at will.
  *
  * If the server is ever exposed directly to the internet, this MUST be
- * replaced with the connection-level remote address — otherwise
- * attackers can spoof X-Forwarded-For to bypass per-IP rate limiting.
+ * replaced with the connection-level remote address.
  */
 export function getClientIp(request: NextRequest): string {
   const fwd = request.headers.get("x-forwarded-for");
   if (fwd) {
-    const first = fwd.split(",")[0]?.trim();
-    if (first) return first;
+    const parts = fwd.split(",").map((p) => p.trim()).filter(Boolean);
+    const last = parts[parts.length - 1];
+    if (last) return last;
   }
   const real = request.headers.get("x-real-ip");
   if (real) return real.trim();
