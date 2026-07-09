@@ -92,6 +92,20 @@ export interface ProposalDownloadCta {
   subtitle?: string;
 }
 
+/**
+ * "Supporting Documents" section. A grid of document cards, each with a title,
+ * short description, and a "View Document" button that downloads a gated PDF
+ * via attachmentId (must reference an entry in proposal.attachments[]). Used
+ * for proposals whose deliverable is a set of documents rather than a single
+ * main PDF (e.g. an engagement position + a value estimate).
+ */
+export interface ProposalDocCard {
+  title: string;
+  description: string;
+  // References proposal.attachments[i].id — the gated download for this card.
+  attachmentId: string;
+}
+
 export interface ProposalSections {
   summary: {
     headline: string;
@@ -100,6 +114,8 @@ export interface ProposalSections {
     // Optional now: lean proposals can omit the highlights grid entirely.
     highlights?: string[];
   };
+  // Optional. Renders right after Summary as a grid of document cards.
+  supportingDocuments?: ProposalDocCard[];
   // Long-form phase-by-phase roadmap. Optional: lean proposals can use
   // `howItWorks` instead, or omit work-structure detail entirely (and
   // let it live in the PDF).

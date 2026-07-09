@@ -46,7 +46,8 @@ export interface ProposalListStrings {
 export interface ProposalViewerStrings {
   label: string;
   preparedFor: string;
-  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string };
+  viewDocument: string;
+  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string };
   download: {
     headline: string;
     subtitle: string;
@@ -357,6 +358,7 @@ export const translations: Record<Lang, LangStrings> = {
       viewer: {
         label: "Proposal",
         preparedFor: "Prepared for",
+        viewDocument: "View Document",
         sections: {
           executiveSummary: "Executive Summary",
           roadmap: "Roadmap",
@@ -366,6 +368,7 @@ export const translations: Record<Lang, LangStrings> = {
           team: "Meet the Team",
           initiative: "Initiative",
           realEstateAgent: "Real Estate Agent",
+          documents: "Supporting Documents",
         },
         download: {
           headline: "Ready to move forward?",
@@ -626,6 +629,7 @@ export const translations: Record<Lang, LangStrings> = {
       viewer: {
         label: "Propuesta",
         preparedFor: "Preparado para",
+        viewDocument: "Ver Documento",
         sections: {
           executiveSummary: "Resumen Ejecutivo",
           roadmap: "Hoja de Ruta",
@@ -635,6 +639,7 @@ export const translations: Record<Lang, LangStrings> = {
           team: "El Equipo",
           initiative: "Iniciativa",
           realEstateAgent: "Agente de Bienes Raíces",
+          documents: "Documentos de Apoyo",
         },
         download: {
           headline: "¿Listo para avanzar?",
