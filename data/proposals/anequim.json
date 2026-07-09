@@ -1,21 +1,60 @@
 {
-  "_comment": "Active engagement with the Haven-style key-entry form. No PDF yet (document pending) — the gated page shows a 'being finalized' summary and no download button (DownloadSection is gated on pdfFilename). passwordHash gates an empty placeholder page; ROTATE it (scripts/hash-password.mjs) when the real proposal document is added, and deliver the fresh code to the client securely. Add pdfFilename + full sections then.",
+  "_comment": "Active engagement (Haven-style key-entry form). Deliverable is two supporting documents (engagement position + value estimate) surfaced as cards via the supportingDocuments section — no single main PDF, so the bottom Download CTA stays hidden. passwordHash currently gates real content; ROTATE it (scripts/hash-password.mjs) and deliver the fresh code to the client securely before sharing.",
   "slug": "anequim",
   "clientName": "Anequim",
-  "projectTitle": "Engagement Proposal",
-  "projectTitle_es": "Propuesta de Colaboración",
+  "projectTitle": "Anequim One — Client Portal",
+  "projectTitle_es": "Anequim One — Portal para Clientes",
   "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$qjqLzKGPVsFXMk3/YwNj/Q$CEkFSWlXWO0/xuOppVnlKdVA2tUi07ZhY9+lF6KvWK4",
   "status": "formalized",
+  "demoFilename": "anequim.html",
+  "attachments": [
+    {
+      "id": "engagement-position",
+      "filename": "anequim-engagement-position.pdf",
+      "label": "View Document",
+      "label_es": "Ver Documento"
+    },
+    {
+      "id": "value-estimate",
+      "filename": "anequim-value-estimate.pdf",
+      "label": "View Document",
+      "label_es": "Ver Documento"
+    }
+  ],
   "sections": {
     "summary": {
-      "headline": "Your proposal is being finalized.",
-      "body": "Thanks for your interest in working with ZNAS. The full proposal for this engagement is being prepared and will be available here shortly. You'll be notified as soon as it's ready to review."
-    }
+      "headline": "A client-facing portal — the product at the center of Anequim's move into AI.",
+      "body": "Anequim is bringing AI-driven service to property management with Anequim One — and at the center of that shift is a client-facing portal, built by ZNAS specifically for Anequim's property manager clients.\n\nWhile Kindred's platform powers the AI voice technology behind the scenes, the ZNAS portal is what Anequim's customers actually see and use: a dedicated console where property managers can view and manage what's happening across their properties. It's the interface that makes Anequim's move into AI tangible — a differentiated product, not just a service layer.\n\nBuilt on MemQL, ZNAS's production-grade AI platform, the portal integrates with Kindred and Zoho, with the full feature set defined collaboratively as discovery progresses. It's backed by ongoing GTM strategy, marketing production, and direct technical consulting from José Sanz, Forward Deployed AI Engineer.\n\nZNAS is also proposing a structure where Anequim builds real equity in the portal through the engagement itself — turning this from a service relationship into an ownable technology asset.\n\nThe two documents below lay out the full terms of the engagement and an independent estimate of the portal's value as an IP asset."
+    },
+    "supportingDocuments": [
+      {
+        "title": "Anequim × ZNAS — Engagement Position",
+        "description": "Full position on the terms of the engagement: scope of work, payment structure, portal ownership model, confidentiality, termination, and data processing — the starting point for the final PSA.",
+        "attachmentId": "engagement-position"
+      },
+      {
+        "title": "Anequim One Portal — Value Estimate",
+        "description": "An independent estimate of the portal's market value as an IP asset ($200K–$350K), triangulated across replacement cost, comparable licensing, and strategic enterprise value using 2026 industry benchmarks.",
+        "attachmentId": "value-estimate"
+      }
+    ]
   },
   "sections_es": {
     "summary": {
-      "headline": "Tu propuesta se está finalizando.",
-      "body": "Gracias por tu interés en trabajar con ZNAS. La propuesta completa para este proyecto se está preparando y estará disponible aquí en breve. Te avisaremos en cuanto esté lista para revisar."
-    }
+      "headline": "Un portal para tus clientes — el producto en el centro del salto de Anequim hacia la IA.",
+      "body": "Anequim está llevando el servicio impulsado por IA a la administración de propiedades con Anequim One — y en el centro de ese cambio está un portal para clientes, construido por ZNAS específicamente para los administradores de propiedades de Anequim.\n\nMientras la plataforma de Kindred impulsa la tecnología de voz con IA tras bambalinas, el portal de ZNAS es lo que los clientes de Anequim realmente ven y usan: una consola dedicada donde los administradores pueden ver y gestionar lo que ocurre en sus propiedades. Es la interfaz que vuelve tangible el salto de Anequim hacia la IA — un producto diferenciado, no solo una capa de servicio.\n\nConstruido sobre MemQL, la plataforma de IA de nivel producción de ZNAS, el portal se integra con Kindred y Zoho, con el conjunto completo de funciones definido en colaboración a medida que avanza el descubrimiento. Está respaldado por estrategia GTM continua, producción de marketing y consultoría técnica directa de José Sanz, Ingeniero de IA Forward Deployed.\n\nZNAS también propone una estructura donde Anequim construye patrimonio real en el portal a través del propio proyecto — convirtiendo esto de una relación de servicio en un activo tecnológico propio.\n\nLos dos documentos a continuación detallan los términos completos del acuerdo y una estimación independiente del valor del portal como activo de propiedad intelectual."
+    },
+    "supportingDocuments": [
+      {
+        "title": "Anequim × ZNAS — Posición del Acuerdo",
+        "description": "Posición completa sobre los términos del acuerdo: alcance del trabajo, estructura de pago, modelo de propiedad del portal, confidencialidad, terminación y procesamiento de datos — el punto de partida para el PSA final.",
+        "attachmentId": "engagement-position"
+      },
+      {
+        "title": "Portal Anequim One — Estimación de Valor",
+        "description": "Una estimación independiente del valor de mercado del portal como activo de propiedad intelectual ($200K–$350K), triangulada entre costo de reemplazo, licenciamiento comparable y valor estratégico empresarial usando referencias de la industria de 2026.",
+        "attachmentId": "value-estimate"
+      }
+    ]
   }
 }

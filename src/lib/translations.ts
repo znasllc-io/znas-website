@@ -46,7 +46,11 @@ export interface ProposalListStrings {
 export interface ProposalViewerStrings {
   label: string;
   preparedFor: string;
-  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string };
+  viewDocument: string;
+  tryNow: string;
+  tryNowHint: string;
+  tryNowLoading: string;
+  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string };
   download: {
     headline: string;
     subtitle: string;
@@ -357,6 +361,10 @@ export const translations: Record<Lang, LangStrings> = {
       viewer: {
         label: "Proposal",
         preparedFor: "Prepared for",
+        viewDocument: "View Document",
+        tryNow: "Try Now",
+        tryNowHint: "Launch a live, interactive preview of the portal — it runs right here on the page.",
+        tryNowLoading: "Loading your new portal…",
         sections: {
           executiveSummary: "Executive Summary",
           roadmap: "Roadmap",
@@ -366,6 +374,8 @@ export const translations: Record<Lang, LangStrings> = {
           team: "Meet the Team",
           initiative: "Initiative",
           realEstateAgent: "Real Estate Agent",
+          documents: "Supporting Documents",
+          tryNow: "Try It Now",
         },
         download: {
           headline: "Ready to move forward?",
@@ -626,6 +636,10 @@ export const translations: Record<Lang, LangStrings> = {
       viewer: {
         label: "Propuesta",
         preparedFor: "Preparado para",
+        viewDocument: "Ver Documento",
+        tryNow: "Probar Ahora",
+        tryNowHint: "Abre una vista previa interactiva del portal — funciona aquí mismo en la página.",
+        tryNowLoading: "Cargando tu nuevo portal…",
         sections: {
           executiveSummary: "Resumen Ejecutivo",
           roadmap: "Hoja de Ruta",
@@ -635,6 +649,8 @@ export const translations: Record<Lang, LangStrings> = {
           team: "El Equipo",
           initiative: "Iniciativa",
           realEstateAgent: "Agente de Bienes Raíces",
+          documents: "Documentos de Apoyo",
+          tryNow: "Pruébalo",
         },
         download: {
           headline: "¿Listo para avanzar?",

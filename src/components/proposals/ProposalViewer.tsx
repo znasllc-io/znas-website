@@ -3,6 +3,8 @@
 import { useEffect, useRef, Fragment } from "react";
 import { gsap } from "@/lib/gsap-config";
 import type { SafeProposal, ProposalAttachment, ProposalTeamMember } from "@/lib/proposals";
+import SupportingDocumentsSection from "./SupportingDocuments";
+import TryNowSection from "./TryNow";
 import SectionLabel from "@/components/ui/SectionLabel";
 import RoadmapTimeline from "./RoadmapTimeline";
 import InvestmentCards from "./InvestmentCards";
@@ -141,6 +143,19 @@ export default function ProposalViewer({
               body={sections.summary.body}
               highlights={sections.summary.highlights}
             />
+
+            {sections.supportingDocuments && (
+              <SupportingDocumentsSection
+                number={nextNumber()}
+                docs={sections.supportingDocuments}
+                onDownload={onDownload}
+                lang={lang}
+              />
+            )}
+
+            {proposal.demoFilename && (
+              <TryNowSection number={nextNumber()} slug={proposal.slug} lang={lang} />
+            )}
 
             {sections.roadmap && (
               <RoadmapSection
