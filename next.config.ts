@@ -1,18 +1,16 @@
 import type { NextConfig } from "next";
 
 /**
- * Content-Security-Policy. Shipped in Report-Only mode first (see H2
- * follow-up) so any violation from Next.js internals or future component
- * changes shows up in browser consoles / report endpoints without breaking
- * the page. Promote to the enforcing `Content-Security-Policy` header
- * after 48 hours of clean observation in production.
+ * Content-Security-Policy — Report-Only, and it MUST stay Report-Only in
+ * this form: Next.js App Router emits inline bootstrap scripts on every
+ * page, which violate script-src 'self'. Promoting this header to
+ * enforcing as-is would blank the entire site. The path to enforcement is
+ * nonce-based CSP via middleware (per-request nonce on script-src), not a
+ * waiting period.
  *
- * Allowlisted external origins (verified against the codebase — grep for
- * https:// returns only these):
- *   - api.fontshare.com, cdn.fontshare.com — Fontshare webfonts (Clash
- *     Display + General Sans, imported in globals.css).
- *   - fonts.googleapis.com, fonts.gstatic.com — Google Fonts (JetBrains
- *     Mono, imported in globals.css).
+ * No external origins: fonts are self-hosted under /public/fonts (was
+ * Fontshare + Google Fonts via CSS @import — removed for performance),
+ * so every directive is 'self'.
  *
  * script-src is intentionally 'self' with no 'unsafe-inline'. Next.js
  * App Router may emit small inline scripts (hydration preamble). If
@@ -23,8 +21,8 @@ import type { NextConfig } from "next";
 const CSP = [
   "default-src 'self'",
   "script-src 'self'",
-  "style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com",
-  "font-src 'self' data: https://cdn.fontshare.com https://fonts.gstatic.com",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data:",
   "img-src 'self' data:",
   "connect-src 'self'",
   "frame-ancestors 'none'",
@@ -100,15 +98,32 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Disable bfcache on home so the Preloader always mounts fresh
-        // when users navigate back from /engagements. Without this, bfcache
-        // restores Home's cached DOM in a pre-useEffect state (panels
-        // covering, "000" counter visible) and the preloader never plays.
-        source: '/',
+        // Self-hosted fonts never change in place (a new font gets a new
+        // filename), so let browsers cache them for a year.
+        source: '/fonts/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
+      {
+        // Static media: cache for a day, serve stale while revalidating for
+        // a week. Not immutable — these files keep their names if replaced.
+        source: '/:dir(images|videos)/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
+        ],
+      },
+      {
+        source: '/logo.png',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
+        ],
+      },
+      // NOTE: the old `Cache-Control: no-store` on '/' (a workaround for the
+      // preloader freezing on bfcache restores) is intentionally gone. The
+      // pageshow/persisted guards in HomePreloader and PageTransition reset
+      // any frozen overlay state, and killing bfcache made every back-tap a
+      // full network reload — the opposite of fast.
     ];
   },
 };

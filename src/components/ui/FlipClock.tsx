@@ -23,6 +23,10 @@ export default function FlipClock({
   const isFlippingRef = useRef(false);
   const delayedCallRef = useRef<gsap.core.Tween | null>(null);
   const activeTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  // Offscreen guard: the clock cycles forever, so pause the scheduler while
+  // it isn't visible (kept in a ref so the IO callback and the scheduling
+  // chain agree without re-renders).
+  const isVisibleRef = useRef(true);
 
   /**
    * Build DOM for a title using DocumentFragment (single reflow).
@@ -191,7 +195,9 @@ export default function FlipClock({
         delayedCallRef.current = null;
         if (!paused) scheduleNext();
       });
+      if (!isVisibleRef.current) delayedCallRef.current.pause();
     });
+    if (!isVisibleRef.current) delayedCallRef.current.pause();
   }, [intervalMs, titles, flipTo, staggerMs, paused, killScheduled]);
 
   useEffect(() => {
@@ -213,12 +219,27 @@ export default function FlipClock({
     };
   }, [titles, paused, buildTitle, scheduleNext, killScheduled, killActiveTimeline]);
 
+  // Pause the cycle while scrolled out of view; resume where it left off on
+  // re-entry. Identical visuals, no wasted work while offscreen.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const io = new IntersectionObserver(([entry]) => {
+      isVisibleRef.current = entry.isIntersecting;
+      if (entry.isIntersecting) delayedCallRef.current?.resume();
+      else delayedCallRef.current?.pause();
+    });
+    io.observe(container);
+    return () => io.disconnect();
+  }, []);
+
+  // SSR renders the first title as plain text (real h1 content for search
+  // engines and pre-hydration paint); buildTitle swaps in the char spans on
+  // mount. No aria-live: announcing every 2s cycle was pure screen-reader
+  // noise — the text is still readable on demand.
   return (
-    <span
-      ref={containerRef}
-      className={className}
-      aria-live="polite"
-      aria-atomic="true"
-    />
+    <span ref={containerRef} className={className}>
+      {titles[0]}
+    </span>
   );
 }

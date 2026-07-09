@@ -44,19 +44,19 @@
       "name": "José Sanz",
       "tagline": "17+ years building production-scale systems across enterprise environments. Founder of ZNAS LLC and co-founder of Visionarys. Previously a lead engineer at a large-scale enterprise language services platform, driving technical architecture across a five-year tenure. Holds an MIT Certification in AI Business Strategy and has presented on AI adoption at a developer-focused workshop series.",
       "caption": "José leads every engagement directly. Clients work with him, not a team that reports to him.",
-      "photo": "/images/jose-sanz.png",
+      "photo": "/images/jose-sanz.webp",
       "members": [
         {
           "name": "María José Zepeda",
           "tagline": "Leads operations at Visionarys and supports ZNAS engagements on the coordination and client-facing side. Keeps projects organized, communication clear, and deliverables on schedule.",
           "caption": "Majo makes sure nothing falls through the cracks — handling the day-to-day coordination that lets José focus on the work itself.",
-          "photo": "/images/maria-zepeda.png"
+          "photo": "/images/maria-zepeda.webp"
         },
         {
           "name": "Jesús Mendivil",
           "tagline": "Handles technical execution across ZNAS engagements. Works across cloud infrastructure, IT administration, and AI tooling — building and maintaining the systems that keep operations running.",
           "caption": "Jesús is the person who makes things work. From GCP deployments to device management and automation, he takes ownership of the technical side so engagements don't stall.",
-          "photo": "/images/jesus-mendivil.png"
+          "photo": "/images/jesus-mendivil.webp"
         }
       ]
     },

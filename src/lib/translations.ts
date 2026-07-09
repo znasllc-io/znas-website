@@ -283,9 +283,9 @@ export const translations: Record<Lang, LangStrings> = {
           challenge:
             "Distributed systems teams waste weeks hand-writing async messaging boilerplate for every new service.",
           approach:
-            "Go code generator that reads AsyncAPI specs and produces production-ready client and server code automatically.",
+            "Contribution to lerenn/asyncapi-codegen — the open-source Go code generator that reads AsyncAPI specs and produces production-ready client and server code automatically.",
           impact:
-            "Open-source tool eliminating manual boilerplate. Ships messaging infrastructure 10x faster.",
+            "Contributed improvements to the community tool that eliminates manual boilerplate and ships messaging infrastructure 10x faster.",
         },
         {
           challenge:
@@ -558,9 +558,9 @@ export const translations: Record<Lang, LangStrings> = {
           challenge:
             "Los equipos de sistemas distribuidos pierden semanas escribiendo manualmente el boilerplate de mensajería asíncrona para cada nuevo servicio.",
           approach:
-            "Generador de código en Go que lee especificaciones AsyncAPI y produce automáticamente código de cliente y servidor listo para producción.",
+            "Contribución a lerenn/asyncapi-codegen — el generador de código open source en Go que lee especificaciones AsyncAPI y produce automáticamente código de cliente y servidor listo para producción.",
           impact:
-            "Herramienta de código abierto que elimina el boilerplate manual. Entrega infraestructura de mensajería 10x más rápido.",
+            "Contribuyó mejoras a la herramienta comunitaria que elimina el boilerplate manual y entrega infraestructura de mensajería 10x más rápido.",
         },
         {
           challenge:

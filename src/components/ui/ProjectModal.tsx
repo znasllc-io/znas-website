@@ -17,7 +17,9 @@ interface ProjectModalProps {
 
 // Map project titles to canonical URLs (GitHub repo or product website)
 const PROJECT_URLS: Record<string, string | null> = {
-  "asyncapi-codegen": "https://github.com/znas-io/asyncapi-codegen",
+  // Upstream project (José is a contributor, not the author — linking the
+  // znas-io fork gave the wrong impression of authorship)
+  "asyncapi-codegen": "https://github.com/lerenn/asyncapi-codegen",
   "t4t: Tag-based Filesystem": "https://github.com/znas-io/t4t",
   "Language Platform Infrastructure": null,
   "Airline Technology Systems": null,

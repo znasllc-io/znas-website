@@ -85,9 +85,10 @@ export default function ConstellationField({
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fine = window.matchMedia("(pointer: fine)").matches;
 
+    let pulse: gsap.core.Tween | null = null;
     const ctx = gsap.context(() => {
       if (!reduced) {
-        gsap.to(".cf-pulse", {
+        pulse = gsap.to(".cf-pulse", {
           scale: 1.3,
           transformOrigin: "center",
           duration: 2.5,
@@ -99,8 +100,29 @@ export default function ConstellationField({
       }
     }, wrap);
 
+    // Infinite tween — run it only while the field is on screen so it
+    // doesn't keep the GSAP raf loop ticking after the user scrolls past.
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) pulse?.play();
+      else pulse?.pause();
+    });
+    io.observe(wrap);
+
     let cleanupMagnetic = () => {};
     if (fine && !reduced) {
+      // Coalesce line redraws: every animating node's quickTo fires onUpdate
+      // for x AND y each tick (up to 20 calls/frame), and each updateLines()
+      // rewrites all 56 SVG attributes. One redraw per frame is enough.
+      let linesDirty = false;
+      const scheduleLineUpdate = () => {
+        if (linesDirty) return;
+        linesDirty = true;
+        requestAnimationFrame(() => {
+          linesDirty = false;
+          updateLines();
+        });
+      };
+
       NODES.forEach((n) => offsets.current.set(n.id, { x: 0, y: 0 }));
       const quickTos = new Map<
         string,
@@ -116,7 +138,7 @@ export default function ConstellationField({
             onUpdate: () => {
               const o = offsets.current.get(node.id);
               if (o) o.x = gsap.getProperty(el, "x") as number;
-              updateLines();
+              scheduleLineUpdate();
             },
           }),
           y: gsap.quickTo(el, "y", {
@@ -125,7 +147,7 @@ export default function ConstellationField({
             onUpdate: () => {
               const o = offsets.current.get(node.id);
               if (o) o.y = gsap.getProperty(el, "y") as number;
-              updateLines();
+              scheduleLineUpdate();
             },
           }),
         });
@@ -171,6 +193,7 @@ export default function ConstellationField({
     }
 
     return () => {
+      io.disconnect();
       cleanupMagnetic();
       ctx.revert();
     };
@@ -225,7 +248,6 @@ export default function ConstellationField({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              willChange: "transform",
             }}
           >
             <div

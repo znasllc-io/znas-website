@@ -30,22 +30,33 @@ export default function HomePreloader() {
   const [shouldPlay, setShouldPlay] = useState<boolean | null>(null);
 
   useEffect(() => {
+    const navEntry = performance.getEntriesByType("navigation")[0] as
+      | PerformanceNavigationTiming
+      | undefined;
     if (
       hasPlayedThisLoad ||
       // Arriving via an in-app transition: PageTransition plays the
       // entrance sweep instead — never stack both covers.
       consumeTransitionFlag() ||
+      // Browser back/forward to home: the user has already seen the site
+      // this session — don't make them sit through the loader again.
+      navEntry?.type === "back_forward" ||
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ) {
       setShouldPlay(false);
       return;
     }
-    hasPlayedThisLoad = true;
     setShouldPlay(true);
   }, []);
 
   useEffect(() => {
     if (!shouldPlay) return;
+
+    // Claim the per-load flag here (playback actually starting), not in the
+    // decision effect above: under React Strict Mode's dev double-invoke the
+    // decision effect runs twice, and claiming there made the second pass
+    // skip the preloader entirely — dev never matched prod.
+    hasPlayedThisLoad = true;
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -166,8 +177,12 @@ export default function HomePreloader() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            background: "radial-gradient(circle, rgba(46, 134, 247, 0.22) 0%, transparent 70%)",
-            filter: "blur(40px)",
+            // Soft gradient only — no filter:blur. A blurred layer here made
+            // iOS Safari composite an extra GPU buffer during first paint,
+            // exactly when the phone is busiest; the gradient alone reads
+            // identically.
+            background:
+              "radial-gradient(circle, rgba(46, 134, 247, 0.2) 0%, rgba(46, 134, 247, 0.08) 45%, transparent 72%)",
             opacity: 0,
             pointerEvents: "none",
           }}

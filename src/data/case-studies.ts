@@ -22,7 +22,7 @@ export const caseStudies: Record<Lang, CaseStudyContent[]> = {
       subtitle:
         "Vision AI that enforces compliance and surfaces lost productivity without adding headcount",
       body: "Manual monitoring couldn't keep up with safety compliance on an active production floor, PPE violations went unnoticed, idle equipment quietly eroded productivity. I built a GPU-accelerated computer vision system wired into their existing camera infrastructure. It detects safety violations in real time, flags idle equipment, and turns hours of footage into searchable intelligence, without adding a single person to the monitoring team.",
-      image: "/images/home/manufacturing-vision-ai.jpg",
+      image: "/images/home/manufacturing-vision-ai.webp",
       imageAlt: "Security camera monitoring a production floor",
       results: [
         "Real-time PPE compliance detection across warehouse and corporate office",
@@ -54,7 +54,7 @@ export const caseStudies: Record<Lang, CaseStudyContent[]> = {
       subtitle:
         "One AI system handling inquiries, lead capture, and security monitoring around the clock",
       body: "A technology-first automaker scaling aggressively in Mexico needed a dealership experience that matched the brand, modern customer engagement and always-on premises security, delivered as one integrated system. I built a bilingual AI avatar and voice agent that handles inquiries and captures leads directly into the sales pipeline. In parallel, I connected existing security cameras to AI for intelligent monitoring and automated weekly reporting.",
-      image: "/images/home/case-automotive.png",
+      image: "/images/home/case-automotive.webp",
       imageAlt: "AI assistant workstation with security camera dashboard",
       results: [
         "Bilingual customer service running 24/7, Spanish and English",
@@ -94,7 +94,7 @@ export const caseStudies: Record<Lang, CaseStudyContent[]> = {
       subtitle:
         "IA de visión que hace cumplir las normas y revela productividad perdida sin sumar personal",
       body: "El monitoreo manual no daba abasto con el cumplimiento de seguridad en una planta de producción activa: las violaciones de EPP pasaban desapercibidas y los equipos inactivos erosionaban la productividad en silencio. Construí un sistema de visión computacional acelerado por GPU, conectado a su infraestructura de cámaras existente. Detecta violaciones de seguridad en tiempo real, señala equipos inactivos y convierte horas de video en inteligencia consultable, sin sumar una sola persona al equipo de monitoreo.",
-      image: "/images/home/manufacturing-vision-ai.jpg",
+      image: "/images/home/manufacturing-vision-ai.webp",
       imageAlt: "Cámara de seguridad monitoreando una planta de producción",
       results: [
         "Detección de cumplimiento de EPP en tiempo real en almacén y oficinas corporativas",
@@ -126,7 +126,7 @@ export const caseStudies: Record<Lang, CaseStudyContent[]> = {
       subtitle:
         "Un solo sistema de IA atendiendo consultas, capturando leads y monitoreando la seguridad todo el día",
       body: "Una automotriz technology-first en plena expansión en México necesitaba una experiencia de agencia a la altura de la marca: atención al cliente moderna y seguridad permanente del recinto, entregadas como un solo sistema integrado. Construí un avatar de IA bilingüe y un agente de voz que atiende consultas y captura leads directamente en el pipeline de ventas. En paralelo, conecté las cámaras de seguridad existentes a la IA para monitoreo inteligente y reportes semanales automáticos.",
-      image: "/images/home/case-automotive.png",
+      image: "/images/home/case-automotive.webp",
       imageAlt: "Estación de trabajo con asistente de IA y panel de cámaras de seguridad",
       results: [
         "Atención al cliente bilingüe 24/7, en español e inglés",

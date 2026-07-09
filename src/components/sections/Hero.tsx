@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { gsap, SplitText } from "@/lib/gsap-config";
+import { gsap, SplitText, ScrollTrigger } from "@/lib/gsap-config";
 import FlipClock from "@/components/ui/FlipClock";
 import OwlMark from "@/components/shared/OwlMark";
 import { siteConfig } from "@/data/content";
@@ -99,7 +99,26 @@ export default function Hero({ preloaderDone }: HeroProps) {
     // so the user sees Hero mid-animation when the panels slide off — no
     // "black flash" gap between preloader finishing and Hero appearing.
 
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     const ctx = gsap.context(() => {
+      // GSAP owns visibility from here — disarm the CSS reveal-rescue
+      // failsafe so its `forwards` fill can't fight the scrub tweens.
+      sectionRef.current
+        ?.querySelectorAll<HTMLElement>(".fouc-guard")
+        .forEach((el) => {
+          el.style.animation = "none";
+        });
+
+      // Reduced motion: skip the choreography entirely — show everything
+      // in its final state immediately.
+      if (reduced) {
+        gsap.set([".hero-diagram", ".hero-content"], { opacity: 1 });
+        gsap.set([logoTextRef.current, flipClockRef.current], { opacity: 1 });
+        setFlipClockActive(true);
+        return;
+      }
+
       // SplitText setup
       const splits: InstanceType<typeof SplitText>[] = [];
       [line1Ref].forEach((ref) => {
@@ -191,6 +210,18 @@ export default function Hero({ preloaderDone }: HeroProps) {
         delay: tl.duration() + 0.5,
       });
 
+      // The pulse is infinite — pause it while the hero is scrolled out of
+      // view so it doesn't tick the GSAP raf loop for the whole session.
+      if (sectionRef.current) {
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          onLeave: () => pulseTweenRef.current?.pause(),
+          onEnterBack: () => pulseTweenRef.current?.play(),
+        });
+      }
+
       // 7. Enable flip clock after entry animation completes
       tl.call(() => setFlipClockActive(true));
 
@@ -258,6 +289,19 @@ export default function Hero({ preloaderDone }: HeroProps) {
       nodeOffsetsRef.current.set(node.id, { x: 0, y: 0 });
     });
 
+    // Coalesce line redraws to one per frame: every animating node fires
+    // onUpdate for x AND y each tick (up to 20 calls/frame) and each
+    // updateLines() rewrites all 56 SVG attributes.
+    let linesDirty = false;
+    const scheduleLineUpdate = () => {
+      if (linesDirty) return;
+      linesDirty = true;
+      requestAnimationFrame(() => {
+        linesDirty = false;
+        updateLines();
+      });
+    };
+
     // Setup quickTo for each node — with onUpdate to track offsets and update lines
     const quickTos = new Map<string, { x: ReturnType<typeof gsap.quickTo>; y: ReturnType<typeof gsap.quickTo> }>();
 
@@ -272,7 +316,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
             const transform = gsap.getProperty(el, "x") as number;
             const offset = nodeOffsetsRef.current.get(node.id);
             if (offset) offset.x = transform;
-            updateLines();
+            scheduleLineUpdate();
           },
         }),
         y: gsap.quickTo(el, "y", {
@@ -282,7 +326,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
             const transform = gsap.getProperty(el, "y") as number;
             const offset = nodeOffsetsRef.current.get(node.id);
             if (offset) offset.y = transform;
-            updateLines();
+            scheduleLineUpdate();
           },
         }),
       });
@@ -344,7 +388,11 @@ export default function Hero({ preloaderDone }: HeroProps) {
         minHeight: "100svh",
       }}
     >
-      {/* Ambient glow — static (animation removed to eliminate compositor stutter) */}
+      {/* Ambient glow — static (animation removed to eliminate compositor
+          stutter). Plain radial gradient, no filter: blur(80px) on a
+          60vw×60vh element forced iOS Safari to keep a huge offscreen GPU
+          buffer alive; the gradient is already soft, so the blur was
+          visually redundant. */}
       <div
         className="absolute pointer-events-none"
         style={{
@@ -353,13 +401,15 @@ export default function Hero({ preloaderDone }: HeroProps) {
           left: "20%",
           top: "10%",
           background:
-            "radial-gradient(circle, rgba(79,156,247,0.04) 0%, transparent 70%)",
-          filter: "blur(80px)",
+            "radial-gradient(ellipse 55% 55% at 50% 50%, rgba(79,156,247,0.045) 0%, rgba(79,156,247,0.02) 45%, transparent 72%)",
         }}
       />
 
-      {/* Architecture diagram wrapper for parallax */}
-      <div ref={diagramRef} className="hero-diagram absolute inset-0" style={{ willChange: "transform", opacity: 0, zIndex: 2 }}>
+      {/* Architecture diagram wrapper for parallax. No static will-change:
+          GSAP promotes layers while tweens run; a permanent full-viewport
+          composited layer just burns GPU memory on iOS. fouc-guard = CSS
+          failsafe reveal if JS never runs. */}
+      <div ref={diagramRef} className="hero-diagram fouc-guard absolute inset-0" style={{ opacity: 0, zIndex: 2 }}>
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
         style={{ zIndex: 1 }}
@@ -408,7 +458,6 @@ export default function Hero({ preloaderDone }: HeroProps) {
                 top: `${node.y}%`,
                 transform: "translate(-50%, -50%)",
                 zIndex: isHovered ? 10 : 1,
-                willChange: "transform",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -448,13 +497,13 @@ export default function Hero({ preloaderDone }: HeroProps) {
       {/* end hero-diagram */}
 
       {/* Hero content */}
-      <div className="hero-content container relative pb-16 md:pb-24" style={{ zIndex: 5, willChange: "transform", opacity: 0 }}>
+      <div className="hero-content fouc-guard container relative pb-16 md:pb-24" style={{ zIndex: 5, opacity: 0 }}>
         {/* Logo lockup */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "fit-content" }}>
           <OwlMark ref={logoRef} className="logo-img logo-hero" />
           <span
             ref={logoTextRef}
-            className="logo-lockup-text logo-lockup-text--hero"
+            className="logo-lockup-text logo-lockup-text--hero fouc-guard"
             style={{ opacity: 0 }}
           >
             {siteConfig.name} LLC
@@ -480,7 +529,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
 
         <h1 className="text-hero-inline">
           <span ref={line1Ref} style={{ verticalAlign: "baseline" }}>Freelance</span>{" "}
-          <span ref={flipClockRef} style={{ opacity: 0, verticalAlign: "baseline" }}>
+          <span ref={flipClockRef} className="fouc-guard" style={{ opacity: 0, verticalAlign: "baseline" }}>
             <FlipClock
               titles={t.hero.cyclingTitles}
               intervalMs={2000}

@@ -92,6 +92,8 @@ export default function CaseStudyPage({ slug }: { slug: string }) {
             <img
               src={data.image}
               alt={data.imageAlt}
+              loading="lazy"
+              decoding="async"
               style={{
                 width: "100%",
                 borderRadius: "10px",

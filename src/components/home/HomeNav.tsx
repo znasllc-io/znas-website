@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import TransitionLink from "@/components/layout/TransitionLink";
 import BrandLockup from "@/components/layout/BrandLockup";
 import { useLanguage } from "@/lib/language";
@@ -12,9 +13,20 @@ import { homeTranslations } from "@/lib/home-translations";
 export default function HomeNav() {
   const { lang, toggle: toggleLang } = useLanguage();
   const t = homeTranslations[lang];
+  // backdrop-filter only once content can actually scroll behind the bar —
+  // an always-on blur makes iOS re-sample the backdrop every frame while
+  // scrolling. At the top the near-opaque black bg reads identically.
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <nav className="fde-nav">
+    <nav className={`fde-nav${scrolled ? " is-scrolled" : ""}`}>
       <TransitionLink href="/" className="fde-nav-brand">
         <BrandLockup full />
       </TransitionLink>

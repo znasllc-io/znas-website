@@ -55,7 +55,7 @@ export default function ProductPage({ product }: { product: "memql" | "copresent
           <div className="flex items-center justify-center" style={{ marginTop: "2.8rem" }}>
             {product === "memql" ? (
               <img
-                src="/images/home/memql-wordmark.png"
+                src="/images/home/memql-wordmark.webp"
                 alt="MemQL"
                 style={{ height: "clamp(90px, 16vw, 160px)", width: "auto" }}
               />

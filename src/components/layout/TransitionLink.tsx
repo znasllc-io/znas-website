@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { navigateWithTransition } from "@/lib/transition-nav";
 
 interface TransitionLinkProps
@@ -10,8 +11,9 @@ interface TransitionLinkProps
 
 /**
  * Cross-page link that plays the panel-sweep exit before navigating.
- * Same-page hash links fall through to normal anchor behavior (Lenis
- * handles the smooth scroll), so #contact on the homepage never sweeps.
+ * Built on next/link so destinations are prefetched when the link scrolls
+ * into view — the actual navigation is a client-side route change and feels
+ * instant. Same-page hash links smooth-scroll in place (no route change).
  */
 export default function TransitionLink({ href, children, onClick, ...rest }: TransitionLinkProps) {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -22,15 +24,20 @@ export default function TransitionLink({ href, children, onClick, ...rest }: Tra
 
     const url = new URL(href, window.location.href);
     const samePage = url.pathname === window.location.pathname;
-    if (samePage && url.hash) return; // plain anchor scroll
+    if (samePage && url.hash) {
+      // In-page anchor: scroll smoothly, no transition sweep.
+      e.preventDefault();
+      document.querySelector(url.hash)?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
 
     e.preventDefault();
     navigateWithTransition(href);
   };
 
   return (
-    <a href={href} onClick={handleClick} {...rest}>
+    <Link href={href} onClick={handleClick} {...rest}>
       {children}
-    </a>
+    </Link>
   );
 }

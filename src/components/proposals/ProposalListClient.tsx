@@ -56,14 +56,21 @@ function Countdown({
   prefix: string;
 }) {
   const targetMs = useMemo(() => new Date(target).getTime(), [target]);
-  const [now, setNow] = useState(() => Date.now());
+  // null until mounted: the page is statically prerendered, so a Date.now()
+  // initializer bakes the BUILD time into the server HTML and guarantees a
+  // hydration mismatch against the client's clock. Render the numbers only
+  // client-side.
+  const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
+    setNow(Date.now());
     const remaining = targetMs - Date.now();
     const tick = remaining < 24 * 3600 * 1000 ? 1000 : 60 * 1000;
     const id = setInterval(() => setNow(Date.now()), tick);
     return () => clearInterval(id);
   }, [targetMs]);
+
+  if (now === null) return null;
 
   const diff = Math.max(0, targetMs - now);
   const d = Math.floor(diff / (24 * 3600 * 1000));
@@ -126,10 +133,10 @@ export default function ProposalListClient({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // Navigating away skips the full home preloader; bfcache restores are
+    // handled by the home page's own pageshow guards (the old empty
+    // `unload` bfcache-disabling hack was deprecated and a no-op on iOS).
     sessionStorage.setItem("znas-page-transition", "1");
-    const preventBfcache = () => {};
-    window.addEventListener("unload", preventBfcache);
-    return () => window.removeEventListener("unload", preventBfcache);
   }, []);
 
   const startCountdown = useCallback((seconds: number) => {
@@ -567,7 +574,7 @@ export default function ProposalListClient({
 
       <div
         style={{
-          minHeight: "100vh",
+          minHeight: "100svh",
           backgroundColor: "var(--color-bg-void)",
           display: "flex",
           flexDirection: "column",

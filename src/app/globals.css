@@ -1,10 +1,66 @@
-/* ── Fonts ── */
-@import url("https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&display=swap");
-@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&display=swap");
-
 @import "tailwindcss";
+
+/* ── Fonts ──
+   Self-hosted woff2 (was 4 render-blocking @imports to Fontshare/Google —
+   a serial CSS→CSS→font request chain that delayed first paint on every
+   page, worst on cellular). Files live in /public/fonts with immutable
+   caching; Archivo and JetBrains Mono are variable fonts, one file each. */
+@font-face {
+  font-family: "Clash Display";
+  src: url("/fonts/clash-display-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Clash Display";
+  src: url("/fonts/clash-display-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Clash Display";
+  src: url("/fonts/clash-display-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "General Sans";
+  src: url("/fonts/general-sans-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "General Sans";
+  src: url("/fonts/general-sans-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "General Sans";
+  src: url("/fonts/general-sans-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/jetbrains-mono-latin.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ── Tailwind v4 Theme ── */
 @theme {
@@ -92,6 +148,9 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: auto;
+  /* clip (not hidden) so html never becomes a scroll container — belt and
+     braces with body's overflow-x for iOS horizontal-pan leaks. */
+  overflow-x: clip;
 }
 
 body {
@@ -149,6 +208,38 @@ body {
   .blueprint-card {
     cursor: none;
   }
+}
+
+/* Hybrid-input devices (e.g. iPad + trackpad): the primary pointer is
+   coarse, so the custom cursor dot is hidden — restore the native cursor
+   even where components set inline cursor:none. */
+@media (pointer: coarse) {
+  * {
+    cursor: auto !important;
+  }
+}
+
+/* ── JS-independent reveal failsafes ──
+   The portfolio hero and every .fde-reveal section are server-rendered
+   hidden (opacity: 0) and revealed by GSAP / IntersectionObserver after
+   hydration. On a slow connection — or if a script chunk stalls, which is
+   exactly the reported iPhone Safari failure — that JS may run late or
+   never, leaving a black page. These delayed CSS animations force the
+   final visible state with zero JS; the JS paths disarm them the moment
+   they take over, so when everything works nothing changes visually. */
+@keyframes reveal-rescue {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fouc-guard {
+  animation: reveal-rescue 0.4s ease 1.8s forwards;
+}
+
+.fde-reveal {
+  animation: reveal-rescue 0.4s ease 2.5s forwards;
 }
 
 /* Brand-name highlight — scoped to proposal pages only. Subtle gradient
@@ -546,12 +637,25 @@ body {
   background-color: var(--color-accent);
   border-color: var(--color-accent);
   box-shadow: 0 0 20px var(--color-accent-glow), 0 0 40px var(--color-accent-glow);
+}
+
+/* The pulse animates opacity on an overlay shadow instead of animating
+   box-shadow itself — box-shadow keyframes force a repaint every frame,
+   opacity stays on the compositor. Same visible crossfade. */
+.timeline-node.is-current::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  box-shadow: 0 0 30px var(--color-accent), 0 0 60px var(--color-accent-glow);
+  opacity: 0;
   animation: pulse-glow 2s ease-in-out infinite;
+  pointer-events: none;
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px var(--color-accent-glow), 0 0 40px var(--color-accent-glow); }
-  50% { box-shadow: 0 0 30px var(--color-accent), 0 0 60px var(--color-accent-glow); }
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 
 .timeline-card {
@@ -611,6 +715,9 @@ body {
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  /* Keep links clear of the iPhone notch / home indicator */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* ── Mobile Audit Fixes (375px / 390px) ── */
@@ -879,8 +986,15 @@ html:has(.fde) {
   justify-content: space-between;
   padding: 0.95rem clamp(1.25rem, 4vw, 3rem);
   background: rgba(0, 0, 0, 0.84);
-  backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Blur only while content scrolls behind the bar (HomeNav toggles the
+   class) — a permanent backdrop-filter forces iOS Safari to re-sample the
+   backdrop every frame. At rest the 84%-black bg reads the same. */
+.fde-nav.is-scrolled {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .fde-nav-brand {

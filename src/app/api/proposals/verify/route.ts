@@ -15,6 +15,14 @@ const SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
 };
 
+/**
+ * Static argon2id hash of a value nobody knows. Verified against when the
+ * slug is invalid so unknown and known slugs take the same time to reject —
+ * without it, fast 401s revealed which proposal slugs exist.
+ */
+const DUMMY_HASH =
+  "$argon2id$v=19$m=65536,t=3,p=4$yALfHno9yE3NVwJUYVtYaQ$nHzkO8oSP746vPKZOqdvTECfKGcE55QeIcTXMDmmsbg";
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -29,20 +37,34 @@ export async function POST(request: NextRequest) {
 
     // Rate limiting (per-IP+slug and per-slug abuse ceiling). Keyed by
     // client IP so a single attacker cannot lock out the real client.
+    // A rate-limiter backend outage (e.g. Upstash unreachable) fails OPEN:
+    // a legitimate client must still be able to open their proposal, and
+    // the argon2 gate remains. Previously the thrown error fell through to
+    // the generic 400 and logins mysteriously failed while Redis was down.
     const ip = getClientIp(request);
-    const rateLimit = await checkRateLimit({ ip, slug });
-    if (!rateLimit.allowed) {
-      return NextResponse.json(
-        { error: "Too many attempts. Please try again later.", retryAfter: Math.ceil(rateLimit.resetIn / 1000) },
-        { status: 429, headers: SECURITY_HEADERS }
-      );
+    try {
+      const rateLimit = await checkRateLimit({ ip, slug });
+      if (!rateLimit.allowed) {
+        return NextResponse.json(
+          { error: "Too many attempts. Please try again later.", retryAfter: Math.ceil(rateLimit.resetIn / 1000) },
+          { status: 429, headers: SECURITY_HEADERS }
+        );
+      }
+    } catch (err) {
+      console.error("rate-limit backend unavailable, failing open:", err);
     }
 
     // Load proposal — returns null if slug invalid or file not found
     const proposal = loadProposal(slug);
     if (!proposal || !proposal.passwordHash) {
-      // Return same error shape as wrong password — prevents slug enumeration
-      // (also catches `completed` engagements that intentionally have no hash).
+      // Same error shape AND same timing as a wrong password — prevents
+      // slug enumeration (also catches `completed` engagements that
+      // intentionally have no hash).
+      try {
+        await argon2.verify(DUMMY_HASH, password);
+      } catch {
+        /* timing equalizer only */
+      }
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401, headers: SECURITY_HEADERS }

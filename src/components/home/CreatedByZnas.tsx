@@ -29,7 +29,7 @@ export function CoPresentWordmark({ height = 56 }: { height?: number }) {
     >
       C
       <img
-        src="/images/home/copresent-ring.png"
+        src="/images/home/copresent-ring.webp"
         alt="o"
         style={{
           height: `calc(${size} * 0.72)`,
@@ -105,7 +105,7 @@ export default function CreatedByZnas() {
           <ProductColumn
             logo={
               <img
-                src="/images/home/memql-wordmark.png"
+                src="/images/home/memql-wordmark.webp"
                 alt="MemQL"
                 style={{ height: "92px", width: "auto" }}
               />

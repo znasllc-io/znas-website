@@ -19,10 +19,10 @@ const ROUTES: { path: string; priority: number }[] = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
   return ROUTES.map(({ path, priority }) => ({
     url: `${BASE}${path}`,
-    lastModified,
+    // No lastModified: stamping new Date() per request told crawlers every
+    // page changed on every crawl, which erodes trust in the value.
     changeFrequency: "monthly",
     priority,
   }));

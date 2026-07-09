@@ -12,6 +12,8 @@ function Marquee() {
 
   useEffect(() => {
     if (!trackRef.current) return;
+    // Reduced motion: the static first repetitions read fine as a headline.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const track = trackRef.current;
     const firstChild = track.children[0] as HTMLElement;
@@ -31,7 +33,17 @@ function Marquee() {
       },
     });
 
+    // Only run while the marquee is actually on screen — an infinite tween
+    // otherwise keeps the main thread + compositor busy for the whole
+    // session (measurable battery/jank cost on phones).
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) tween.play();
+      else tween.pause();
+    });
+    io.observe(track);
+
     return () => {
+      io.disconnect();
       tween.kill();
     };
   }, []);
@@ -53,7 +65,6 @@ function Marquee() {
         style={{
           display: "flex",
           whiteSpace: "nowrap",
-          willChange: "transform",
         }}
       >
         {Array.from({ length: repetitions }).map((_, i) => (

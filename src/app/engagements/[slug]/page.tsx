@@ -43,6 +43,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: meta ? `${meta.clientName} | Proposal | ZNAS` : "Proposal | ZNAS",
     description: "Access your ZNAS project proposal.",
+    // Password-gated client pages: excluded from the sitemap AND explicitly
+    // noindex — sitemap exclusion alone doesn't stop indexing via links.
+    robots: { index: false, follow: false },
   };
 }
 

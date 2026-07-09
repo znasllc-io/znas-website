@@ -15,6 +15,10 @@ export default function Reveal({ children, delay = 0, className = "" }: RevealPr
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // JS is alive — disarm the CSS reveal-rescue failsafe (globals.css) so
+    // the IntersectionObserver keeps full control of when this reveals.
+    // If hydration never runs, the rescue makes the content visible anyway.
+    el.style.animation = "none";
     if (typeof IntersectionObserver === "undefined") {
       el.classList.add("is-visible");
       return;
