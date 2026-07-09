@@ -49,6 +49,7 @@ export interface ProposalViewerStrings {
   viewDocument: string;
   tryNow: string;
   tryNowHint: string;
+  tryNowLoading: string;
   sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string };
   download: {
     headline: string;
@@ -363,6 +364,7 @@ export const translations: Record<Lang, LangStrings> = {
         viewDocument: "View Document",
         tryNow: "Try Now",
         tryNowHint: "Launch a live, interactive preview of the portal — it runs right here on the page.",
+        tryNowLoading: "Loading your new portal…",
         sections: {
           executiveSummary: "Executive Summary",
           roadmap: "Roadmap",
@@ -637,6 +639,7 @@ export const translations: Record<Lang, LangStrings> = {
         viewDocument: "Ver Documento",
         tryNow: "Probar Ahora",
         tryNowHint: "Abre una vista previa interactiva del portal — funciona aquí mismo en la página.",
+        tryNowLoading: "Cargando tu nuevo portal…",
         sections: {
           executiveSummary: "Resumen Ejecutivo",
           roadmap: "Hoja de Ruta",
