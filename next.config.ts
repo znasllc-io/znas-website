@@ -59,7 +59,10 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        // Everything EXCEPT the gated Try-Now demo (which our own origin must
+        // be able to iframe — see the dedicated rule below). DENY here would
+        // otherwise stop the browser from framing it.
+        source: '/((?!api/proposals/demo).*)',
         headers: [
           // Legacy clickjacking protection. CSP frame-ancestors supersedes
           // this on modern browsers but both are kept for defense-in-depth.
@@ -79,6 +82,21 @@ const nextConfig: NextConfig = {
           // reported in the browser console / report endpoint but the
           // request is not blocked. Promote to enforcing after 48h clean.
           { key: 'Content-Security-Policy-Report-Only', value: CSP },
+        ],
+      },
+      {
+        // Gated Try-Now demo: same security posture as the rest, but framable
+        // by our own origin so the proposal viewer can embed it in an iframe.
+        // The route handler also sets X-Frame-Options: SAMEORIGIN + CSP
+        // frame-ancestors 'self' on its response; this keeps the other
+        // hardening headers (nosniff, referrer, permissions, HSTS) in place.
+        source: '/api/proposals/demo',
+        headers: [
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'Strict-Transport-Security', value: 'max-age=31536000' },
         ],
       },
       {

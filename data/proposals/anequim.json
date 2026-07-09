@@ -6,6 +6,7 @@
   "projectTitle_es": "Anequim One — Portal para Clientes",
   "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$qjqLzKGPVsFXMk3/YwNj/Q$CEkFSWlXWO0/xuOppVnlKdVA2tUi07ZhY9+lF6KvWK4",
   "status": "formalized",
+  "demoFilename": "anequim.html",
   "attachments": [
     {
       "id": "engagement-position",

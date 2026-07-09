@@ -198,6 +198,11 @@ export interface Proposal {
   // Optional. Completed engagements don't need a PDF.
   pdfFilename?: string;
   pdfFilenameEs?: string;
+  // Optional. Self-contained HTML file in data/proposals/demos/ (must match
+  // ^[a-z0-9-]+\.html$). When set, the viewer shows a "Try Now" section that
+  // loads it in a gated iframe via /api/proposals/demo?slug=. Kept out of
+  // /public so it stays behind the same session gate as the rest.
+  demoFilename?: string;
   // Optional supplementary downloads (rendered as additional buttons next
   // to the main PDF download). Same auth + path validation rules apply.
   attachments?: ProposalAttachment[];

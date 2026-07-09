@@ -47,7 +47,9 @@ export interface ProposalViewerStrings {
   label: string;
   preparedFor: string;
   viewDocument: string;
-  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string };
+  tryNow: string;
+  tryNowHint: string;
+  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string };
   download: {
     headline: string;
     subtitle: string;
@@ -359,6 +361,8 @@ export const translations: Record<Lang, LangStrings> = {
         label: "Proposal",
         preparedFor: "Prepared for",
         viewDocument: "View Document",
+        tryNow: "Try Now",
+        tryNowHint: "Launch a live, interactive preview of the portal — it runs right here on the page.",
         sections: {
           executiveSummary: "Executive Summary",
           roadmap: "Roadmap",
@@ -369,6 +373,7 @@ export const translations: Record<Lang, LangStrings> = {
           initiative: "Initiative",
           realEstateAgent: "Real Estate Agent",
           documents: "Supporting Documents",
+          tryNow: "Try It Now",
         },
         download: {
           headline: "Ready to move forward?",
@@ -630,6 +635,8 @@ export const translations: Record<Lang, LangStrings> = {
         label: "Propuesta",
         preparedFor: "Preparado para",
         viewDocument: "Ver Documento",
+        tryNow: "Probar Ahora",
+        tryNowHint: "Abre una vista previa interactiva del portal — funciona aquí mismo en la página.",
         sections: {
           executiveSummary: "Resumen Ejecutivo",
           roadmap: "Hoja de Ruta",
@@ -640,6 +647,7 @@ export const translations: Record<Lang, LangStrings> = {
           initiative: "Iniciativa",
           realEstateAgent: "Agente de Bienes Raíces",
           documents: "Documentos de Apoyo",
+          tryNow: "Pruébalo",
         },
         download: {
           headline: "¿Listo para avanzar?",
