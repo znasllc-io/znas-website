@@ -24,12 +24,17 @@ export default function TryNowSection({
   number,
   slug,
   lang,
+  label,
 }: {
   number: string;
   slug: string;
   lang: "en" | "es";
+  // Per-proposal demo name (browser-chrome title + preview caption).
+  // Falls back to a generic label so it never shows another client's name.
+  label?: string;
 }) {
   const t = translations[lang];
+  const consoleLabel = label ?? "Live Portal";
   const [phase, setPhase] = useState<Phase>("idle");
   const src = `/api/proposals/demo?slug=${encodeURIComponent(slug)}`;
 
@@ -37,6 +42,55 @@ export default function TryNowSection({
   const panelARef = useRef<HTMLDivElement>(null);
   const panelBRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const cursorCleanupRef = useRef<(() => void) | null>(null);
+
+  // The site's custom cursor tracks mousemove on the *parent* window, which
+  // stops firing while the pointer is inside the iframe — so it freezes at the
+  // boundary and the portal shows the OS cursor instead. The demo is served
+  // same-origin (/api/proposals/demo), so we can reach into its document to:
+  // (1) hide its system cursor, and (2) relay pointer position back to the
+  // parent window (offset by the iframe's rect) so the custom cursor keeps
+  // following over the portal. Wired on iframe load; cleaned up on unmount.
+  const wireCursorForwarding = () => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    let win: Window | null = null;
+    let doc: Document | null = null;
+    try {
+      win = iframe.contentWindow;
+      doc = iframe.contentDocument;
+    } catch {
+      return; // cross-origin — nothing we can do
+    }
+    if (!win || !doc) return;
+
+    cursorCleanupRef.current?.();
+
+    try {
+      const style = doc.createElement("style");
+      style.setAttribute("data-znas-cursor", "");
+      style.textContent = "*, *::before, *::after { cursor: none !important; }";
+      doc.head?.appendChild(style);
+    } catch { /* leave the system cursor if we can't inject */ }
+
+    const forward = (e: MouseEvent) => {
+      const rect = iframe.getBoundingClientRect();
+      window.dispatchEvent(
+        new MouseEvent("mousemove", {
+          clientX: rect.left + e.clientX,
+          clientY: rect.top + e.clientY,
+        }),
+      );
+    };
+
+    try {
+      win.addEventListener("mousemove", forward);
+      const w = win;
+      cursorCleanupRef.current = () => w.removeEventListener("mousemove", forward);
+    } catch { /* ignore */ }
+  };
+
+  useEffect(() => () => cursorCleanupRef.current?.(), []);
 
   // Drive the loading → gate-open sequence once the iframe has mounted.
   useEffect(() => {
@@ -84,8 +138,19 @@ export default function TryNowSection({
         >
           {t.proposals.viewer.tryNowHint}
         </p>
+      </div>
 
-        {/* Bezel */}
+      {/* Bezel — breaks out of the narrow text column so the desktop portal
+          renders near its native width (it's built for ~1440px, full-viewport
+          sections) instead of being reflowed and cropped in a tall-narrow box. */}
+      <div
+        style={{
+          width: "min(1760px, 94vw)",
+          margin: "0 auto",
+          padding: "0 1rem",
+          boxSizing: "border-box",
+        }}
+      >
         <div
           style={{
             border: "1px solid var(--color-border)",
@@ -124,7 +189,7 @@ export default function TryNowSection({
                 textOverflow: "ellipsis",
               }}
             >
-              Anequim One Console
+              {consoleLabel}
             </span>
             {phase === "open" && (
               <a
@@ -146,15 +211,18 @@ export default function TryNowSection({
             )}
           </div>
 
-          {/* Viewport */}
-          <div style={{ position: "relative", height: "clamp(420px, 70vh, 720px)", backgroundColor: "var(--color-bg-void)" }}>
+          {/* Viewport — desktop 16:9 so the portal keeps its native
+              proportions and isn't cropped. Width is bounded by the 1600px
+              bezel wrapper, so height tops out around 900px. */}
+          <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", backgroundColor: "var(--color-bg-void)" }}>
             {phase !== "idle" && (
               // No opacity in JSX style — GSAP owns it, so React re-renders
               // don't reset the fade.
               <iframe
                 ref={iframeRef}
                 src={src}
-                title="Anequim One Console"
+                title={consoleLabel}
+                onLoad={wireCursorForwarding}
                 style={{ width: "100%", height: "100%", border: 0, display: "block" }}
               />
             )}
@@ -242,7 +310,7 @@ export default function TryNowSection({
                     color: "var(--color-text-tertiary)",
                   }}
                 >
-                  Anequim One Console — live preview
+                  {consoleLabel} — live preview
                 </span>
               </button>
             )}

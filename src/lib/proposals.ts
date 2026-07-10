@@ -203,6 +203,10 @@ export interface Proposal {
   // loads it in a gated iframe via /api/proposals/demo?slug=. Kept out of
   // /public so it stays behind the same session gate as the rest.
   demoFilename?: string;
+  // Optional label for the "Try Now" demo (browser-chrome title + preview
+  // caption), e.g. "Fylo Warehouse OS Console". Falls back to a generic
+  // "Live Portal" when omitted so the section never shows another client's name.
+  demoLabel?: string;
   // Optional supplementary downloads (rendered as additional buttons next
   // to the main PDF download). Same auth + path validation rules apply.
   attachments?: ProposalAttachment[];

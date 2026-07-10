@@ -154,7 +154,7 @@ export default function ProposalViewer({
             )}
 
             {proposal.demoFilename && (
-              <TryNowSection number={nextNumber()} slug={proposal.slug} lang={lang} />
+              <TryNowSection number={nextNumber()} slug={proposal.slug} lang={lang} label={proposal.demoLabel} />
             )}
 
             {sections.roadmap && (
