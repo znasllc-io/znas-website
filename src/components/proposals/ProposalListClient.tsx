@@ -5,7 +5,7 @@ import Navigation from "@/components/layout/Navigation";
 import { navigateWithTransition } from "@/lib/transition-nav";
 import RestartModal from "@/components/proposals/RestartModal";
 import { useLanguage } from "@/lib/language";
-import { translations, type ProposalListStrings } from "@/lib/translations";
+import { translations } from "@/lib/translations";
 
 interface ProposalEntry {
   slug: string;
@@ -46,52 +46,6 @@ function tierFor(s: LifecycleState): Tier {
   if (s === "pending" || s === "formalized") return "active";
   if (s === "completed") return "completed";
   return "archived";
-}
-
-// Live-updating countdown to an ISO date. Re-ticks each second when total
-// time remaining is < 1 day, otherwise once per minute (cheaper).
-function Countdown({
-  target,
-  units,
-  prefix,
-}: {
-  target: string;
-  units: ProposalListStrings["units"];
-  prefix: string;
-}) {
-  const targetMs = useMemo(() => new Date(target).getTime(), [target]);
-  // null until mounted: the page is statically prerendered, so a Date.now()
-  // initializer bakes the BUILD time into the server HTML and guarantees a
-  // hydration mismatch against the client's clock. Render the numbers only
-  // client-side.
-  const [now, setNow] = useState<number | null>(null);
-
-  useEffect(() => {
-    setNow(Date.now());
-    const remaining = targetMs - Date.now();
-    const tick = remaining < 24 * 3600 * 1000 ? 1000 : 60 * 1000;
-    const id = setInterval(() => setNow(Date.now()), tick);
-    return () => clearInterval(id);
-  }, [targetMs]);
-
-  if (now === null) return null;
-
-  const diff = Math.max(0, targetMs - now);
-  const d = Math.floor(diff / (24 * 3600 * 1000));
-  const h = Math.floor((diff % (24 * 3600 * 1000)) / (3600 * 1000));
-  const m = Math.floor((diff % (3600 * 1000)) / (60 * 1000));
-  const s = Math.floor((diff % (60 * 1000)) / 1000);
-
-  const formatted = d > 0
-    ? `${d}${units.d} ${String(h).padStart(2, "0")}${units.h}`
-    : `${String(h).padStart(2, "0")}${units.h} ${String(m).padStart(2, "0")}${units.m} ${String(s).padStart(2, "0")}${units.s}`;
-
-  return (
-    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", letterSpacing: "0.06em" }}>
-      <span style={{ color: "var(--color-text-tertiary)" }}>{prefix} </span>
-      <span style={{ color: "var(--color-accent)" }}>{formatted}</span>
-    </span>
-  );
 }
 
 function SectionHeader({ label }: { label: string }) {
@@ -397,43 +351,20 @@ export default function ProposalListClient({
             </div>
             {/* State indicator (right side) */}
             <div style={{ flexShrink: 0, paddingTop: "0.15rem", textAlign: "right" }}>
-              {state === "pending" && p.expiresAt && (
-                <Countdown
-                  target={p.expiresAt}
-                  units={t.proposals.list.units}
-                  prefix={t.proposals.list.expiresIn}
-                />
-              )}
+              {/* The access-window countdown is intentionally NOT shown here.
+                  It lives only inside the engagement (the viewer's header
+                  "access ends in Xd" line). The list just states status. */}
               {isFormalized && (
                 <span
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-end",
-                    gap: "0.35rem",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.65rem",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--color-accent)",
                   }}
                 >
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "0.65rem",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "var(--color-accent)",
-                    }}
-                  >
-                    // {t.proposals.list.inProgress}
-                  </span>
-                  {/* Access-window countdown — appears only once the client's
-                      first login has started the clock (server-derived
-                      expiresAt). Absent until then. */}
-                  {p.expiresAt && (
-                    <Countdown
-                      target={p.expiresAt}
-                      units={t.proposals.list.units}
-                      prefix={t.proposals.list.expiresIn}
-                    />
-                  )}
+                  // {t.proposals.list.inProgress}
                 </span>
               )}
               {isCompleted && (
