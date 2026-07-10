@@ -54,13 +54,26 @@ function renderInline(text: string) {
 
 interface ProposalViewerProps {
   proposal: SafeProposal;
+  // Access-window info from verify. expiresAt (epoch ms) is the
+  // sentAt + window deadline, or null when the proposal has no window.
+  access?: { expiresAt: number | null };
   // attachmentId is undefined for the main PDF, or matches an entry in
   // proposal.attachments for a supplementary download.
   onDownload: (attachmentId?: string) => void;
 }
 
+// "23d" / "5h" for the quiet access-window line. Days once ≥ 24h remain,
+// hours below that (never "0h" — the page wouldn't have opened if expired).
+function formatRemaining(expiresAt: number, units: { d: string; h: string }): string {
+  const ms = Math.max(0, expiresAt - Date.now());
+  const days = Math.floor(ms / (24 * 3600 * 1000));
+  if (days >= 1) return `${days}${units.d}`;
+  return `${Math.max(1, Math.ceil(ms / (3600 * 1000)))}${units.h}`;
+}
+
 export default function ProposalViewer({
   proposal,
+  access,
   onDownload,
 }: ProposalViewerProps) {
   const { lang } = useLanguage();
@@ -124,6 +137,21 @@ export default function ProposalViewer({
           >
             {t.proposals.viewer.preparedFor} {proposal.clientName}
           </p>
+          {/* Access-window line — only once the clock is running. */}
+          {access?.expiresAt != null && (
+            <p
+              className="reveal-up"
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.7rem",
+                letterSpacing: "0.08em",
+                color: "var(--color-accent)",
+                marginTop: "0.75rem",
+              }}
+            >
+              // {t.proposals.viewer.accessEnds(formatRemaining(access.expiresAt, t.proposals.list.units))}
+            </p>
+          )}
         </div>
       </section>
 

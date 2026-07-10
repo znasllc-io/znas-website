@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
-import { loadProposal } from "@/lib/proposals";
+import { loadProposal, isAccessExpired } from "@/lib/proposals";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { SESSION_COOKIE_NAME, verifySession } from "@/lib/session";
 
@@ -55,6 +55,15 @@ export async function POST(request: NextRequest) {
     // PDF filename mapping, not to re-verify access).
     const proposal = loadProposal(slug);
     if (!proposal) {
+      return NextResponse.json(
+        { error: "Invalid credentials" },
+        { status: 401, headers: SECURITY_HEADERS }
+      );
+    }
+
+    // Access-window check on every download: a session minted minutes
+    // before the deadline must not keep downloading after it passes.
+    if (isAccessExpired(proposal)) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401, headers: SECURITY_HEADERS }

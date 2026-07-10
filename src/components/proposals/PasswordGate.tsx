@@ -6,10 +6,18 @@ import type { SafeProposal } from "@/lib/proposals";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
 
+/**
+ * Access-window info returned by /api/proposals/verify. expiresAt (epoch ms)
+ * is the sentAt + window deadline, or null when the proposal has no window.
+ */
+export interface ProposalAccess {
+  expiresAt: number | null;
+}
+
 interface PasswordGateProps {
   slug: string;
   clientName: string;
-  onSuccess: (proposalData: SafeProposal) => void;
+  onSuccess: (proposalData: SafeProposal, access?: ProposalAccess) => void;
 }
 
 export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGateProps) {
@@ -122,7 +130,7 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
             y: -30,
             duration: 0.5,
             ease: "power3.in",
-            onComplete: () => onSuccess(data.proposal),
+            onComplete: () => onSuccess(data.proposal, data.access),
           });
           return;
         }
@@ -130,6 +138,13 @@ export default function PasswordGate({ slug, clientName, onSuccess }: PasswordGa
         if (res.status === 401) {
           setError(t.proposals.gate.invalidKey);
           shakeInput();
+          return;
+        }
+
+        if (res.status === 403) {
+          // The access window has ended — the client code is permanently
+          // done (only the internal team code still opens this page).
+          setError(t.proposals.gate.expiredKey);
           return;
         }
 

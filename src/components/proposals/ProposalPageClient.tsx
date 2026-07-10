@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import type { SafeProposal } from "@/lib/proposals";
 import Navigation from "@/components/layout/Navigation";
 import SiteFooter from "@/components/layout/SiteFooter";
-import PasswordGate from "./PasswordGate";
+import PasswordGate, { type ProposalAccess } from "./PasswordGate";
 import ProposalViewer from "./ProposalViewer";
 import { useLanguage } from "@/lib/language";
 import { translations } from "@/lib/translations";
@@ -23,22 +23,31 @@ interface ProposalPageClientProps {
 // leaving the user staring at the gate for a proposal they *just* unlocked.
 // Seeding a module-scoped cache once, from a lazy state initializer, makes the
 // read idempotent across those remounts (the cache outlives the instances).
-const handoffCache = new Map<string, SafeProposal>();
+interface Handoff {
+  proposal: SafeProposal;
+  access?: ProposalAccess;
+}
 
-function takeHandoff(slug: string): SafeProposal | null {
+const handoffCache = new Map<string, Handoff>();
+
+function takeHandoff(slug: string): Handoff | null {
   if (typeof window === "undefined") return null;
   const cached = handoffCache.get(slug);
   if (cached) return cached;
   try {
     const stored = sessionStorage.getItem(`znas-proposal-${slug}`);
     if (stored) {
-      const { proposal } = JSON.parse(stored) as { proposal?: SafeProposal };
+      const { proposal, access } = JSON.parse(stored) as {
+        proposal?: SafeProposal;
+        access?: ProposalAccess;
+      };
       if (proposal) {
-        handoffCache.set(slug, proposal);
+        const handoff: Handoff = { proposal, access };
+        handoffCache.set(slug, handoff);
         // Consume from storage so a later hard refresh re-gates; the cache
         // (this session only) keeps the surviving mount populated.
         sessionStorage.removeItem(`znas-proposal-${slug}`);
-        return proposal;
+        return handoff;
       }
     }
   } catch { /* ignore parse errors */ }
@@ -62,7 +71,9 @@ export default function ProposalPageClient({
   // so auth state lives in the cookie — the access code is never stored or
   // re-sent by client code. Read in a lazy initializer (not an effect) so the
   // viewer renders on the first paint with no gate flash.
-  const [proposal, setProposal] = useState<SafeProposal | null>(() => takeHandoff(slug));
+  const [handoff, setHandoff] = useState<Handoff | null>(() => takeHandoff(slug));
+  const proposal = handoff?.proposal ?? null;
+  const access = handoff?.access;
 
   // Mark that we're on a proposal page so navigation away (including
   // browser back) skips the full home preloader. Home's pageshow guards
@@ -74,8 +85,8 @@ export default function ProposalPageClient({
   }, []);
 
   const handleSuccess = useCallback(
-    (data: SafeProposal) => {
-      setTimeout(() => setProposal(data), 600);
+    (data: SafeProposal, access?: ProposalAccess) => {
+      setTimeout(() => setHandoff({ proposal: data, access }), 600);
     },
     []
   );
@@ -193,7 +204,7 @@ export default function ProposalPageClient({
             backHref="/engagements"
             backLabel={t.nav.back}
           />
-          <ProposalViewer proposal={proposal} onDownload={handleDownload} />
+          <ProposalViewer proposal={proposal} access={access} onDownload={handleDownload} />
           <SiteFooter />
         </>
       )}

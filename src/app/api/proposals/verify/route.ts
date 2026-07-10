@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import argon2 from "argon2";
-import { loadProposal, toSafeProposal } from "@/lib/proposals";
+import { loadProposal, toSafeProposal, effectiveExpiresAt } from "@/lib/proposals";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import {
   SESSION_COOKIE_NAME,
@@ -87,13 +87,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // ── Access window ──
+    // The deadline is static config: sentAt (code-delivery date, set
+    // manually in the proposal JSON) + accessWindowDays. Once passed, the
+    // code is dead for everyone; re-opening access means updating sentAt in
+    // the JSON and redeploying. Checked AFTER the argon2 gate so an expired
+    // response never confirms a wrong code.
+    const deadline = effectiveExpiresAt(proposal);
+    if (deadline !== null && Date.now() > deadline) {
+      return NextResponse.json(
+        { error: "expired" },
+        { status: 403, headers: SECURITY_HEADERS }
+      );
+    }
+
     // Mint a session token. From here on the client proves it passed the
     // argon2 gate by presenting this cookie — the raw access code never
     // needs to be held in client state or re-sent on subsequent requests.
     const token = await signSession(proposal.slug);
 
     const response = NextResponse.json(
-      { proposal: toSafeProposal(proposal) },
+      {
+        proposal: toSafeProposal(proposal),
+        // Window info for the viewer's "access ends in Xd" line. Null when
+        // the proposal has no window (no sentAt / expiresAt configured).
+        access: { expiresAt: deadline },
+      },
       { headers: SECURITY_HEADERS }
     );
     response.cookies.set({
