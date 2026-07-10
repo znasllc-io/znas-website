@@ -62,13 +62,14 @@ interface ProposalViewerProps {
   onDownload: (attachmentId?: string) => void;
 }
 
-// "23d" / "5h" for the quiet access-window line. Days once ≥ 24h remain,
-// hours below that (never "0h" — the page wouldn't have opened if expired).
+// "23d 5h" for the access-window header value. Always shows both units
+// (unlike the old days-OR-hours list countdown) — hours round down to 0
+// rather than disappearing, so "0d 3h" still reads clearly near expiry.
 function formatRemaining(expiresAt: number, units: { d: string; h: string }): string {
   const ms = Math.max(0, expiresAt - Date.now());
   const days = Math.floor(ms / (24 * 3600 * 1000));
-  if (days >= 1) return `${days}${units.d}`;
-  return `${Math.max(1, Math.ceil(ms / (3600 * 1000)))}${units.h}`;
+  const hours = Math.floor((ms % (24 * 3600 * 1000)) / (3600 * 1000));
+  return `${days}${units.d} ${hours}${units.h}`;
 }
 
 export default function ProposalViewer({
@@ -137,11 +138,18 @@ export default function ProposalViewer({
           >
             {t.proposals.viewer.preparedFor} {proposal.clientName}
           </p>
-          {/* Access-window line — only once the clock is running. */}
+          {/* Access-window line — only once the clock is running. The
+              "23d 5h" value is a distinct, larger, yellow span so the
+              deadline pops out rather than blending into the quiet
+              mono-text row it sits in. */}
           {access?.expiresAt != null && (
             <p
               className="reveal-up"
               style={{
+                display: "flex",
+                alignItems: "baseline",
+                flexWrap: "wrap",
+                gap: "0.5rem",
                 fontFamily: "var(--font-mono)",
                 fontSize: "0.7rem",
                 letterSpacing: "0.08em",
@@ -149,7 +157,17 @@ export default function ProposalViewer({
                 marginTop: "0.75rem",
               }}
             >
-              // {t.proposals.viewer.accessEnds(formatRemaining(access.expiresAt, t.proposals.list.units))}
+              <span>// {t.proposals.viewer.accessEnds}</span>
+              <span
+                style={{
+                  fontSize: "1.15rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.02em",
+                  color: "#FACC15",
+                }}
+              >
+                {formatRemaining(access.expiresAt, t.proposals.list.units)}
+              </span>
             </p>
           )}
         </div>
