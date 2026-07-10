@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
-import { loadProposal } from "@/lib/proposals";
+import { loadProposal, isAccessExpired } from "@/lib/proposals";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { SESSION_COOKIE_NAME, verifySession } from "@/lib/session";
 
@@ -47,8 +47,13 @@ export async function GET(request: NextRequest) {
   if (!sessionSlug || sessionSlug !== slug) return deny();
 
   const proposal = loadProposal(slug);
-  const demoFilename = proposal?.demoFilename;
+  if (!proposal) return deny();
+  const demoFilename = proposal.demoFilename;
   if (!demoFilename || !/^[a-z0-9-]+\.html$/.test(demoFilename)) return deny();
+
+  // Access-window check on every load: a session minted minutes before the
+  // deadline must not keep serving the demo after it passes.
+  if (isAccessExpired(proposal)) return deny();
 
   // Resolve within data/proposals/demos and verify no path traversal.
   const demosDir = path.resolve(path.join(process.cwd(), "data", "proposals", "demos"));

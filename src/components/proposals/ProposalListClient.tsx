@@ -33,8 +33,12 @@ type Tier = "active" | "archived" | "completed";
 function computeLifecycle(p: ProposalEntry, now: number): LifecycleState {
   if (p.status === "completed") return "completed";
   if (p.status === "archived") return "archived";
-  if (p.status === "formalized") return "formalized";
+  // A passed expiresAt archives the card regardless of pending/formalized.
+  // For gated entries the loader sets expiresAt to the effective deadline
+  // (sentAt + access window), so this is what flips a proposal to the
+  // "Contact us" treatment when its window hits zero.
   if (p.expiresAt && new Date(p.expiresAt).getTime() < now) return "archived";
+  if (p.status === "formalized") return "formalized";
   return "pending";
 }
 
@@ -173,9 +177,16 @@ export default function ProposalListClient({
           const data = await res.json();
           sessionStorage.setItem(
             `znas-proposal-${selectedSlug}`,
-            JSON.stringify({ proposal: data.proposal })
+            JSON.stringify({ proposal: data.proposal, access: data.access })
           );
           navigateWithTransition(`/engagements/${selectedSlug}`);
+          return;
+        }
+
+        if (res.status === 403) {
+          // Access window over — the external code is permanently done.
+          setError(t.proposals.gate.expiredKey);
+          setLoading(false);
           return;
         }
 
@@ -195,7 +206,7 @@ export default function ProposalListClient({
         setLoading(false);
       }
     },
-    [selectedSlug, password, loading, countdown, startCountdown, t.proposals.list]
+    [selectedSlug, password, loading, countdown, startCountdown, t.proposals.list, t.proposals.gate]
   );
 
   const handleCancel = () => {
@@ -396,14 +407,33 @@ export default function ProposalListClient({
               {isFormalized && (
                 <span
                   style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.65rem",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    color: "var(--color-accent)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    gap: "0.35rem",
                   }}
                 >
-                  // {t.proposals.list.inProgress}
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.65rem",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "var(--color-accent)",
+                    }}
+                  >
+                    // {t.proposals.list.inProgress}
+                  </span>
+                  {/* Access-window countdown — appears only once the client's
+                      first login has started the clock (server-derived
+                      expiresAt). Absent until then. */}
+                  {p.expiresAt && (
+                    <Countdown
+                      target={p.expiresAt}
+                      units={t.proposals.list.units}
+                      prefix={t.proposals.list.expiresIn}
+                    />
+                  )}
                 </span>
               )}
               {isCompleted && (

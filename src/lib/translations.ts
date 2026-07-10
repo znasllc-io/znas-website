@@ -50,6 +50,9 @@ export interface ProposalViewerStrings {
   tryNow: string;
   tryNowHint: string;
   tryNowLoading: string;
+  // Quiet header line once the client's access window is running.
+  // `remaining` arrives pre-formatted, e.g. "23d" or "5h".
+  accessEnds: (remaining: string) => string;
   sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string };
   download: {
     headline: string;
@@ -66,6 +69,7 @@ export interface ProposalGateStrings {
   access: string;
   verifying: string;
   invalidKey: string;
+  expiredKey: string;
   rateLimitMsg: (s: number) => string;
   unexpected: string;
   networkError: string;
@@ -365,6 +369,7 @@ export const translations: Record<Lang, LangStrings> = {
         tryNow: "Try Now",
         tryNowHint: "Launch a live, interactive preview of the portal — it runs right here on the page.",
         tryNowLoading: "Loading your new portal…",
+        accessEnds: (remaining) => `Access to this proposal ends in ${remaining}`,
         sections: {
           executiveSummary: "Executive Summary",
           roadmap: "Roadmap",
@@ -400,6 +405,7 @@ export const translations: Record<Lang, LangStrings> = {
         access: "Access Proposal",
         verifying: "Verifying...",
         invalidKey: "Invalid proposal key. Please try again.",
+        expiredKey: "This proposal's access window has ended. Contact us to revisit it.",
         rateLimitMsg: (s) => `Too many attempts. Please wait ${s} seconds.`,
         unexpected: "Something went wrong. Please try again.",
         networkError: "Network error. Please check your connection.",
@@ -640,6 +646,7 @@ export const translations: Record<Lang, LangStrings> = {
         tryNow: "Probar Ahora",
         tryNowHint: "Abre una vista previa interactiva del portal — funciona aquí mismo en la página.",
         tryNowLoading: "Cargando tu nuevo portal…",
+        accessEnds: (remaining) => `El acceso a esta propuesta termina en ${remaining}`,
         sections: {
           executiveSummary: "Resumen Ejecutivo",
           roadmap: "Hoja de Ruta",
@@ -675,6 +682,7 @@ export const translations: Record<Lang, LangStrings> = {
         access: "Acceder a Propuesta",
         verifying: "Verificando...",
         invalidKey: "Clave de propuesta inválida. Por favor intenta de nuevo.",
+        expiredKey: "El período de acceso a esta propuesta ha terminado. Contáctanos para retomarla.",
         rateLimitMsg: (s) => `Demasiados intentos. Por favor espera ${s} segundos.`,
         unexpected: "Algo salió mal. Por favor intenta de nuevo.",
         networkError: "Error de red. Por favor verifica tu conexión.",

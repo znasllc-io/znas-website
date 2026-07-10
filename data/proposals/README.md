@@ -11,10 +11,14 @@ See `proposal.example.json` for the full schema. Required fields:
 - `slug` — URL segment. Must match `^[a-z0-9-]+$`. The filename must be
   `<slug>.json`.
 - `clientName`, `projectTitle`, `status: "active" | "draft" | "archived"`
-- `passwordHash` — argon2id hash. Generated with
+- `passwordHash` — argon2id hash of the access code. Generated with
   `node scripts/hash-password.mjs`. **Never store the plaintext code
   here.** The plaintext lives only in the secure channel used to deliver
   it to the client (e.g. 1Password share, Signal).
+- `sentAt` (optional) — ISO datetime the code was DELIVERED to the client.
+  Starts the access window. See "Access windows" below.
+- `accessWindowDays` (optional, default 30) — length of the access window,
+  counted from `sentAt`.
 - `pdfFilename` (+ optional `pdfFilenameEs`) — PDF file inside
   `data/proposals/pdfs/`, matching `^[a-z0-9-]+\.pdf$`.
 - `sections` — proposal content; see the example for the full shape.
@@ -40,6 +44,31 @@ See `proposal.example.json` for the full schema. Required fields:
 2. Replace the `passwordHash` value in the proposal JSON.
 3. Deliver the new code to the client over a secure channel.
 4. Redeploy.
+
+## Access windows
+
+A gated proposal can carry an access window: the code works for a fixed
+number of days, then stops. It's plain static config — no runtime state,
+no external services.
+
+- Set `sentAt` to the datetime you delivered the code to the client
+  (ISO 8601, e.g. `"2026-06-20T15:00:00-07:00"`).
+- The window closes at `sentAt + accessWindowDays` (default 30). The
+  countdown is measured from delivery, NOT from when the client first
+  opens the link — a code sent 10 days ago shows 20 days left.
+- `src/lib/proposals.ts` → `effectiveExpiresAt()` is the single source of
+  truth. It's enforced in the verify/download/demo API routes and drives
+  the listing countdown, the expired-card flip, and the viewer's
+  "access ends in Xd" header line.
+
+When the window closes, the code stops working for everyone (there's no
+separate team bypass), and the listing card flips to the "Contact us"
+re-engage treatment. **To re-open access, bump `sentAt` (or remove it)
+and redeploy** — the whole window lives in the committed JSON, so a
+redeploy is all it takes.
+
+A proposal with no `sentAt` and no `expiresAt` has no window: the code
+works indefinitely.
 
 ## Why this file isn't in git
 

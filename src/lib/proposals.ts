@@ -171,9 +171,19 @@ export interface Proposal {
   clientName: string;
   projectTitle: string;
   projectTitle_es?: string;
-  // Argon2id hash of the access code. Never stored or transmitted in plaintext.
-  // Optional for `completed` engagements — historical records with no gated content.
+  // Argon2id hash of the access code. Never stored or transmitted in
+  // plaintext. Optional for `completed` engagements — historical records
+  // with no gated content.
   passwordHash?: string;
+  // ISO datetime the access code was DELIVERED to the client. Set manually
+  // when the code goes out; the access window runs sentAt + accessWindowDays
+  // and is enforced in verify/download/demo. Once it passes, the code stops
+  // working for everyone — to re-open access, update this date (or remove
+  // it) and redeploy.
+  sentAt?: string;
+  // Length of the access window in days. Defaults to 30. Counted from
+  // sentAt — delivery, not first view.
+  accessWindowDays?: number;
   // Lifecycle:
   //   draft      — internal, hidden from listing
   //   active     — published; if expiresAt has passed, the listing card
@@ -296,13 +306,17 @@ export function loadAllProposals(): ProposalListEntry[] {
       ) {
         continue;
       }
+      // Surface the EFFECTIVE deadline (sentAt + window, or legacy fixed
+      // expiresAt) so the listing's countdown and expired-card flip always
+      // agree with what the API routes enforce.
+      const deadline = effectiveExpiresAt(proposal);
       entries.push({
         slug: proposal.slug,
         clientName: proposal.clientName,
         projectTitle: proposal.projectTitle,
         projectTitle_es: proposal.projectTitle_es,
         status: proposal.status,
-        expiresAt: proposal.expiresAt,
+        expiresAt: deadline !== null ? new Date(deadline).toISOString() : undefined,
         completedAt: proposal.completedAt,
         summary: proposal.summary,
         summary_es: proposal.summary_es,
@@ -321,4 +335,46 @@ export function loadAllProposals(): ProposalListEntry[] {
 export function toSafeProposal(proposal: Proposal): SafeProposal {
   const { passwordHash: _h, ...safe } = proposal;
   return safe;
+}
+
+/** Milliseconds in one day. */
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** Default access window when a proposal doesn't specify accessWindowDays. */
+export const DEFAULT_ACCESS_WINDOW_DAYS = 30;
+
+/**
+ * The moment (epoch ms) a proposal's access window closes, or null when it
+ * has no window. Two sources, in priority order:
+ *
+ *   1. `sentAt` — code-delivery date; window = sentAt + accessWindowDays
+ *      (default 30). The normal path: set manually when the code goes out.
+ *   2. `expiresAt` — legacy fixed deadline, honored as-is.
+ *
+ * Single source of truth for the window: the verify/download/demo routes
+ * (enforcement), the listing (countdown + expired card flip), and the
+ * viewer's header line all derive from this.
+ */
+export function effectiveExpiresAt(
+  p: Pick<Proposal, "sentAt" | "accessWindowDays" | "expiresAt">,
+): number | null {
+  if (p.sentAt) {
+    const sent = Date.parse(p.sentAt);
+    if (Number.isFinite(sent)) {
+      return sent + (p.accessWindowDays ?? DEFAULT_ACCESS_WINDOW_DAYS) * DAY_MS;
+    }
+  }
+  if (p.expiresAt) {
+    const fixed = Date.parse(p.expiresAt);
+    if (Number.isFinite(fixed)) return fixed;
+  }
+  return null;
+}
+
+/** True when the proposal has a window and it has already closed. */
+export function isAccessExpired(
+  p: Pick<Proposal, "sentAt" | "accessWindowDays" | "expiresAt">,
+): boolean {
+  const deadline = effectiveExpiresAt(p);
+  return deadline !== null && Date.now() > deadline;
 }
