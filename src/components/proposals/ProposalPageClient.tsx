@@ -14,28 +14,55 @@ interface ProposalPageClientProps {
   clientName: string;
 }
 
+// Module-scoped handoff cache. The /engagements list verifies the access
+// code, stores the verified proposal in sessionStorage, then navigates here
+// client-side. Reading straight from sessionStorage inside an effect is
+// fragile: React StrictMode (dev) and the page-transition sweep mount this
+// component twice, and the throwaway mount would read-and-remove the handoff
+// (and its cleanup would null the state) before the surviving mount ran —
+// leaving the user staring at the gate for a proposal they *just* unlocked.
+// Seeding a module-scoped cache once, from a lazy state initializer, makes the
+// read idempotent across those remounts (the cache outlives the instances).
+const handoffCache = new Map<string, SafeProposal>();
+
+function takeHandoff(slug: string): SafeProposal | null {
+  if (typeof window === "undefined") return null;
+  const cached = handoffCache.get(slug);
+  if (cached) return cached;
+  try {
+    const stored = sessionStorage.getItem(`znas-proposal-${slug}`);
+    if (stored) {
+      const { proposal } = JSON.parse(stored) as { proposal?: SafeProposal };
+      if (proposal) {
+        handoffCache.set(slug, proposal);
+        // Consume from storage so a later hard refresh re-gates; the cache
+        // (this session only) keeps the surviving mount populated.
+        sessionStorage.removeItem(`znas-proposal-${slug}`);
+        return proposal;
+      }
+    }
+  } catch { /* ignore parse errors */ }
+  return null;
+}
+
+// A transient unmount during the arrival transition must not drop the session
+// cookie that was just minted. On unmount we *schedule* the logout; a remount
+// that fires within the window cancels it. A real navigation away leaves no
+// remount to cancel it, so the logout still fires.
+let pendingLogout: ReturnType<typeof setTimeout> | null = null;
+
 export default function ProposalPageClient({
   slug,
   clientName,
 }: ProposalPageClientProps) {
   const { lang } = useLanguage();
   const t = translations[lang];
-  const [proposal, setProposal] = useState<SafeProposal | null>(null);
-
-  // Pick up proposal data handed off from the /proposals list page via
-  // sessionStorage. The server already issued an HttpOnly session cookie
-  // during that verify call, so auth state lives in the cookie — the
-  // access code is never stored or re-sent by client code.
-  useEffect(() => {
-    const stored = sessionStorage.getItem(`znas-proposal-${slug}`);
-    if (stored) {
-      try {
-        const { proposal: data } = JSON.parse(stored);
-        if (data) setProposal(data);
-      } catch { /* ignore parse errors */ }
-      sessionStorage.removeItem(`znas-proposal-${slug}`);
-    }
-  }, [slug]);
+  // Pick up proposal data handed off from the /engagements list page. The
+  // server already issued an HttpOnly session cookie during that verify call,
+  // so auth state lives in the cookie — the access code is never stored or
+  // re-sent by client code. Read in a lazy initializer (not an effect) so the
+  // viewer renders on the first paint with no gate flash.
+  const [proposal, setProposal] = useState<SafeProposal | null>(() => takeHandoff(slug));
 
   // Mark that we're on a proposal page so navigation away (including
   // browser back) skips the full home preloader. Home's pageshow guards
@@ -98,19 +125,29 @@ export default function ProposalPageClient({
     [slug, lang, t.proposals.viewer.download.errorRefresh, t.proposals.viewer.download.errorFailed]
   );
 
-  // On unmount clear the in-memory proposal and ask the server to drop
-  // the session cookie. Best-effort — if the request fails (tab closed
-  // mid-flight) the cookie will still expire on its own Max-Age.
+  // On real navigation away, ask the server to drop the session cookie so the
+  // gated content can't be reopened without re-entering the code. Best-effort
+  // (the cookie also expires on its own Max-Age). Debounced through
+  // `pendingLogout`: a mount cancels any logout a transient unmount just
+  // scheduled, so the arrival transition's throwaway unmount doesn't nuke the
+  // freshly-minted cookie — only an unmount with no immediate remount fires it.
   useEffect(() => {
+    if (pendingLogout) {
+      clearTimeout(pendingLogout);
+      pendingLogout = null;
+    }
     return () => {
-      setProposal(null);
-      fetch("/api/proposals/logout", {
-        method: "POST",
-        credentials: "same-origin",
-        keepalive: true,
-      }).catch(() => { /* tab closing, nothing to do */ });
+      pendingLogout = setTimeout(() => {
+        pendingLogout = null;
+        handoffCache.delete(slug);
+        fetch("/api/proposals/logout", {
+          method: "POST",
+          credentials: "same-origin",
+          keepalive: true,
+        }).catch(() => { /* tab closing, nothing to do */ });
+      }, 200);
     };
-  }, []);
+  }, [slug]);
 
   return (
     <>

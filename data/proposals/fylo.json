@@ -1,21 +1,61 @@
 {
-  "_comment": "Active engagement with the Haven-style key-entry form. No PDF yet (document pending) — the gated page shows a 'being finalized' summary and no download button (DownloadSection is gated on pdfFilename). passwordHash gates an empty placeholder page; ROTATE it (scripts/hash-password.mjs) when the real proposal document is added, and deliver the fresh code to the client securely. Add pdfFilename + full sections then.",
+  "_comment": "Active engagement (Haven/Anequim-style key-entry form). Deliverable is two supporting-document cards (engagement proposal + value estimate) via the supportingDocuments section — no single main PDF, so the bottom Download CTA stays hidden. passwordHash gates the content; ROTATE it (scripts/hash-password.mjs) and deliver the fresh code to the client securely before sharing. demoFilename wires the gated Fylo Warehouse OS portal into the Try Now section.",
   "slug": "fylo",
   "clientName": "Fylo",
-  "projectTitle": "Engagement Proposal",
-  "projectTitle_es": "Propuesta de Colaboración",
+  "projectTitle": "Fylo Warehouse OS",
+  "projectTitle_es": "Fylo Warehouse OS",
   "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$RlA68imfRV0TAoXxPBmCPQ$nAUUrIqc3D2+i0bGZTf/5TBR9NpnFZ3RNqPTA5U7JNw",
   "status": "formalized",
+  "demoFilename": "fylo.html",
+  "demoLabel": "Fylo Warehouse OS Console",
+  "attachments": [
+    {
+      "id": "engagement-proposal",
+      "filename": "fylo-engagement-proposal.pdf",
+      "label": "View Document",
+      "label_es": "Ver Documento"
+    },
+    {
+      "id": "value-estimate",
+      "filename": "fylo-value-estimate.pdf",
+      "label": "View Document",
+      "label_es": "Ver Documento"
+    }
+  ],
   "sections": {
     "summary": {
-      "headline": "Your proposal is being finalized.",
-      "body": "Thanks for your interest in working with ZNAS. The full proposal for this engagement is being prepared and will be available here shortly. You'll be notified as soon as it's ready to review."
-    }
+      "headline": "A warehouse operating system built for Fylo — four systems in one, owned by you.",
+      "body": "Fylo Warehouse OS is a custom operating system for your fulfillment business — built to measure for Fylo, and owned by you. Where most operations run on a stack of rented subscriptions, this is a single platform your team actually works in, and an intellectual-property asset that sits on your own balance sheet.\n\nIt's four purpose-built systems on one platform: a mobile Manager dashboard, the Station floor displays, the Worker packer tablets, and a unified customer Support desk. Your sales channels — Shopify, Amazon, your in-office Farmville retail, and wholesale — all flow into one place, with an AI layer running throughout and returns, inventory, and a team bonus/leaderboard engine built in.\n\nAt the center is something no generic brand can offer: a Clinical Knowledge Assistant that puts Dr. Valenzuela's expertise directly into customer support, always behind a mandatory human approval gate. The platform runs on MemQL, ZNAS's production-grade AI platform, and open-source technology provided at no license cost — you get the capability without paying for the plumbing, and with no recurring SaaS rent for the software itself.\n\nThe two documents below lay out the full engagement. The **Engagement Proposal** covers the whole picture — technical services and optional marketing, the ~6–8 month build timeline, three flexible ways to own the platform (valued at **$225,000**), running costs, hardware, and terms. The **Value Estimate** is the independent appraisal behind that number — **$150K–$300K**, triangulated across three industry-standard methods on current-year 2026 data, with every figure traced to a cited source. Together they give you both the terms and the reasoning behind them."
+    },
+    "supportingDocuments": [
+      {
+        "title": "Fylo × ZNAS — Engagement Proposal",
+        "description": "The full engagement: technical services (the four-view platform, channel integrations, and ongoing technical consulting) and optional marketing services, the build timeline, three flexible ways to own the platform ($225,000 valuation), running costs, hardware, and terms & conditions.",
+        "attachmentId": "engagement-proposal"
+      },
+      {
+        "title": "Fylo Warehouse OS — Value Estimate",
+        "description": "An independent estimate of the platform's market value as an IP asset ($150K–$300K), triangulated across replacement cost, equivalent-subscription cost, and strategic enterprise value using 2026 industry benchmarks. Every figure traces to a cited source in the methodology section.",
+        "attachmentId": "value-estimate"
+      }
+    ]
   },
   "sections_es": {
     "summary": {
-      "headline": "Tu propuesta se está finalizando.",
-      "body": "Gracias por tu interés en trabajar con ZNAS. La propuesta completa para este proyecto se está preparando y estará disponible aquí en breve. Te avisaremos en cuanto esté lista para revisar."
-    }
+      "headline": "Un sistema operativo de bodega hecho para Fylo — cuatro sistemas en uno, y es tuyo.",
+      "body": "Fylo Warehouse OS es un sistema operativo a la medida para tu negocio de fulfillment — construido específicamente para Fylo, y de tu propiedad. Mientras la mayoría de las operaciones funcionan sobre una pila de suscripciones rentadas, esta es una sola plataforma donde tu equipo realmente trabaja, y un activo de propiedad intelectual que figura en tu propio balance.\n\nSon cuatro sistemas con propósito definido en una sola plataforma: un tablero Gerencial móvil, las pantallas de piso de las Estaciones, las tablets de los Empacadores, y una mesa de Soporte al cliente unificada. Tus canales de venta — Shopify, Amazon, tu tienda Farmville en oficina y mayoreo — fluyen todos a un mismo lugar, con una capa de IA presente en todo el sistema y con devoluciones, inventario y un motor de bonos/leaderboard para el equipo ya integrados.\n\nEn el centro hay algo que ninguna marca genérica puede ofrecer: un Asistente de Conocimiento Clínico que lleva la experiencia del Dr. Valenzuela directamente al soporte al cliente, siempre detrás de una aprobación humana obligatoria. La plataforma corre sobre MemQL, la plataforma de IA de nivel producción de ZNAS, y sobre tecnología de código abierto provista sin costo de licencia — obtienes la capacidad sin pagar la plomería, y sin renta recurrente de SaaS por el software en sí.\n\nLos dos documentos a continuación detallan el acuerdo completo. La **Propuesta de Colaboración** cubre el panorama entero — servicios técnicos y marketing opcional, el cronograma de construcción de ~6 a 8 meses, tres formas flexibles de ser dueño de la plataforma (valorada en **$225,000**), costos de operación, hardware y términos. La **Estimación de Valor** es la valoración independiente detrás de esa cifra — **$150K–$300K**, triangulada entre tres métodos estándar de la industria con datos de mercado de 2026, donde cada cifra remite a una fuente citada. Juntos te dan tanto los términos como el razonamiento que los respalda."
+    },
+    "supportingDocuments": [
+      {
+        "title": "Fylo × ZNAS — Propuesta de Colaboración",
+        "description": "El acuerdo completo: servicios técnicos (la plataforma de cuatro vistas, las integraciones de canales y la consultoría técnica continua) y servicios de marketing opcionales, el cronograma de construcción, tres formas flexibles de ser dueño de la plataforma (valoración de $225,000), costos de operación, hardware y términos y condiciones.",
+        "attachmentId": "engagement-proposal"
+      },
+      {
+        "title": "Fylo Warehouse OS — Estimación de Valor",
+        "description": "Una estimación independiente del valor de mercado de la plataforma como activo de propiedad intelectual ($150K–$300K), triangulada entre costo de reemplazo, costo de suscripciones equivalentes y valor estratégico empresarial usando referencias de la industria de 2026. Cada cifra remite a una fuente citada en la sección de metodología.",
+        "attachmentId": "value-estimate"
+      }
+    ]
   }
 }
