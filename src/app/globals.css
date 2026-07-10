@@ -252,7 +252,8 @@ body {
 }
 
 .proposal-page .glow-cyan,
-.proposal-page .glow-white {
+.proposal-page .glow-white,
+.proposal-page .glow-teal {
   background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -286,9 +287,24 @@ body {
   animation-duration: 7s;
 }
 
+/* White → teal sweep — used for the "Fylo Warehouse OS" product name. */
+.proposal-page .glow-teal {
+  background-image: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    #5EEAD4 25%,
+    #2DD4BF 50%,
+    #5EEAD4 75%,
+    #FFFFFF 100%
+  );
+  /* Yet another speed so it doesn't tick in lockstep with cyan/white */
+  animation-duration: 8s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .proposal-page .glow-cyan,
-  .proposal-page .glow-white {
+  .proposal-page .glow-white,
+  .proposal-page .glow-teal {
     animation: none;
   }
 }
