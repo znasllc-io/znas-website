@@ -17,9 +17,13 @@ import { translations } from "@/lib/translations";
 // .proposal-page in globals.css so the styling never leaks elsewhere.
 const CYAN_WORDS = ["CoPresent", "Visionarys"];
 const WHITE_WORDS = ["ZNAS"];
-const ALL_GLOW_WORDS = [...CYAN_WORDS, ...WHITE_WORDS];
+// Multi-word product name — kept first in the alternation so the full phrase
+// matches ahead of any single-word entry.
+const TEAL_PHRASES = ["Fylo Warehouse OS"];
+const ALL_GLOW_WORDS = [...TEAL_PHRASES, ...CYAN_WORDS, ...WHITE_WORDS];
 
 function glowClassFor(word: string): string | undefined {
+  if (TEAL_PHRASES.includes(word)) return "glow-teal";
   if (CYAN_WORDS.includes(word)) return "glow-cyan";
   if (WHITE_WORDS.includes(word)) return "glow-white";
   return undefined;
