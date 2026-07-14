@@ -56,11 +56,14 @@ export default function SupportingDocumentsSection({
     >
       <div className="container">
         <SectionLabel number={number} label={t.proposals.viewer.sections.documents} />
+        {/* Fixed 2-column grid (not auto-fit) so an even count of documents
+            reads as a deliberate square — e.g. Fylo's 4 cards form a clean
+            2x2 — rather than reflowing to 3+1 on wide viewports. Single
+            column on mobile. */}
         <div
+          className="grid grid-cols-1 md:grid-cols-2"
           style={{
-            display: "grid",
             gap: "1.5rem",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             marginTop: "2rem",
           }}
         >
