@@ -1167,18 +1167,6 @@ html:has(.fde) {
   white-space: nowrap;
 }
 
-/* Owl idle video — never show iOS Safari's native "start playback" button.
-   When muted autoplay is blocked (e.g. Low Power Mode) Safari overlays a play
-   button on the poster; the owl should just sit on its static frame instead. */
-.owl-mark::-webkit-media-controls,
-.owl-mark::-webkit-media-controls-start-playback-button,
-.owl-mark::-webkit-media-controls-play-button,
-.owl-mark::-webkit-media-controls-panel {
-  display: none !important;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
 /* ── Misc ── */
 .fde-container {
   width: 100%;

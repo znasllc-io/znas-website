@@ -52,7 +52,7 @@ export default function Hero({ preloaderDone }: HeroProps) {
   const taglineRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLVideoElement>(null);
+  const logoRef = useRef<HTMLImageElement>(null);
   const logoTextRef = useRef<HTMLSpanElement>(null);
   const flipClockRef = useRef<HTMLDivElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
