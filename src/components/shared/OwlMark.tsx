@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useEffect, useRef, type CSSProperties } from "react";
+import { forwardRef, useEffect, useState, type CSSProperties } from "react";
 
 interface OwlMarkProps {
   /** Display height. Omit to let a CSS class control sizing (e.g. .logo-hero). */
@@ -9,64 +9,47 @@ interface OwlMarkProps {
   style?: CSSProperties;
 }
 
+const ANIMATED_SRC = "/videos/owl-idle.webp";
+const STATIC_SRC = "/videos/owl-idle-poster.png";
+
 /**
- * Idling ZNAS owl — a tiny (~50KB) looping, muted video used wherever the owl
- * mark appears large. The source has a pure-black background, so
- * `mix-blend-mode: screen` drops the black and the owl blends like the static
- * logo. Falls back to a paused poster frame (the static owl) when the user
- * prefers reduced motion, or if autoplay/the video is unavailable.
+ * Idling ZNAS owl — a small looping animation used wherever the owl mark
+ * appears large.
  *
- * Forwards its ref to the <video> so callers can drive it (e.g. the portfolio
+ * Served as an animated WebP `<img>`, deliberately NOT a `<video>`: Safari
+ * (both iOS and macOS) overlays its media-controls / "tap to play" button on
+ * a <video> whenever it won't autoplay — e.g. Low Power Mode — and that
+ * overlay isn't reliably removable. An <img> can never show those controls,
+ * animates on every browser, and plays even in Low Power Mode. The source
+ * frames are white-on-black, so `mix-blend-mode: screen` drops the black and
+ * the owl blends like the static logo.
+ *
+ * Honors prefers-reduced-motion by swapping to a single static frame.
+ *
+ * Forwards its ref to the <img> so callers can drive it (e.g. the portfolio
  * hero's GSAP entrance animation).
  */
-const OwlMark = forwardRef<HTMLVideoElement, OwlMarkProps>(function OwlMark(
+const OwlMark = forwardRef<HTMLImageElement, OwlMarkProps>(function OwlMark(
   { height, className, style },
   ref
 ) {
-  const innerRef = useRef<HTMLVideoElement>(null);
+  // Default to the animated source; swap to the still frame when the visitor
+  // prefers reduced motion (checked after mount — SSR can't know it).
+  const [src, setSrc] = useState(ANIMATED_SRC);
 
   useEffect(() => {
-    const v = innerRef.current;
-    if (!v) return;
-
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      v.removeAttribute("autoplay");
-      v.pause();
-      try {
-        v.currentTime = 0;
-      } catch {
-        /* poster shows regardless */
-      }
-      return;
+      setSrc(STATIC_SRC);
     }
-
-    // Force muted + start playback. React's `muted` JSX prop is a property, not
-    // a reflected attribute, so it can be applied too late for the browser's
-    // autoplay gate — leaving the video paused on its poster ("not moving").
-    // Setting it imperatively and calling play() makes muted autoplay reliable.
-    v.muted = true;
-    const tryPlay = () => {
-      const p = v.play();
-      if (p && typeof p.catch === "function") p.catch(() => {});
-    };
-    tryPlay();
-    // If metadata wasn't ready on first try, play once it can.
-    v.addEventListener("canplay", tryPlay, { once: true });
-    return () => v.removeEventListener("canplay", tryPlay);
   }, []);
-
-  const setRefs = (el: HTMLVideoElement | null) => {
-    innerRef.current = el;
-    if (typeof ref === "function") ref(el);
-    else if (ref) (ref as React.MutableRefObject<HTMLVideoElement | null>).current = el;
-  };
 
   const h =
     height === undefined ? undefined : typeof height === "number" ? `${height}px` : height;
 
   return (
-    <video
-      ref={setRefs}
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      ref={ref}
       className={`owl-mark${className ? ` ${className}` : ""}`}
       style={{
         height: h,
@@ -76,13 +59,11 @@ const OwlMark = forwardRef<HTMLVideoElement, OwlMarkProps>(function OwlMark(
         pointerEvents: "none",
         ...style,
       }}
-      src="/videos/owl-idle.mp4"
-      poster="/videos/owl-idle-poster.png"
-      autoPlay
-      muted
-      loop
-      playsInline
+      src={src}
+      alt=""
       aria-hidden
+      draggable={false}
+      decoding="async"
     />
   );
 });
