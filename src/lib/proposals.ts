@@ -249,6 +249,14 @@ export interface Proposal {
   // caption), e.g. "Fylo Warehouse OS Console". Falls back to a generic
   // "Live Portal" when omitted so the section never shows another client's name.
   demoLabel?: string;
+  // Optional showcase video. File in data/proposals/videos/ (must match
+  // ^[a-z0-9-]+\.mp4$). When set, the viewer shows a "Video" section (before
+  // Try Now) with a custom player, streamed range-gated via
+  // /api/proposals/video?slug= so it stays behind the same session gate.
+  videoFilename?: string;
+  // Optional caption shown in the video frame's idle/loading state.
+  videoLabel?: string;
+  videoLabel_es?: string;
   // Optional supplementary downloads (rendered as additional buttons next
   // to the main PDF download). Same auth + path validation rules apply.
   attachments?: ProposalAttachment[];

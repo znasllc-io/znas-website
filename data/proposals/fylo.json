@@ -8,6 +8,9 @@
   "status": "formalized",
   "demoFilename": "fylo.html",
   "demoLabel": "Fylo Warehouse OS Console",
+  "videoFilename": "fylo-walkthrough.mp4",
+  "videoLabel": "Fylo Warehouse OS — Walkthrough",
+  "videoLabel_es": "Fylo Warehouse OS — Recorrido",
   "attachments": [
     {
       "id": "engagement-proposal",

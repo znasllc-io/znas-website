@@ -57,7 +57,12 @@ export interface ProposalViewerStrings {
   // Assets (downloads) section.
   assetsIntro: string;
   downloadAsset: string;
-  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string; assets: string };
+  // Video showcase section.
+  videoHint: string;
+  videoCta: string;
+  videoLoading: string;
+  videoReplay: string;
+  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string; assets: string; video: string };
   download: {
     headline: string;
     subtitle: string;
@@ -65,7 +70,7 @@ export interface ProposalViewerStrings {
     errorRefresh: string;
     errorFailed: string;
   };
-  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; assets: string };
+  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; assets: string; video: string };
 }
 
 export interface ProposalGateStrings {
@@ -376,6 +381,10 @@ export const translations: Record<Lang, LangStrings> = {
         accessEnds: "Access to this proposal ends in",
         assetsIntro: "Download the documents and files from this engagement.",
         downloadAsset: "Download",
+        videoHint: "A quick walkthrough of your new platform — press play.",
+        videoCta: "Watch the video",
+        videoLoading: "Loading your new video…",
+        videoReplay: "Replay",
         sections: {
           executiveSummary: "Executive Summary",
           roadmap: "Roadmap",
@@ -388,6 +397,7 @@ export const translations: Record<Lang, LangStrings> = {
           documents: "Supporting Documents",
           tryNow: "Try It Now",
           assets: "Assets",
+          video: "Video",
         },
         download: {
           headline: "Ready to move forward?",
@@ -406,6 +416,7 @@ export const translations: Record<Lang, LangStrings> = {
           initiative: "Initiative",
           realEstateAgent: "Real Estate Agent",
           assets: "Assets",
+          video: "Video",
         },
       },
       gate: {
@@ -657,6 +668,10 @@ export const translations: Record<Lang, LangStrings> = {
         accessEnds: "El acceso a esta propuesta termina en",
         assetsIntro: "Descarga los documentos y archivos de este proyecto.",
         downloadAsset: "Descargar",
+        videoHint: "Un recorrido rápido de tu nueva plataforma — dale play.",
+        videoCta: "Ver el video",
+        videoLoading: "Cargando tu nuevo video…",
+        videoReplay: "Repetir",
         sections: {
           executiveSummary: "Resumen Ejecutivo",
           roadmap: "Hoja de Ruta",
@@ -669,6 +684,7 @@ export const translations: Record<Lang, LangStrings> = {
           documents: "Documentos de Apoyo",
           tryNow: "Pruébalo",
           assets: "Recursos",
+          video: "Video",
         },
         download: {
           headline: "¿Listo para avanzar?",
@@ -687,6 +703,7 @@ export const translations: Record<Lang, LangStrings> = {
           initiative: "Iniciativa",
           realEstateAgent: "Agente de Bienes Raíces",
           assets: "Recursos",
+          video: "Video",
         },
       },
       gate: {

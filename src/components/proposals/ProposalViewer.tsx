@@ -5,6 +5,7 @@ import { gsap } from "@/lib/gsap-config";
 import type { SafeProposal, ProposalAttachment, ProposalTeamMember } from "@/lib/proposals";
 import SupportingDocumentsSection from "./SupportingDocuments";
 import AssetsSection from "./AssetsSection";
+import VideoShowcase from "./VideoShowcase";
 import TryNowSection from "./TryNow";
 import SectionLabel from "@/components/ui/SectionLabel";
 import RoadmapTimeline from "./RoadmapTimeline";
@@ -203,6 +204,15 @@ export default function ProposalViewer({
                 number={nextNumber()}
                 docs={sections.supportingDocuments}
                 onDownload={onDownload}
+                lang={lang}
+              />
+            )}
+
+            {proposal.videoFilename && (
+              <VideoShowcase
+                number={nextNumber()}
+                slug={proposal.slug}
+                label={(lang === "es" && proposal.videoLabel_es) ? proposal.videoLabel_es : proposal.videoLabel}
                 lang={lang}
               />
             )}

@@ -216,6 +216,9 @@ export default function ProposalPageClient({
             // Other proposals' nav stays unaffected.
             navOverride={[
               { label: t.proposals.viewer.nav.summary, href: "#summary" },
+              ...(proposal.videoFilename
+                ? [{ label: t.proposals.viewer.nav.video, href: "#video" }]
+                : []),
               ...(proposal.sections.roadmap
                 ? [{ label: t.proposals.viewer.nav.roadmap, href: "#roadmap" }]
                 : []),
