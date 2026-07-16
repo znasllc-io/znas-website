@@ -148,12 +148,24 @@ export default function VideoShowcase({
     };
   }, [phase, scrubbing]);
 
-  // Track whether the player is the current fullscreen element.
+  // Track whether the player is the current fullscreen element. Handle the
+  // WebKit-prefixed event + property too (Safari), or the state never flips
+  // there and the cursor stays hidden.
   useEffect(() => {
-    const onFsChange = () =>
-      setFullscreen(document.fullscreenElement === bezelRef.current);
+    const onFsChange = () => {
+      const fsEl =
+        document.fullscreenElement ||
+        (document as Document & { webkitFullscreenElement?: Element })
+          .webkitFullscreenElement ||
+        null;
+      setFullscreen(fsEl === bezelRef.current);
+    };
     document.addEventListener("fullscreenchange", onFsChange);
-    return () => document.removeEventListener("fullscreenchange", onFsChange);
+    document.addEventListener("webkitfullscreenchange", onFsChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", onFsChange);
+      document.removeEventListener("webkitfullscreenchange", onFsChange);
+    };
   }, []);
 
   const togglePlay = () => {
@@ -178,10 +190,21 @@ export default function VideoShowcase({
   };
 
   const toggleFullscreen = () => {
-    const el = bezelRef.current;
+    const el = bezelRef.current as
+      | (HTMLDivElement & { webkitRequestFullscreen?: () => Promise<void> | void })
+      | null;
     if (!el) return;
-    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-    else el.requestFullscreen?.().catch(() => {});
+    const doc = document as Document & {
+      webkitFullscreenElement?: Element;
+      webkitExitFullscreen?: () => Promise<void> | void;
+    };
+    const fsEl = document.fullscreenElement || doc.webkitFullscreenElement;
+    // Prefer the standard API, fall back to WebKit-prefixed (Safari). Swallow
+    // rejections so a blocked request can't surface as an unhandled rejection.
+    const run = fsEl
+      ? document.exitFullscreen?.() ?? doc.webkitExitFullscreen?.()
+      : el.requestFullscreen?.() ?? el.webkitRequestFullscreen?.();
+    Promise.resolve(run).catch(() => {});
   };
 
   // Scrub: pointer down/move on the track seeks the video.
@@ -246,6 +269,12 @@ export default function VideoShowcase({
             backgroundColor: "var(--color-bg-void)",
             border: "1px solid var(--color-border)",
             boxShadow: "0 40px 90px -50px rgba(0,0,0,0.75)",
+            // In fullscreen the bezel fills the screen and the portrait video
+            // letterboxes, so most of the surface is bezel background. Give the
+            // bezel itself the native cursor (it inherits down to the letterbox
+            // area); the video/controls keep their own pointer. Outside
+            // fullscreen it stays `none` so the site's custom cursor shows.
+            cursor: cursorFor(false),
           }}
         >
           {/* Video (mounts once we leave idle) */}
