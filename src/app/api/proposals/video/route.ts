@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { loadProposal, isAccessExpired } from "@/lib/proposals";
-import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { checkStreamRateLimit, getClientIp } from "@/lib/rate-limit";
 import { SESSION_COOKIE_NAME, verifySession } from "@/lib/session";
 
 /**
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
   if (!/^[a-z0-9-]+$/.test(slug)) return deny();
 
   const ip = getClientIp(request);
-  const rateLimit = await checkRateLimit({ ip, slug });
+  const rateLimit = await checkStreamRateLimit({ ip, slug });
   if (!rateLimit.allowed) {
     return new NextResponse("Too many requests", { status: 429, headers: NOSNIFF });
   }
