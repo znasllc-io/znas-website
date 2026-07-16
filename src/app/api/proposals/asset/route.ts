@@ -111,7 +111,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const size = fs.statSync(assetPath).size;
     const ext = path.extname(assetPath).toLowerCase();
     const contentType = CONTENT_TYPE_BY_EXT[ext] ?? "application/octet-stream";
 
@@ -120,11 +119,17 @@ export async function POST(request: NextRequest) {
     let downloadName = asset.downloadName || path.basename(assetPath);
     if (!/^[A-Za-z0-9._-]+$/.test(downloadName)) downloadName = path.basename(assetPath);
 
-    // Stream the file rather than buffering it whole: a large asset (e.g. the
-    // ~33MB video) would otherwise be read into memory and returned as one
-    // buffered response, which fails on Cloud Run (256Mi container + a ~32MiB
-    // buffered-response cap). Streaming sends it in chunks — bounded memory,
-    // no size cap.
+    // Stream the file as a true chunked response — and deliberately DO NOT set
+    // Content-Length. On Cloud Run, a response with a fixed Content-Length is
+    // treated as non-streaming: the platform caps it at ~32 MiB and the
+    // container buffers the whole body in memory. That's why the ~33MB video
+    // 500'd ("Response size was too large" + "Memory limit of 256 MiB exceeded"
+    // in the logs) even after we switched to createReadStream — the header
+    // defeated the streaming. Omitting Content-Length sends the body with
+    // Transfer-Encoding: chunked (HTTP server-side streaming), which has no
+    // size cap on Cloud Run and flushes chunk-by-chunk, so memory stays bounded
+    // regardless of file size. Trade-off: the browser can't show a download
+    // progress %, which is fine for these gated deliverables.
     const nodeStream = fs.createReadStream(assetPath);
     const webStream = Readable.toWeb(nodeStream) as unknown as ReadableStream<Uint8Array>;
 
@@ -133,7 +138,6 @@ export async function POST(request: NextRequest) {
       headers: {
         "Content-Type": contentType,
         "Content-Disposition": `attachment; filename="${downloadName}"`,
-        "Content-Length": size.toString(),
         "Cache-Control": "no-store, no-cache, must-revalidate",
         "X-Content-Type-Options": "nosniff",
       },
