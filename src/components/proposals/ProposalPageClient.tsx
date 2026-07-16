@@ -136,6 +136,43 @@ export default function ProposalPageClient({
     [slug, lang, t.proposals.viewer.download.errorRefresh, t.proposals.viewer.download.errorFailed]
   );
 
+  // Download an Assets-section deliverable (PDF, portal HTML, media) via the
+  // gated asset endpoint. Saved filename comes from Content-Disposition.
+  const handleDownloadAsset = useCallback(
+    async (assetId: string) => {
+      try {
+        const res = await fetch("/api/proposals/asset", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ slug, assetId }),
+        });
+
+        if (!res.ok) {
+          alert(t.proposals.viewer.download.errorRefresh);
+          return;
+        }
+
+        const cd = res.headers.get("Content-Disposition") || "";
+        const m = cd.match(/filename="?([^";]+)"?/);
+        const filename = m ? m[1] : "download";
+
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch {
+        alert(t.proposals.viewer.download.errorFailed);
+      }
+    },
+    [slug, t.proposals.viewer.download.errorRefresh, t.proposals.viewer.download.errorFailed]
+  );
+
   // On real navigation away, ask the server to drop the session cookie so the
   // gated content can't be reopened without re-entering the code. Best-effort
   // (the cookie also expires on its own Max-Age). Debounced through
@@ -179,6 +216,9 @@ export default function ProposalPageClient({
             // Other proposals' nav stays unaffected.
             navOverride={[
               { label: t.proposals.viewer.nav.summary, href: "#summary" },
+              ...(proposal.videoFilename
+                ? [{ label: t.proposals.viewer.nav.video, href: "#video" }]
+                : []),
               ...(proposal.sections.roadmap
                 ? [{ label: t.proposals.viewer.nav.roadmap, href: "#roadmap" }]
                 : []),
@@ -200,11 +240,19 @@ export default function ProposalPageClient({
               ...(proposal.sections.realEstateAgent
                 ? [{ label: t.proposals.viewer.nav.realEstateAgent, href: "#realEstateAgent" }]
                 : []),
+              ...(proposal.assets && proposal.assets.length > 0
+                ? [{ label: t.proposals.viewer.nav.assets, href: "#assets" }]
+                : []),
             ]}
             backHref="/engagements"
             backLabel={t.nav.back}
           />
-          <ProposalViewer proposal={proposal} access={access} onDownload={handleDownload} />
+          <ProposalViewer
+            proposal={proposal}
+            access={access}
+            onDownload={handleDownload}
+            onDownloadAsset={handleDownloadAsset}
+          />
           <SiteFooter />
         </>
       )}

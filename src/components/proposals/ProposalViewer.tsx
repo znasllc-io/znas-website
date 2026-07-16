@@ -4,6 +4,8 @@ import { useEffect, useRef, Fragment } from "react";
 import { gsap } from "@/lib/gsap-config";
 import type { SafeProposal, ProposalAttachment, ProposalTeamMember } from "@/lib/proposals";
 import SupportingDocumentsSection from "./SupportingDocuments";
+import AssetsSection from "./AssetsSection";
+import VideoShowcase from "./VideoShowcase";
 import TryNowSection from "./TryNow";
 import SectionLabel from "@/components/ui/SectionLabel";
 import RoadmapTimeline from "./RoadmapTimeline";
@@ -60,6 +62,8 @@ interface ProposalViewerProps {
   // attachmentId is undefined for the main PDF, or matches an entry in
   // proposal.attachments for a supplementary download.
   onDownload: (attachmentId?: string) => void;
+  // Downloads a proposal.assets[] item via /api/proposals/asset.
+  onDownloadAsset: (assetId: string) => void;
 }
 
 // "23d 5h" for the access-window header value. Always shows both units
@@ -76,6 +80,7 @@ export default function ProposalViewer({
   proposal,
   access,
   onDownload,
+  onDownloadAsset,
 }: ProposalViewerProps) {
   const { lang } = useLanguage();
   const t = translations[lang];
@@ -203,6 +208,15 @@ export default function ProposalViewer({
               />
             )}
 
+            {proposal.videoFilename && (
+              <VideoShowcase
+                number={nextNumber()}
+                slug={proposal.slug}
+                label={(lang === "es" && proposal.videoLabel_es) ? proposal.videoLabel_es : proposal.videoLabel}
+                lang={lang}
+              />
+            )}
+
             {proposal.demoFilename && (
               <TryNowSection number={nextNumber()} slug={proposal.slug} lang={lang} label={proposal.demoLabel} />
             )}
@@ -268,6 +282,15 @@ export default function ProposalViewer({
                 intro={sections.realEstateAgent.intro}
                 points={sections.realEstateAgent.points}
                 note={sections.realEstateAgent.note}
+              />
+            )}
+
+            {proposal.assets && proposal.assets.length > 0 && (
+              <AssetsSection
+                number={nextNumber()}
+                assets={proposal.assets}
+                onDownloadAsset={onDownloadAsset}
+                lang={lang}
               />
             )}
           </>

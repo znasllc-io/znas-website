@@ -54,7 +54,15 @@ export interface ProposalViewerStrings {
   // the "23d 5h" value renders as its own (larger, colored) span right
   // after it, not interpolated into the sentence.
   accessEnds: string;
-  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string };
+  // Assets (downloads) section.
+  assetsIntro: string;
+  downloadAsset: string;
+  // Video showcase section.
+  videoHint: string;
+  videoCta: string;
+  videoLoading: string;
+  videoReplay: string;
+  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string; assets: string; video: string };
   download: {
     headline: string;
     subtitle: string;
@@ -62,7 +70,7 @@ export interface ProposalViewerStrings {
     errorRefresh: string;
     errorFailed: string;
   };
-  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string };
+  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; assets: string; video: string };
 }
 
 export interface ProposalGateStrings {
@@ -371,6 +379,12 @@ export const translations: Record<Lang, LangStrings> = {
         tryNowHint: "Launch a live, interactive preview of the portal — it runs right here on the page.",
         tryNowLoading: "Loading your new portal…",
         accessEnds: "Access to this proposal ends in",
+        assetsIntro: "Download the documents and files from this engagement.",
+        downloadAsset: "Download",
+        videoHint: "A quick walkthrough of your new platform — press play.",
+        videoCta: "Watch the video",
+        videoLoading: "Loading your new video…",
+        videoReplay: "Replay",
         sections: {
           executiveSummary: "Executive Summary",
           roadmap: "Roadmap",
@@ -382,6 +396,8 @@ export const translations: Record<Lang, LangStrings> = {
           realEstateAgent: "Real Estate Agent",
           documents: "Supporting Documents",
           tryNow: "Try It Now",
+          assets: "Assets",
+          video: "Video",
         },
         download: {
           headline: "Ready to move forward?",
@@ -399,6 +415,8 @@ export const translations: Record<Lang, LangStrings> = {
           team: "Meet the Team",
           initiative: "Initiative",
           realEstateAgent: "Real Estate Agent",
+          assets: "Assets",
+          video: "Video",
         },
       },
       gate: {
@@ -648,6 +666,12 @@ export const translations: Record<Lang, LangStrings> = {
         tryNowHint: "Abre una vista previa interactiva del portal — funciona aquí mismo en la página.",
         tryNowLoading: "Cargando tu nuevo portal…",
         accessEnds: "El acceso a esta propuesta termina en",
+        assetsIntro: "Descarga los documentos y archivos de este proyecto.",
+        downloadAsset: "Descargar",
+        videoHint: "Un recorrido rápido de tu nueva plataforma — dale play.",
+        videoCta: "Ver el video",
+        videoLoading: "Cargando tu nuevo video…",
+        videoReplay: "Repetir",
         sections: {
           executiveSummary: "Resumen Ejecutivo",
           roadmap: "Hoja de Ruta",
@@ -659,6 +683,8 @@ export const translations: Record<Lang, LangStrings> = {
           realEstateAgent: "Agente de Bienes Raíces",
           documents: "Documentos de Apoyo",
           tryNow: "Pruébalo",
+          assets: "Recursos",
+          video: "Video",
         },
         download: {
           headline: "¿Listo para avanzar?",
@@ -676,6 +702,8 @@ export const translations: Record<Lang, LangStrings> = {
           team: "El Equipo",
           initiative: "Iniciativa",
           realEstateAgent: "Agente de Bienes Raíces",
+          assets: "Recursos",
+          video: "Video",
         },
       },
       gate: {

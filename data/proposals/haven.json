@@ -14,6 +14,22 @@
       "label_es": "Descargar Plan de Acción"
     }
   ],
+  "assets": [
+    {
+      "id": "proposal",
+      "file": "pdfs/haven-en.pdf",
+      "label": "Proposal",
+      "label_es": "Propuesta",
+      "kind": "pdf"
+    },
+    {
+      "id": "gameplan",
+      "file": "pdfs/haven-gameplan.pdf",
+      "label": "Gameplan",
+      "label_es": "Plan de Acción",
+      "kind": "pdf"
+    }
+  ],
   "downloadCta": {
     "headline": "Ready to move forward?",
     "subtitle": "This is what working with ZNAS looks like in practice. The full proposal is below."
