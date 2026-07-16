@@ -21,6 +21,13 @@ import { Redis } from "@upstash/redis";
  *     follow-up should emit a structured log + alert at that moment
  *     (audit finding M2).
  *
+ * The video streaming route uses a separate, much more permissive limiter
+ * (see checkStreamRateLimit below) instead of the one above: it's already
+ * gated behind the session cookie (verifySession), so the brute-force
+ * concern the tight 10/min budget defends against doesn't apply, and a
+ * single playthrough of a range-chunked video legitimately needs far more
+ * than 10 requests/minute.
+ *
  * Two runtime modes:
  *
  *   - Distributed (preferred for prod): if UPSTASH_REDIS_REST_URL +
@@ -41,12 +48,20 @@ import { Redis } from "@upstash/redis";
 const MAX_PER_IP_PER_MIN = 10;
 const MAX_PER_SLUG_PER_HOUR = 100;
 
+// Streaming needs many more, smaller requests per viewing than an auth
+// attempt does (the video route caps each response to MAX_CHUNK bytes), so
+// it gets its own, more permissive budget instead of sharing the one above.
+const MAX_STREAM_PER_IP_PER_MIN = 300;
+const MAX_STREAM_PER_SLUG_PER_HOUR = 6000;
+
 const redisConfigured = !!(
   process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
 );
 
 let perIpLimiter: Ratelimit | null = null;
 let perSlugLimiter: Ratelimit | null = null;
+let streamIpLimiter: Ratelimit | null = null;
+let streamSlugLimiter: Ratelimit | null = null;
 
 if (redisConfigured) {
   const redis = Redis.fromEnv();
@@ -60,6 +75,18 @@ if (redisConfigured) {
     redis,
     limiter: Ratelimit.slidingWindow(MAX_PER_SLUG_PER_HOUR, "3600 s"),
     prefix: "rl:slug",
+    analytics: false,
+  });
+  streamIpLimiter = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(MAX_STREAM_PER_IP_PER_MIN, "60 s"),
+    prefix: "rl:stream:ip",
+    analytics: false,
+  });
+  streamSlugLimiter = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(MAX_STREAM_PER_SLUG_PER_HOUR, "3600 s"),
+    prefix: "rl:stream:slug",
     analytics: false,
   });
 }
@@ -135,6 +162,35 @@ export async function checkRateLimit(args: {
   const ipCheck = memCheck(`ip:${ip}:${slug}`, MAX_PER_IP_PER_MIN, 60_000);
   if (!ipCheck.allowed) return ipCheck;
   const slugCheck = memCheck(`slug:${slug}`, MAX_PER_SLUG_PER_HOUR, 3_600_000);
+  if (!slugCheck.allowed) return slugCheck;
+  return { allowed: true, resetIn: Math.min(ipCheck.resetIn, slugCheck.resetIn) };
+}
+
+/**
+ * Rate limit for the gated video streaming route only. Same IP+slug /
+ * slug-wide shape as checkRateLimit, but with a budget sized for many
+ * range-chunked requests per viewing rather than a handful of auth
+ * attempts (see the module comment above).
+ */
+export async function checkStreamRateLimit(args: {
+  ip: string;
+  slug: string;
+}): Promise<{ allowed: boolean; resetIn: number }> {
+  const { ip, slug } = args;
+
+  if (streamIpLimiter && streamSlugLimiter) {
+    const [ipResult, slugResult] = await Promise.all([
+      streamIpLimiter.limit(`${ip}:${slug}`),
+      streamSlugLimiter.limit(slug),
+    ]);
+    const allowed = ipResult.success && slugResult.success;
+    const resetIn = Math.max(0, Math.max(ipResult.reset, slugResult.reset) - Date.now());
+    return { allowed, resetIn };
+  }
+
+  const ipCheck = memCheck(`streamip:${ip}:${slug}`, MAX_STREAM_PER_IP_PER_MIN, 60_000);
+  if (!ipCheck.allowed) return ipCheck;
+  const slugCheck = memCheck(`streamslug:${slug}`, MAX_STREAM_PER_SLUG_PER_HOUR, 3_600_000);
   if (!slugCheck.allowed) return slugCheck;
   return { allowed: true, resetIn: Math.min(ipCheck.resetIn, slugCheck.resetIn) };
 }
