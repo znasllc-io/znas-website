@@ -213,6 +213,7 @@ export default function ProposalViewer({
                 number={nextNumber()}
                 slug={proposal.slug}
                 label={(lang === "es" && proposal.videoLabel_es) ? proposal.videoLabel_es : proposal.videoLabel}
+                hint={(lang === "es" && proposal.videoHint_es) ? proposal.videoHint_es : proposal.videoHint}
                 lang={lang}
               />
             )}

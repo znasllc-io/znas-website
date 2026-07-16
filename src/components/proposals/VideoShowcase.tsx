@@ -30,11 +30,13 @@ export default function VideoShowcase({
   number,
   slug,
   label,
+  hint,
   lang,
 }: {
   number: string;
   slug: string;
   label?: string;
+  hint?: string;
   lang: "en" | "es";
 }) {
   const t = translations[lang];
@@ -253,7 +255,7 @@ export default function VideoShowcase({
           className="text-body"
           style={{ color: "var(--color-text-secondary)", maxWidth: "640px", margin: "1rem 0 2.25rem", lineHeight: 1.7 }}
         >
-          {t.proposals.viewer.videoHint}
+          {hint || t.proposals.viewer.videoHint}
         </p>
 
         {/* Portrait bezel */}

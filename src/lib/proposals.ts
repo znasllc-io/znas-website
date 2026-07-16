@@ -257,6 +257,10 @@ export interface Proposal {
   // Optional caption shown in the video frame's idle/loading state.
   videoLabel?: string;
   videoLabel_es?: string;
+  // Optional subtitle above the video frame. Overrides the generic
+  // translations `videoHint` when set (per-proposal brand copy).
+  videoHint?: string;
+  videoHint_es?: string;
   // Optional supplementary downloads (rendered as additional buttons next
   // to the main PDF download). Same auth + path validation rules apply.
   attachments?: ProposalAttachment[];
