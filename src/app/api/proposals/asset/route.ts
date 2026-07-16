@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { Readable } from "stream";
 import { loadProposal, isAccessExpired, resolveAssetPath } from "@/lib/proposals";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { SESSION_COOKIE_NAME, verifySession } from "@/lib/session";
@@ -110,7 +111,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const buffer = fs.readFileSync(assetPath);
+    const size = fs.statSync(assetPath).size;
     const ext = path.extname(assetPath).toLowerCase();
     const contentType = CONTENT_TYPE_BY_EXT[ext] ?? "application/octet-stream";
 
@@ -119,12 +120,20 @@ export async function POST(request: NextRequest) {
     let downloadName = asset.downloadName || path.basename(assetPath);
     if (!/^[A-Za-z0-9._-]+$/.test(downloadName)) downloadName = path.basename(assetPath);
 
-    return new NextResponse(buffer, {
+    // Stream the file rather than buffering it whole: a large asset (e.g. the
+    // ~33MB video) would otherwise be read into memory and returned as one
+    // buffered response, which fails on Cloud Run (256Mi container + a ~32MiB
+    // buffered-response cap). Streaming sends it in chunks — bounded memory,
+    // no size cap.
+    const nodeStream = fs.createReadStream(assetPath);
+    const webStream = Readable.toWeb(nodeStream) as unknown as ReadableStream<Uint8Array>;
+
+    return new NextResponse(webStream, {
       status: 200,
       headers: {
         "Content-Type": contentType,
         "Content-Disposition": `attachment; filename="${downloadName}"`,
-        "Content-Length": buffer.length.toString(),
+        "Content-Length": size.toString(),
         "Cache-Control": "no-store, no-cache, must-revalidate",
         "X-Content-Type-Options": "nosniff",
       },
