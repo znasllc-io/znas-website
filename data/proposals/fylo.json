@@ -75,6 +75,16 @@
       "description": "The interactive portal, as a self-contained file you can open in any browser.",
       "description_es": "El portal interactivo, como un archivo independiente que puedes abrir en cualquier navegador.",
       "downloadName": "fylo-warehouse-os-portal.html"
+    },
+    {
+      "id": "walkthrough-video",
+      "file": "videos/fylo-walkthrough.mp4",
+      "label": "Fylo Warehouse OS — Walkthrough",
+      "label_es": "Fylo Warehouse OS — Recorrido",
+      "kind": "video",
+      "description": "The walkthrough video, as a downloadable file.",
+      "description_es": "El video de recorrido, como archivo descargable.",
+      "downloadName": "fylo-warehouse-os-walkthrough.mp4"
     }
   ],
   "sections": {
