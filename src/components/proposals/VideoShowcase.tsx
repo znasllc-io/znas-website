@@ -241,7 +241,11 @@ export default function VideoShowcase({
               style={{
                 width: "100%",
                 height: "100%",
-                objectFit: "cover",
+                // contain, not cover: the portrait clip must never be cropped —
+                // in landscape fullscreen it letterboxes (side bars) instead of
+                // scaling up to fill and cutting off the top/bottom. In the
+                // portrait bezel the aspect matches, so it fills edge-to-edge.
+                objectFit: "contain",
                 display: "block",
                 cursor: "none",
               }}
