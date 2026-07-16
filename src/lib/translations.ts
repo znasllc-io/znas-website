@@ -54,7 +54,10 @@ export interface ProposalViewerStrings {
   // the "23d 5h" value renders as its own (larger, colored) span right
   // after it, not interpolated into the sentence.
   accessEnds: string;
-  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string };
+  // Assets (downloads) section.
+  assetsIntro: string;
+  downloadAsset: string;
+  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string; assets: string };
   download: {
     headline: string;
     subtitle: string;
@@ -62,7 +65,7 @@ export interface ProposalViewerStrings {
     errorRefresh: string;
     errorFailed: string;
   };
-  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string };
+  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; assets: string };
 }
 
 export interface ProposalGateStrings {
@@ -371,6 +374,8 @@ export const translations: Record<Lang, LangStrings> = {
         tryNowHint: "Launch a live, interactive preview of the portal — it runs right here on the page.",
         tryNowLoading: "Loading your new portal…",
         accessEnds: "Access to this proposal ends in",
+        assetsIntro: "Download the documents and files from this engagement.",
+        downloadAsset: "Download",
         sections: {
           executiveSummary: "Executive Summary",
           roadmap: "Roadmap",
@@ -382,6 +387,7 @@ export const translations: Record<Lang, LangStrings> = {
           realEstateAgent: "Real Estate Agent",
           documents: "Supporting Documents",
           tryNow: "Try It Now",
+          assets: "Assets",
         },
         download: {
           headline: "Ready to move forward?",
@@ -399,6 +405,7 @@ export const translations: Record<Lang, LangStrings> = {
           team: "Meet the Team",
           initiative: "Initiative",
           realEstateAgent: "Real Estate Agent",
+          assets: "Assets",
         },
       },
       gate: {
@@ -648,6 +655,8 @@ export const translations: Record<Lang, LangStrings> = {
         tryNowHint: "Abre una vista previa interactiva del portal — funciona aquí mismo en la página.",
         tryNowLoading: "Cargando tu nuevo portal…",
         accessEnds: "El acceso a esta propuesta termina en",
+        assetsIntro: "Descarga los documentos y archivos de este proyecto.",
+        downloadAsset: "Descargar",
         sections: {
           executiveSummary: "Resumen Ejecutivo",
           roadmap: "Hoja de Ruta",
@@ -659,6 +668,7 @@ export const translations: Record<Lang, LangStrings> = {
           realEstateAgent: "Agente de Bienes Raíces",
           documents: "Documentos de Apoyo",
           tryNow: "Pruébalo",
+          assets: "Recursos",
         },
         download: {
           headline: "¿Listo para avanzar?",
@@ -676,6 +686,7 @@ export const translations: Record<Lang, LangStrings> = {
           team: "El Equipo",
           initiative: "Iniciativa",
           realEstateAgent: "Agente de Bienes Raíces",
+          assets: "Recursos",
         },
       },
       gate: {

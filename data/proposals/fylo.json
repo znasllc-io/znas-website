@@ -34,6 +34,46 @@
       "label_es": "Ver Documento"
     }
   ],
+  "assets": [
+    {
+      "id": "engagement-proposal",
+      "file": "pdfs/fylo-engagement-proposal.pdf",
+      "label": "Engagement Proposal",
+      "label_es": "Propuesta de Colaboración",
+      "kind": "pdf"
+    },
+    {
+      "id": "investment-roadmap",
+      "file": "pdfs/fylo-investment-roadmap.pdf",
+      "label": "Investment & Roadmap",
+      "label_es": "Inversión y Hoja de Ruta",
+      "kind": "pdf"
+    },
+    {
+      "id": "marketing-tiers",
+      "file": "pdfs/fylo-marketing-tiers.pdf",
+      "label": "Marketing Tiers",
+      "label_es": "Niveles de Marketing",
+      "kind": "pdf"
+    },
+    {
+      "id": "value-estimate",
+      "file": "pdfs/fylo-value-estimate.pdf",
+      "label": "Value Estimate",
+      "label_es": "Estimación de Valor",
+      "kind": "pdf"
+    },
+    {
+      "id": "portal-html",
+      "file": "demos/fylo.html",
+      "label": "Fylo Warehouse OS — Portal",
+      "label_es": "Fylo Warehouse OS — Portal",
+      "kind": "html",
+      "description": "The interactive portal, as a self-contained file you can open in any browser.",
+      "description_es": "El portal interactivo, como un archivo independiente que puedes abrir en cualquier navegador.",
+      "downloadName": "fylo-warehouse-os-portal.html"
+    }
+  ],
   "sections": {
     "summary": {
       "headline": "A warehouse operating system built for Fylo — four systems in one, owned by you.",

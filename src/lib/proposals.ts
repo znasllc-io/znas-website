@@ -166,6 +166,38 @@ export interface ProposalAttachment {
   label_es?: string;
 }
 
+export type ProposalAssetKind = "pdf" | "html" | "video" | "image" | "file";
+
+/**
+ * A downloadable deliverable in the "Assets" section — PDFs, the portal HTML,
+ * and (later) videos/images. Unlike attachments (PDF-only, viewed inline),
+ * assets are served by /api/proposals/asset as forced downloads and can be
+ * any allowed type. Gated the same way: session cookie must match the slug,
+ * the access window must be open, and the resolved path is containment-checked
+ * inside data/proposals/.
+ */
+export interface ProposalAsset {
+  // url-safe id — the asset endpoint's lookup key (must match ^[a-z0-9-]+$).
+  id: string;
+  // Path RELATIVE to data/proposals/, e.g. "pdfs/fylo-value-estimate.pdf" or
+  // "demos/fylo.html". Server-only — stripped from the client payload.
+  file: string;
+  // Human label shown in the download row.
+  label: string;
+  label_es?: string;
+  // Drives the type tag/icon shown next to the row.
+  kind: ProposalAssetKind;
+  // Optional one-liner under the label.
+  description?: string;
+  description_es?: string;
+  // Optional nicer filename for the saved download (default: basename of file).
+  downloadName?: string;
+}
+
+// Client-facing asset: the server `file` path is stripped and a computed
+// byte `size` is added (for the "PDF · 1.4 MB" hint).
+export type SafeProposalAsset = Omit<ProposalAsset, "file"> & { size?: number };
+
 export interface Proposal {
   slug: string;
   clientName: string;
@@ -220,6 +252,9 @@ export interface Proposal {
   // Optional supplementary downloads (rendered as additional buttons next
   // to the main PDF download). Same auth + path validation rules apply.
   attachments?: ProposalAttachment[];
+  // Optional downloadable deliverables surfaced in the "Assets" section
+  // (PDFs, the portal HTML, future media). Served by /api/proposals/asset.
+  assets?: ProposalAsset[];
   // Optional override for the bottom Download CTA headline + subtitle.
   // Falls back to translations.ts strings when absent. Lets one proposal
   // customize closing copy without touching the shared i18n.
@@ -236,10 +271,26 @@ export interface Proposal {
   sections_es?: ProposalSections;
 }
 
-// Safe proposal data (hash stripped)
-export type SafeProposal = Omit<Proposal, "passwordHash">;
+// Safe proposal data: password hash removed, and each asset's server-side
+// `file` path swapped for a client-safe shape (id/label/kind + computed size).
+export type SafeProposal = Omit<Proposal, "passwordHash" | "assets"> & {
+  assets?: SafeProposalAsset[];
+};
 
 const PROPOSALS_DIR = path.join(process.cwd(), "data", "proposals");
+
+/**
+ * Resolve an asset's on-disk path (its `file` is relative to data/proposals/)
+ * and containment-check it. Returns the absolute path only if it stays inside
+ * data/proposals/, else null. Shared by the size lookup here and the asset
+ * download route.
+ */
+export function resolveAssetPath(file: string): string | null {
+  const baseDir = path.resolve(PROPOSALS_DIR);
+  const resolved = path.resolve(path.join(baseDir, file));
+  if (!resolved.startsWith(baseDir + path.sep)) return null;
+  return resolved;
+}
 
 /**
  * Sanitize slug — only allow lowercase alphanumeric + hyphens.
@@ -330,11 +381,24 @@ export function loadAllProposals(): ProposalListEntry[] {
 }
 
 /**
- * Strip password hash from proposal for safe client-side use.
+ * Strip password hash for safe client-side use, and convert each asset from
+ * its server shape (with the on-disk `file` path) to the client shape
+ * (path removed, byte `size` added for the download hint).
  */
 export function toSafeProposal(proposal: Proposal): SafeProposal {
-  const { passwordHash: _h, ...safe } = proposal;
-  return safe;
+  const { passwordHash: _h, assets, ...rest } = proposal;
+  const safeAssets = assets?.map((a): SafeProposalAsset => {
+    const { file, ...clientFields } = a;
+    let size: number | undefined;
+    try {
+      const resolved = resolveAssetPath(file);
+      if (resolved) size = fs.statSync(resolved).size;
+    } catch {
+      /* size is best-effort — omit if the file can't be stat'd */
+    }
+    return { ...clientFields, size };
+  });
+  return { ...rest, assets: safeAssets };
 }
 
 /** Milliseconds in one day. */
