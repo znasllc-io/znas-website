@@ -53,6 +53,16 @@ export default function VideoShowcase({
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
   const [scrubbing, setScrubbing] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
+
+  // The site's custom cursor is a fixed element at the top of the DOM, so the
+  // player hides the native cursor (`cursor: none`) in its favor. In
+  // fullscreen the browser only paints the bezel subtree — the custom cursor
+  // lives outside it — so there we must restore the native cursor or the user
+  // is left with nothing to point with. Track fullscreen and switch the player
+  // surfaces to the native cursor only while it's active.
+  const cursorFor = (interactive: boolean) =>
+    fullscreen ? (interactive ? "pointer" : "default") : "none";
 
   // Start playback from the top, with sound. The opening click is the user
   // gesture; if the browser still blocks unmuted autoplay, fall back to muted.
@@ -137,6 +147,14 @@ export default function VideoShowcase({
       v.removeEventListener("volumechange", onVol);
     };
   }, [phase, scrubbing]);
+
+  // Track whether the player is the current fullscreen element.
+  useEffect(() => {
+    const onFsChange = () =>
+      setFullscreen(document.fullscreenElement === bezelRef.current);
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
 
   const togglePlay = () => {
     const v = videoRef.current;
@@ -247,7 +265,7 @@ export default function VideoShowcase({
                 // portrait bezel the aspect matches, so it fills edge-to-edge.
                 objectFit: "contain",
                 display: "block",
-                cursor: "none",
+                cursor: cursorFor(phase === "open"),
               }}
             />
           )}
@@ -358,7 +376,7 @@ export default function VideoShowcase({
                 gap: "0.6rem",
                 background: "color-mix(in srgb, var(--color-bg-void) 55%, transparent)",
                 border: 0,
-                cursor: "none",
+                cursor: cursorFor(true),
                 zIndex: 4,
                 fontFamily: "var(--font-display)",
                 fontSize: "1.05rem",
@@ -409,7 +427,7 @@ export default function VideoShowcase({
                   height: "14px",
                   display: "flex",
                   alignItems: "center",
-                  cursor: "none",
+                  cursor: cursorFor(true),
                   touchAction: "none",
                 }}
               >
@@ -431,7 +449,7 @@ export default function VideoShowcase({
 
               {/* Buttons row */}
               <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
-                <button onClick={togglePlay} aria-label={playing ? "Pause" : "Play"} style={ctrlBtn}>
+                <button onClick={togglePlay} aria-label={playing ? "Pause" : "Play"} style={{ ...ctrlBtn, cursor: cursorFor(true) }}>
                   {playing ? "❚❚" : "▶"}
                 </button>
                 <span
@@ -445,10 +463,10 @@ export default function VideoShowcase({
                   {formatTime(current)} / {formatTime(duration)}
                 </span>
                 <span style={{ flex: 1 }} />
-                <button onClick={toggleMute} aria-label={muted ? "Unmute" : "Mute"} style={ctrlBtn}>
+                <button onClick={toggleMute} aria-label={muted ? "Unmute" : "Mute"} style={{ ...ctrlBtn, cursor: cursorFor(true) }}>
                   {muted ? "🔇" : "🔊"}
                 </button>
-                <button onClick={toggleFullscreen} aria-label="Fullscreen" style={ctrlBtn}>
+                <button onClick={toggleFullscreen} aria-label="Fullscreen" style={{ ...ctrlBtn, cursor: cursorFor(true) }}>
                   ⤢
                 </button>
               </div>
@@ -466,6 +484,5 @@ const ctrlBtn: React.CSSProperties = {
   color: "#fff",
   fontSize: "0.85rem",
   lineHeight: 1,
-  cursor: "none",
   padding: "0.25rem 0.35rem",
 };
