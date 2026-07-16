@@ -79,12 +79,12 @@
     {
       "id": "walkthrough-video",
       "file": "videos/fylo-walkthrough.mp4",
-      "label": "Fylo Warehouse OS — Walkthrough",
-      "label_es": "Fylo Warehouse OS — Recorrido",
+      "label": "Fylo \"For Your Little Ones\" Video",
+      "label_es": "Video Fylo \"For Your Little Ones\"",
       "kind": "video",
-      "description": "The walkthrough video, as a downloadable file.",
-      "description_es": "El video de recorrido, como archivo descargable.",
-      "downloadName": "fylo-warehouse-os-walkthrough.mp4"
+      "description": "A short commercial video made for the Fylo Hero.",
+      "description_es": "Un video comercial corto hecho para el Fylo Hero.",
+      "downloadName": "fylo-for-your-little-ones-video.mp4"
     }
   ],
   "sections": {
