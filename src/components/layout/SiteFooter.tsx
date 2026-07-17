@@ -2,8 +2,10 @@
 
 import TransitionLink from "@/components/layout/TransitionLink";
 import Reveal from "@/components/home/Reveal";
+import InsuredByEmbroker from "@/components/layout/InsuredByEmbroker";
 import { useLanguage } from "@/lib/language";
 import { homeTranslations } from "@/lib/home-translations";
+import { SHOW_EMBROKER_BADGE } from "@/lib/embroker";
 
 /**
  * Shared site footer (FDE design) — used by the main site, case studies,
@@ -136,6 +138,19 @@ export default function SiteFooter() {
             ))}
           </div>
         </div>
+        {/* Trust row — coverage badge. Isolated + flag-gated so the entire
+            Embroker mark can be removed site-wide from one place. */}
+        {SHOW_EMBROKER_BADGE && (
+          <div
+            style={{
+              borderTop: "1px solid var(--fde-border)",
+              paddingTop: "1.6rem",
+              paddingBottom: "2.4rem",
+            }}
+          >
+            <InsuredByEmbroker />
+          </div>
+        )}
       </div>
 
       {/* Bottom bar */}
