@@ -28,6 +28,76 @@
       "label": "Gameplan",
       "label_es": "Plan de Acción",
       "kind": "pdf"
+    },
+    {
+      "id": "haven-deals-stage1-video",
+      "file": "videos/haven-stage1-radar.mp4",
+      "label": "Haven Deals — Stage 1 · Radar (video)",
+      "label_es": "Haven Deals — Etapa 1 · Radar (video)",
+      "kind": "video",
+      "description": "Your fix & flip radar, on your phone — lock-screen alerts, honest sourced numbers, and a look under the hood at memQL.",
+      "description_es": "Tu radar de fix & flip, en tu teléfono — alertas en la pantalla de bloqueo, números honestos y con fuente, y un vistazo a memQL.",
+      "downloadName": "haven-deals-stage1-radar.mp4"
+    },
+    {
+      "id": "haven-deals-stage2-video",
+      "file": "videos/haven-stage2-offers.mp4",
+      "label": "Haven Deals — Stage 2 · Offers & pipeline (video)",
+      "label_es": "Haven Deals — Etapa 2 · Ofertas y pipeline (video)",
+      "kind": "video",
+      "description": "The radar grows a desk — the desktop workbench, the human-in-the-loop offer checkpoint, and the pipeline board.",
+      "description_es": "El radar crece un escritorio — el workbench de escritorio, el checkpoint de oferta con humano en el ciclo, y el tablero de pipeline.",
+      "downloadName": "haven-deals-stage2-offers.mp4"
+    },
+    {
+      "id": "haven-deals-stage3-video",
+      "file": "videos/haven-stage3-vera.mp4",
+      "label": "Haven Deals — Stage 3 · VERA (video)",
+      "label_es": "Haven Deals — Etapa 3 · VERA (video)",
+      "kind": "video",
+      "description": "Meet Vera — proactive offer suggestions, overnight morning briefs, and receipts behind every number.",
+      "description_es": "Conoce a Vera — sugerencias de oferta proactivas, resúmenes matutinos nocturnos, y comprobantes detrás de cada número.",
+      "downloadName": "haven-deals-stage3-vera.mp4"
+    },
+    {
+      "id": "haven-deals-stage1-demo",
+      "file": "demos/haven-stage1-radar.html",
+      "label": "Haven Deals — Stage 1 · Radar (interactive demo)",
+      "label_es": "Haven Deals — Etapa 1 · Radar (demo interactivo)",
+      "kind": "html",
+      "description": "The complete phone experience — lock-screen alerts, scored deal feed, deal detail, triage, buy box, watchlist. Every screen clickable.",
+      "description_es": "La experiencia completa de teléfono — alertas, feed de deals, detalle, triage, buy box, watchlist. Cada pantalla es interactiva.",
+      "downloadName": "haven-deals-stage1-radar-demo.html"
+    },
+    {
+      "id": "haven-deals-stage2-demo",
+      "file": "demos/haven-stage2-offers.html",
+      "label": "Haven Deals — Stage 2 · Offers & pipeline (interactive demo)",
+      "label_es": "Haven Deals — Etapa 2 · Ofertas y pipeline (demo interactivo)",
+      "kind": "html",
+      "description": "Everything in Stage 1, plus the desktop workbench: three-column console, ⌘K command bar, offer checkpoint, pipeline board.",
+      "description_es": "Todo lo de la Etapa 1, más el workbench de escritorio: consola de tres columnas, barra de comandos ⌘K, checkpoint de oferta, tablero de pipeline.",
+      "downloadName": "haven-deals-stage2-offers-demo.html"
+    },
+    {
+      "id": "haven-deals-stage3-demo",
+      "file": "demos/haven-stage3-vera.html",
+      "label": "Haven Deals — Stage 3 · VERA (interactive demo)",
+      "label_es": "Haven Deals — Etapa 3 · VERA (demo interactivo)",
+      "kind": "html",
+      "description": "The full product with VERA switched all the way on: proactive suggestions, analyst panel, chat/voice, morning briefs, receipts.",
+      "description_es": "El producto completo con VERA activado por completo: sugerencias proactivas, panel de analista, chat/voz, resúmenes matutinos, comprobantes.",
+      "downloadName": "haven-deals-stage3-vera-demo.html"
+    },
+    {
+      "id": "haven-deals-full-demo",
+      "file": "demos/haven-full.html",
+      "label": "Haven Deals — Full (interactive demo, source)",
+      "label_es": "Haven Deals — Completo (demo interactivo, fuente)",
+      "kind": "html",
+      "description": "The complete product in one file — all three stages combined. The single source-of-truth build.",
+      "description_es": "El producto completo en un solo archivo — las tres etapas combinadas. La versión fuente de la verdad.",
+      "downloadName": "haven-deals-full-demo.html"
     }
   ],
   "videos": [
