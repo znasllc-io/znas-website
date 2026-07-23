@@ -521,7 +521,7 @@ function HowItWorksSection({
             marginBottom: "3rem",
           }}
         >
-          {intro}
+          {renderInline(intro)}
         </p>
 
         <div
