@@ -53,7 +53,22 @@ const EMBED_OVERLAY = `
     dev.style.transform='scale('+s+')';
   }
   window.addEventListener('resize', fit);
+  function pickDefaultDevice(){
+    // Match the default view to the frame shape: a landscape frame opens on the
+    // Desktop workbench (which fills it), a portrait frame on the phone. Only
+    // acts if the matching toggle exists (phone-only stages have no Desktop).
+    try {
+      var wantDesktop = window.innerWidth > window.innerHeight;
+      var toggle = document.querySelector('.device-toggle');
+      if (!toggle) return;
+      var re = wantDesktop ? /desktop/i : /mobile/i;
+      var btns = [].slice.call(toggle.querySelectorAll('button,[role=button],*'));
+      var target = btns.filter(function(b){ return re.test(b.textContent||''); })[0];
+      if (target) target.click();
+    } catch(e){}
+  }
   function boot(){
+    pickDefaultDevice();
     var stage=document.querySelector('.stage');
     if(stage){ try{ new MutationObserver(fit).observe(stage,{attributes:true,subtree:true,attributeFilter:['class']}); }catch(e){} }
     fit();

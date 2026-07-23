@@ -8,11 +8,12 @@ import type { ProposalProductShowcase } from "@/lib/proposals";
 
 /**
  * Staged product showcase (e.g. "Haven Deals"). Renders a headline + intro,
- * then one block per stage — a gated portrait promo video beside its blurb and
- * a "Launch demo ↗" control (opens the full-screen gated demo in a new tab) —
- * and finally an inline DemoFrame for the full-product demo as the headline
- * "try the whole thing." Videos/demos are addressed by id and served gated via
- * /api/proposals/video?video=<id> and /api/proposals/demo?demo=<id>.
+ * then one block per stage — a gated portrait promo video beside its blurb,
+ * with that stage's interactive demo embedded full-width below it — and finally
+ * the full-product demo as the headline "try the whole thing." Every embedded
+ * demo uses DemoFrame's embed mode (chrome stripped, active device scaled to
+ * fill at its true aspect ratio). Videos/demos are addressed by id and served
+ * gated via /api/proposals/video?video=<id> and /api/proposals/demo?demo=<id>.
  */
 export default function ProductShowcase({
   number,
@@ -34,6 +35,18 @@ export default function ProductShowcase({
     `/api/proposals/demo?slug=${encodeURIComponent(slug)}&demo=${encodeURIComponent(id)}`;
 
   const launchLabel = lang === "es" ? "Abrir demo" : "Launch demo";
+  // Default embed frame: landscape, sized to the desktop workbench. Phone-only
+  // stages override this with a portrait frame via stage.embedViewport.
+  const DEFAULT_EMBED = { w: 1528, h: 1000 };
+
+  const kickerStyle: React.CSSProperties = {
+    fontFamily: "var(--font-mono)",
+    fontSize: "0.7rem",
+    letterSpacing: "0.18em",
+    textTransform: "uppercase",
+    color: "var(--color-accent)",
+    margin: 0,
+  };
 
   return (
     <section id="deliverables" className="section-padding" style={{ backgroundColor: "var(--color-bg-primary)" }}>
@@ -62,16 +75,17 @@ export default function ProductShowcase({
             {pick(showcase.intro, showcase.intro_es)}
           </p>
         )}
+      </div>
 
-        {/* Stage blocks */}
-        <div style={{ marginTop: "3.5rem", display: "flex", flexDirection: "column", gap: "4.5rem" }}>
-          {showcase.stages.map((stage, i) => (
+      {/* Stage blocks — each: an intro row (video + text) in the readable
+          container, then that stage's demo embedded full-width below it. */}
+      {showcase.stages.map((stage, i) => (
+        <div key={i} style={{ marginTop: i === 0 ? "3.5rem" : "5rem" }}>
+          <div className="container">
             <div
-              key={i}
               className="grid md:grid-cols-[minmax(0,340px)_1fr]"
               style={{ gap: "2.5rem", alignItems: "center" }}
             >
-              {/* Video (portrait) */}
               {stage.videoId ? (
                 <VideoPlayer
                   src={videoUrl(stage.videoId)}
@@ -83,19 +97,8 @@ export default function ProductShowcase({
                 <div />
               )}
 
-              {/* Text + launch */}
               <div>
-                <p
-                  className="fde-label"
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.7rem",
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    color: "var(--color-accent)",
-                    margin: 0,
-                  }}
-                >
+                <p className="fde-label" style={kickerStyle}>
                   {pick(stage.title, stage.title_es)}
                 </p>
                 <p
@@ -104,66 +107,52 @@ export default function ProductShowcase({
                 >
                   {pick(stage.blurb, stage.blurb_es)}
                 </p>
-
-                {stage.demoId && (
-                  <a
-                    href={demoUrl(stage.demoId)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                      marginTop: "1.6rem",
-                      fontFamily: "var(--font-display)",
-                      fontSize: "0.95rem",
-                      fontWeight: 500,
-                      color: "var(--color-bg-void)",
-                      backgroundColor: "var(--color-accent)",
-                      border: "2px solid var(--color-accent)",
-                      borderRadius: "2px",
-                      padding: "0.7rem 1.6rem",
-                      textDecoration: "none",
-                    }}
-                  >
-                    {pick(stage.demoLabel, stage.demoLabel_es) ?? launchLabel} ↗
-                  </a>
-                )}
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Full-product demo — the headline "try the whole thing" */}
-        {showcase.fullDemoId && (
-          <div style={{ marginTop: "5rem" }}>
-            <h3
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(1.3rem, 2.4vw, 1.9rem)",
-                fontWeight: 600,
-                lineHeight: 1.15,
-                color: "var(--color-text-primary)",
-                margin: 0,
-              }}
-            >
-              {pick(showcase.fullDemoLabel, showcase.fullDemoLabel_es) ??
-                (lang === "es" ? "El producto completo" : "The complete product")}
-            </h3>
-            {showcase.fullDemoBlurb && (
-              <p
-                className="text-body"
-                style={{ color: "var(--color-text-secondary)", maxWidth: "640px", margin: "1rem 0 2.25rem", lineHeight: 1.7 }}
-              >
-                {pick(showcase.fullDemoBlurb, showcase.fullDemoBlurb_es)}
-              </p>
-            )}
           </div>
-        )}
-      </div>
 
-      {/* DemoFrame breaks out of .container to near-native width, so it lives
-          outside the container div (matching the Try Now section layout). */}
+          {stage.demoId && (
+            <div style={{ marginTop: "2rem" }}>
+              <DemoFrame
+                src={demoUrl(stage.demoId)}
+                label={pick(stage.title, stage.title_es)}
+                ctaLabel={pick(stage.demoLabel, stage.demoLabel_es) ?? launchLabel}
+                lang={lang}
+                embed
+                fixedViewport={stage.embedViewport ?? DEFAULT_EMBED}
+              />
+            </div>
+          )}
+        </div>
+      ))}
+
+      {/* Full-product demo — the headline "try the whole thing" */}
+      {showcase.fullDemoId && (
+        <div className="container" style={{ marginTop: "5rem" }}>
+          <h3
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(1.3rem, 2.4vw, 1.9rem)",
+              fontWeight: 600,
+              lineHeight: 1.15,
+              color: "var(--color-text-primary)",
+              margin: 0,
+            }}
+          >
+            {pick(showcase.fullDemoLabel, showcase.fullDemoLabel_es) ??
+              (lang === "es" ? "El producto completo" : "The complete product")}
+          </h3>
+          {showcase.fullDemoBlurb && (
+            <p
+              className="text-body"
+              style={{ color: "var(--color-text-secondary)", maxWidth: "640px", margin: "1rem 0 2.25rem", lineHeight: 1.7 }}
+            >
+              {pick(showcase.fullDemoBlurb, showcase.fullDemoBlurb_es)}
+            </p>
+          )}
+        </div>
+      )}
+
       {showcase.fullDemoId && (
         <DemoFrame
           src={demoUrl(showcase.fullDemoId)}
