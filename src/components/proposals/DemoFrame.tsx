@@ -24,6 +24,7 @@ export default function DemoFrame({
   label,
   ctaLabel,
   lang,
+  fixedViewport,
 }: {
   // Gated demo URL, e.g. /api/proposals/demo?slug=haven&demo=full
   src: string;
@@ -33,11 +34,35 @@ export default function DemoFrame({
   // Launch-button text. Defaults to the shared "Try Now" string.
   ctaLabel?: string;
   lang: "en" | "es";
+  // When set, the iframe always renders at this fixed logical viewport (px) and
+  // is scaled DOWN to fit the frame — so the demo paints one known-good layout
+  // and can never re-flow/overlap regardless of screen. The frame is also
+  // capped at this width, so it never scales *up* (that blew the phone mockup up
+  // on large screens). Pick a size tall enough for the demo's content to fit;
+  // the Haven demo needs a tall canvas (1280x1400) or the lock-screen
+  // notifications collide with the clock. Omit for the default responsive 16:9.
+  fixedViewport?: { w: number; h: number };
 }) {
   const t = translations[lang];
   const consoleLabel = label ?? "Live Portal";
   const launchLabel = ctaLabel ?? t.proposals.viewer.tryNow;
   const [phase, setPhase] = useState<Phase>("idle");
+
+  // Fixed-viewport scaling: measure the frame width and scale the fixed-size
+  // iframe to fit (transform-origin top-left), never above 1:1. The frame is
+  // capped at the canvas width (below), so scale is always <= 1.
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [fixedScale, setFixedScale] = useState(1);
+  useEffect(() => {
+    if (!fixedViewport) return;
+    const el = viewportRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const apply = () => setFixedScale(Math.min(1, el.clientWidth / fixedViewport.w));
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [fixedViewport]);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const panelARef = useRef<HTMLDivElement>(null);
@@ -125,7 +150,9 @@ export default function DemoFrame({
     // its native width instead of being reflowed and cropped.
     <div
       style={{
-        width: "min(1760px, 94vw)",
+        // Cap the frame at the fixed canvas width so it never scales past 1:1
+        // (scaling up is what blew the phone mockup up on large screens).
+        width: fixedViewport ? `min(${fixedViewport.w}px, 94vw)` : "min(1760px, 94vw)",
         margin: "0 auto",
         padding: "0 1rem",
         boxSizing: "border-box",
@@ -191,15 +218,41 @@ export default function DemoFrame({
           )}
         </div>
 
-        {/* Viewport — desktop 16:9 so the portal keeps its native proportions. */}
-        <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", backgroundColor: "var(--color-bg-void)" }}>
+        {/* Viewport. Default: responsive 16:9. With fixedViewport: the frame
+            takes that logical aspect and the iframe renders at the fixed pixel
+            size, scaled to fit — so the demo always paints one known-good
+            layout and can't re-flow/overlap. */}
+        <div
+          ref={viewportRef}
+          style={{
+            position: "relative",
+            width: "100%",
+            aspectRatio: fixedViewport ? `${fixedViewport.w} / ${fixedViewport.h}` : "16 / 9",
+            backgroundColor: "var(--color-bg-void)",
+            overflow: "hidden",
+          }}
+        >
           {phase !== "idle" && (
             <iframe
               ref={iframeRef}
               src={src}
               title={consoleLabel}
               onLoad={wireCursorForwarding}
-              style={{ width: "100%", height: "100%", border: 0, display: "block" }}
+              style={
+                fixedViewport
+                  ? {
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: `${fixedViewport.w}px`,
+                      height: `${fixedViewport.h}px`,
+                      transform: `scale(${fixedScale})`,
+                      transformOrigin: "top left",
+                      border: 0,
+                      display: "block",
+                    }
+                  : { width: "100%", height: "100%", border: 0, display: "block" }
+              }
             />
           )}
 

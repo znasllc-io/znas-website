@@ -170,6 +170,7 @@ export default function ProductShowcase({
           label={pick(showcase.fullDemoLabel, showcase.fullDemoLabel_es)}
           ctaLabel={lang === "es" ? "Abrir el producto completo" : "Launch the full product"}
           lang={lang}
+          fixedViewport={{ w: 1280, h: 1400 }}
         />
       )}
     </section>
