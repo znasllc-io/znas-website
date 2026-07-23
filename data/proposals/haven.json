@@ -121,7 +121,7 @@
       "body": "You've put two decades into Haven. The digital side hasn't kept pace. Four suspended Google Business Profiles are the most visible problem — but they're not the only one. ZNAS comes in as your technology partner: we identify what's broken, propose what needs to change, and execute only after you approve. You stay in control of every decision."
     },
     "howItWorks": {
-      "intro": "José runs this engagement directly — you'll always be working with him, not handed off to a team. From week one, the focus is recovering the suspended profiles and mapping whatever else is holding Haven back. Scope and pricing are set together in the alignment meeting, before anything starts.",
+      "intro": "ZNAS runs this engagement as a team — you're not handed off to a single point of contact with no backup. From week one, the focus is recovering the suspended profiles and mapping whatever else is holding Haven back. Scope and pricing are set together in the alignment meeting, before anything starts.",
       "cards": [
         {
           "title": "Month-to-month",
@@ -144,7 +144,7 @@
     },
     "realEstateAgent": {
       "headline": "The real estate agent is already in build.",
-      "intro": "You mentioned it in our first conversation: property research and bidding takes too long. Finding listings that actually fit your criteria, running the numbers, deciding fast enough to move on a deal — it burns time Haven doesn't have to waste. ZNAS and Visionarys are already building the agent that handles this for you.",
+      "intro": "You mentioned it in our first conversation: property research and bidding takes too long. Finding listings that actually fit your criteria, running the numbers, deciding fast enough to move on a deal — it burns time Haven doesn't have to waste. ZNAS is already building the agent that handles this for you.",
       "points": [
         {
           "title": "Live market data",
@@ -159,7 +159,7 @@
           "body": "Research and comparison happen in seconds, not afternoons — so you spend your time on the calls and decisions only you can make."
         }
       ],
-      "note": "The agent runs on CoPresent — an AI platform built by Visionarys. Haven licenses it directly from Visionarys; everything built on top of it is yours."
+      "note": "The agent runs on MemQL, ZNAS's production-grade AI platform — everything built on top of it is yours."
     },
     "productShowcase": {
       "headline": "Haven Deals — the deal-sourcing engine we built for you",
