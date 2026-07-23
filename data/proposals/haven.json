@@ -28,7 +28,88 @@
       "label": "Gameplan",
       "label_es": "Plan de Acción",
       "kind": "pdf"
+    },
+    {
+      "id": "haven-deals-stage1-video",
+      "file": "videos/haven-stage1-radar.mp4",
+      "label": "Haven Deals — Stage 1 · Radar (video)",
+      "label_es": "Haven Deals — Etapa 1 · Radar (video)",
+      "kind": "video",
+      "description": "Your fix & flip radar, on your phone — lock-screen alerts, honest sourced numbers, and a look under the hood at memQL.",
+      "description_es": "Tu radar de fix & flip, en tu teléfono — alertas en la pantalla de bloqueo, números honestos y con fuente, y un vistazo a memQL.",
+      "downloadName": "haven-deals-stage1-radar.mp4"
+    },
+    {
+      "id": "haven-deals-stage2-video",
+      "file": "videos/haven-stage2-offers.mp4",
+      "label": "Haven Deals — Stage 2 · Offers & pipeline (video)",
+      "label_es": "Haven Deals — Etapa 2 · Ofertas y pipeline (video)",
+      "kind": "video",
+      "description": "The radar grows a desk — the desktop workbench, the human-in-the-loop offer checkpoint, and the pipeline board.",
+      "description_es": "El radar crece un escritorio — el workbench de escritorio, el checkpoint de oferta con humano en el ciclo, y el tablero de pipeline.",
+      "downloadName": "haven-deals-stage2-offers.mp4"
+    },
+    {
+      "id": "haven-deals-stage3-video",
+      "file": "videos/haven-stage3-vera.mp4",
+      "label": "Haven Deals — Stage 3 · VERA (video)",
+      "label_es": "Haven Deals — Etapa 3 · VERA (video)",
+      "kind": "video",
+      "description": "Meet Vera — proactive offer suggestions, overnight morning briefs, and receipts behind every number.",
+      "description_es": "Conoce a Vera — sugerencias de oferta proactivas, resúmenes matutinos nocturnos, y comprobantes detrás de cada número.",
+      "downloadName": "haven-deals-stage3-vera.mp4"
+    },
+    {
+      "id": "haven-deals-stage1-demo",
+      "file": "demos/haven-stage1-radar.html",
+      "label": "Haven Deals — Stage 1 · Radar (interactive demo)",
+      "label_es": "Haven Deals — Etapa 1 · Radar (demo interactivo)",
+      "kind": "html",
+      "description": "The complete phone experience — lock-screen alerts, scored deal feed, deal detail, triage, buy box, watchlist. Every screen clickable.",
+      "description_es": "La experiencia completa de teléfono — alertas, feed de deals, detalle, triage, buy box, watchlist. Cada pantalla es interactiva.",
+      "downloadName": "haven-deals-stage1-radar-demo.html"
+    },
+    {
+      "id": "haven-deals-stage2-demo",
+      "file": "demos/haven-stage2-offers.html",
+      "label": "Haven Deals — Stage 2 · Offers & pipeline (interactive demo)",
+      "label_es": "Haven Deals — Etapa 2 · Ofertas y pipeline (demo interactivo)",
+      "kind": "html",
+      "description": "Everything in Stage 1, plus the desktop workbench: three-column console, ⌘K command bar, offer checkpoint, pipeline board.",
+      "description_es": "Todo lo de la Etapa 1, más el workbench de escritorio: consola de tres columnas, barra de comandos ⌘K, checkpoint de oferta, tablero de pipeline.",
+      "downloadName": "haven-deals-stage2-offers-demo.html"
+    },
+    {
+      "id": "haven-deals-stage3-demo",
+      "file": "demos/haven-stage3-vera.html",
+      "label": "Haven Deals — Stage 3 · VERA (interactive demo)",
+      "label_es": "Haven Deals — Etapa 3 · VERA (demo interactivo)",
+      "kind": "html",
+      "description": "The full product with VERA switched all the way on: proactive suggestions, analyst panel, chat/voice, morning briefs, receipts.",
+      "description_es": "El producto completo con VERA activado por completo: sugerencias proactivas, panel de analista, chat/voz, resúmenes matutinos, comprobantes.",
+      "downloadName": "haven-deals-stage3-vera-demo.html"
+    },
+    {
+      "id": "haven-deals-full-demo",
+      "file": "demos/haven-full.html",
+      "label": "Haven Deals — Full (interactive demo, source)",
+      "label_es": "Haven Deals — Completo (demo interactivo, fuente)",
+      "kind": "html",
+      "description": "The complete product in one file — all three stages combined. The single source-of-truth build.",
+      "description_es": "El producto completo en un solo archivo — las tres etapas combinadas. La versión fuente de la verdad.",
+      "downloadName": "haven-deals-full-demo.html"
     }
+  ],
+  "videos": [
+    { "id": "stage1-radar", "filename": "haven-stage1-radar.mp4" },
+    { "id": "stage2-offers", "filename": "haven-stage2-offers.mp4" },
+    { "id": "stage3-vera", "filename": "haven-stage3-vera.mp4" }
+  ],
+  "demos": [
+    { "id": "stage1-radar", "filename": "haven-stage1-radar.html" },
+    { "id": "stage2-offers", "filename": "haven-stage2-offers.html" },
+    { "id": "stage3-vera", "filename": "haven-stage3-vera.html" },
+    { "id": "full", "filename": "haven-full.html" }
   ],
   "downloadCta": {
     "headline": "Ready to move forward?",
@@ -56,26 +137,6 @@
         }
       ]
     },
-    "team": {
-      "name": "José Sanz",
-      "tagline": "17+ years building production-scale systems across enterprise environments. Founder of ZNAS LLC and co-founder of Visionarys. Previously a lead engineer at a large-scale enterprise language services platform, driving technical architecture across a five-year tenure. Holds an MIT Certification in AI Business Strategy and has presented on AI adoption at a developer-focused workshop series.",
-      "caption": "José leads every engagement directly. Clients work with him, not a team that reports to him.",
-      "photo": "/images/jose-sanz.webp",
-      "members": [
-        {
-          "name": "María José Zepeda",
-          "tagline": "Leads operations at Visionarys and supports ZNAS engagements on the coordination and client-facing side. Keeps projects organized, communication clear, and deliverables on schedule.",
-          "caption": "Majo makes sure nothing falls through the cracks — handling the day-to-day coordination that lets José focus on the work itself.",
-          "photo": "/images/maria-zepeda.webp"
-        },
-        {
-          "name": "Jesús Mendivil",
-          "tagline": "Handles technical execution across ZNAS engagements. Works across cloud infrastructure, IT administration, and AI tooling — building and maintaining the systems that keep operations running.",
-          "caption": "Jesús is the person who makes things work. From GCP deployments to device management and automation, he takes ownership of the technical side so engagements don't stall.",
-          "photo": "/images/jesus-mendivil.webp"
-        }
-      ]
-    },
     "initiative": {
       "headline": "The work starts before you sign.",
       "body": "The gameplan below was drafted before this meeting. It covers exactly how ZNAS would recover your four suspended Google Business Profiles — what starts this week without needing any access from you, what we'll need your side to unblock, and the one step only you can take: a single 60-second on-camera verification that mirrors a documented reinstatement from a peer business.\n\nEvery task is assigned. Every dependency is mapped. The appeal sequence is structured so nothing wastes one of Google's limited review windows.\n\nHave a look before our meeting so we can spend that time on your questions and any adjustments.",
@@ -99,6 +160,39 @@
         }
       ],
       "note": "The agent runs on CoPresent — an AI platform built by Visionarys. Haven licenses it directly from Visionarys; everything built on top of it is yours."
+    },
+    "productShowcase": {
+      "headline": "Haven Deals — the deal-sourcing engine we built for you",
+      "intro": "Three stages, each building on the last: a phone that surfaces deals, a desktop workbench for offers and pipeline, and VERA — an analyst working while you sleep. Watch each stage below, then open the live demos and click through them yourself.",
+      "stages": [
+        {
+          "title": "Stage 1 · Radar",
+          "blurb": "Your fix & flip radar, on your phone. Deals find you: lock-screen alerts when a property clears your buy box, every number honest and sourced, renovation estimates you control — and a look under the hood at memQL, the engine we built ourselves.",
+          "videoId": "stage1-radar",
+          "videoLabel": "Stage 1 · Radar",
+          "demoId": "stage1-radar",
+          "demoLabel": "Launch Stage 1 demo"
+        },
+        {
+          "title": "Stage 2 · Offers & pipeline",
+          "blurb": "The radar grows a desk. A full desktop workbench — map, listings, and deal detail side by side — a human-in-the-loop offer checkpoint that never sends without you, and a pipeline board that walks every deal from approved to closed. Map, listings, pipeline: one backend, always live, in memQL.",
+          "videoId": "stage2-offers",
+          "videoLabel": "Stage 2 · Offers & pipeline",
+          "demoId": "stage2-offers",
+          "demoLabel": "Launch Stage 2 demo"
+        },
+        {
+          "title": "Stage 3 · VERA",
+          "blurb": "Meet Vera — her full potential. Proactive offer suggestions while you sleep, overnight morning briefs, receipts behind every number, and an analyst panel on your workbench. And under all of it: memQL — ours, our own creation — where every deal and every version is remembered, and the door AI uses to reach your data stays locked until you say so.",
+          "videoId": "stage3-vera",
+          "videoLabel": "Stage 3 · VERA",
+          "demoId": "stage3-vera",
+          "demoLabel": "Launch Stage 3 demo"
+        }
+      ],
+      "fullDemoId": "full",
+      "fullDemoLabel": "Haven Deals — the complete product",
+      "fullDemoBlurb": "All three stages in one build — exactly what Stage 3 delivers, kept as the single source of truth. Open it and click through the whole thing."
     }
   },
   "sentAt": "2026-07-10T14:00:00-07:00"

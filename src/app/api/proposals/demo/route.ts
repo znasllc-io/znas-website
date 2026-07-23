@@ -48,7 +48,17 @@ export async function GET(request: NextRequest) {
 
   const proposal = loadProposal(slug);
   if (!proposal) return deny();
-  const demoFilename = proposal.demoFilename;
+
+  // Optional ?demo=<id> selects one of proposal.demos[]; without it we serve
+  // the single legacy demoFilename. Unknown/malformed ids deny (no leak).
+  const demoId = request.nextUrl.searchParams.get("demo");
+  let demoFilename: string | undefined;
+  if (demoId !== null) {
+    if (!/^[a-z0-9-]+$/.test(demoId)) return deny();
+    demoFilename = proposal.demos?.find((d) => d.id === demoId)?.filename;
+  } else {
+    demoFilename = proposal.demoFilename;
+  }
   if (!demoFilename || !/^[a-z0-9-]+\.html$/.test(demoFilename)) return deny();
 
   // Access-window check on every load: a session minted minutes before the

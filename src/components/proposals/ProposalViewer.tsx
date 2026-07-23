@@ -7,6 +7,7 @@ import SupportingDocumentsSection from "./SupportingDocuments";
 import AssetsSection from "./AssetsSection";
 import VideoShowcase from "./VideoShowcase";
 import TryNowSection from "./TryNow";
+import ProductShowcase from "./ProductShowcase";
 import SectionLabel from "@/components/ui/SectionLabel";
 import RoadmapTimeline from "./RoadmapTimeline";
 import InvestmentCards from "./InvestmentCards";
@@ -283,6 +284,15 @@ export default function ProposalViewer({
                 intro={sections.realEstateAgent.intro}
                 points={sections.realEstateAgent.points}
                 note={sections.realEstateAgent.note}
+              />
+            )}
+
+            {sections.productShowcase && (
+              <ProductShowcase
+                number={nextNumber()}
+                slug={proposal.slug}
+                showcase={sections.productShowcase}
+                lang={lang}
               />
             )}
 
