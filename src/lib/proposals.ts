@@ -145,6 +145,10 @@ export interface ProposalSections {
   // Optional. Forward-looking deliverable already in build (e.g. the
   // Haven real estate agent). Renders after Initiative.
   realEstateAgent?: ProposalRealEstateAgent;
+  // Optional. Staged product showcase (per-stage video + interactive demo,
+  // plus an optional full-product demo). Renders near the end, after the
+  // Real Estate Agent section and before the Assets/downloads section.
+  productShowcase?: ProposalProductShowcase;
 }
 
 /**
@@ -197,6 +201,73 @@ export interface ProposalAsset {
 // Client-facing asset: the server `file` path is stripped and a computed
 // byte `size` is added (for the "PDF · 1.4 MB" hint).
 export type SafeProposalAsset = Omit<ProposalAsset, "file"> & { size?: number };
+
+/**
+ * A named video, addressable by id. Lets one proposal carry several gated
+ * videos (e.g. a per-stage promo set) served by /api/proposals/video?video=<id>.
+ * The single `videoFilename` field on Proposal remains for one-video proposals.
+ */
+export interface ProposalVideo {
+  // url-safe id used as ?video=<id> — must match ^[a-z0-9-]+$.
+  id: string;
+  // mp4 filename inside data/proposals/videos/ — must match ^[a-z0-9-]+\.mp4$.
+  // Server-only: stripped from the client payload.
+  filename: string;
+}
+
+/**
+ * A named self-contained demo HTML, addressable by id. Lets one proposal carry
+ * several gated demos served by /api/proposals/demo?demo=<id>. The single
+ * `demoFilename` field on Proposal remains for one-demo proposals.
+ */
+export interface ProposalDemo {
+  // url-safe id used as ?demo=<id> — must match ^[a-z0-9-]+$.
+  id: string;
+  // html filename inside data/proposals/demos/ — must match ^[a-z0-9-]+\.html$.
+  // Server-only: stripped from the client payload.
+  filename: string;
+}
+
+/**
+ * One stage of a staged product showcase: a client-facing title + blurb paired
+ * with a gated video (by id) and a gated demo (by id). Ids reference
+ * Proposal.videos[]/demos[]; the showcase component builds the gated URLs.
+ */
+export interface ProposalProductStage {
+  title: string;
+  title_es?: string;
+  blurb: string;
+  blurb_es?: string;
+  // References Proposal.videos[].id. Omit for a stage with no video.
+  videoId?: string;
+  // Caption shown on the video's idle/preview screen.
+  videoLabel?: string;
+  videoLabel_es?: string;
+  // References Proposal.demos[].id. Omit for a stage with no demo.
+  demoId?: string;
+  // Label on the demo's launch control + browser-chrome title.
+  demoLabel?: string;
+  demoLabel_es?: string;
+}
+
+/**
+ * A staged product showcase (e.g. "Haven Deals" — Stage 1/2/3, each with a
+ * promo video + interactive demo), plus an optional headline "full" demo that
+ * launches the complete product. Rendered by ProductShowcase.
+ */
+export interface ProposalProductShowcase {
+  headline: string;
+  headline_es?: string;
+  intro?: string;
+  intro_es?: string;
+  stages: ProposalProductStage[];
+  // Optional headline demo (the whole product) shown above/below the stages.
+  fullDemoId?: string;
+  fullDemoLabel?: string;
+  fullDemoLabel_es?: string;
+  fullDemoBlurb?: string;
+  fullDemoBlurb_es?: string;
+}
 
 export interface Proposal {
   slug: string;
@@ -261,6 +332,12 @@ export interface Proposal {
   // translations `videoHint` when set (per-proposal brand copy).
   videoHint?: string;
   videoHint_es?: string;
+  // Optional. Several gated videos addressable by id (e.g. a staged promo
+  // set). Filenames are server-only. Served by /api/proposals/video?video=<id>.
+  videos?: ProposalVideo[];
+  // Optional. Several gated demos addressable by id. Filenames are server-only.
+  // Served by /api/proposals/demo?demo=<id>.
+  demos?: ProposalDemo[];
   // Optional supplementary downloads (rendered as additional buttons next
   // to the main PDF download). Same auth + path validation rules apply.
   attachments?: ProposalAttachment[];
@@ -285,7 +362,9 @@ export interface Proposal {
 
 // Safe proposal data: password hash removed, and each asset's server-side
 // `file` path swapped for a client-safe shape (id/label/kind + computed size).
-export type SafeProposal = Omit<Proposal, "passwordHash" | "assets"> & {
+// `videos`/`demos` carry server-only filenames and are stripped entirely — the
+// client addresses them by id through sections.productShowcase, never by file.
+export type SafeProposal = Omit<Proposal, "passwordHash" | "assets" | "videos" | "demos"> & {
   assets?: SafeProposalAsset[];
 };
 
@@ -398,7 +477,9 @@ export function loadAllProposals(): ProposalListEntry[] {
  * (path removed, byte `size` added for the download hint).
  */
 export function toSafeProposal(proposal: Proposal): SafeProposal {
-  const { passwordHash: _h, assets, ...rest } = proposal;
+  // Strip the password hash and the server-only video/demo filename tables;
+  // the client reaches those by id via sections.productShowcase.
+  const { passwordHash: _h, assets, videos: _v, demos: _d, ...rest } = proposal;
   const safeAssets = assets?.map((a): SafeProposalAsset => {
     const { file, ...clientFields } = a;
     let size: number | undefined;

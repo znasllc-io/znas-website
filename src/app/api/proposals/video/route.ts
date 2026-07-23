@@ -40,7 +40,16 @@ export async function GET(request: NextRequest) {
   const proposal = loadProposal(slug);
   if (!proposal || isAccessExpired(proposal)) return deny();
 
-  const videoFilename = proposal.videoFilename;
+  // Optional ?video=<id> selects one of proposal.videos[]; without it we serve
+  // the single legacy videoFilename. Unknown/malformed ids deny (no leak).
+  const videoId = request.nextUrl.searchParams.get("video");
+  let videoFilename: string | undefined;
+  if (videoId !== null) {
+    if (!/^[a-z0-9-]+$/.test(videoId)) return deny();
+    videoFilename = proposal.videos?.find((v) => v.id === videoId)?.filename;
+  } else {
+    videoFilename = proposal.videoFilename;
+  }
   if (!videoFilename || !/^[a-z0-9-]+\.mp4$/.test(videoFilename)) return deny();
 
   const dir = path.resolve(path.join(process.cwd(), "data", "proposals", "videos"));

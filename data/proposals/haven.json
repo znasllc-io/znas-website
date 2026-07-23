@@ -30,6 +30,17 @@
       "kind": "pdf"
     }
   ],
+  "videos": [
+    { "id": "stage1-radar", "filename": "haven-stage1-radar.mp4" },
+    { "id": "stage2-offers", "filename": "haven-stage2-offers.mp4" },
+    { "id": "stage3-vera", "filename": "haven-stage3-vera.mp4" }
+  ],
+  "demos": [
+    { "id": "stage1-radar", "filename": "haven-stage1-radar.html" },
+    { "id": "stage2-offers", "filename": "haven-stage2-offers.html" },
+    { "id": "stage3-vera", "filename": "haven-stage3-vera.html" },
+    { "id": "full", "filename": "haven-full.html" }
+  ],
   "downloadCta": {
     "headline": "Ready to move forward?",
     "subtitle": "This is what working with ZNAS looks like in practice. The full proposal is below."
@@ -99,6 +110,39 @@
         }
       ],
       "note": "The agent runs on CoPresent — an AI platform built by Visionarys. Haven licenses it directly from Visionarys; everything built on top of it is yours."
+    },
+    "productShowcase": {
+      "headline": "Haven Deals — the deal-sourcing engine we built for you",
+      "intro": "Three stages, each building on the last: a phone that surfaces deals, a desktop workbench for offers and pipeline, and VERA — an analyst working while you sleep. Watch each stage below, then open the live demos and click through them yourself.",
+      "stages": [
+        {
+          "title": "Stage 1 · Radar",
+          "blurb": "Your fix & flip radar, on your phone. Deals find you: lock-screen alerts when a property clears your buy box, every number honest and sourced, renovation estimates you control — and a look under the hood at memQL, the engine we built ourselves.",
+          "videoId": "stage1-radar",
+          "videoLabel": "Stage 1 · Radar",
+          "demoId": "stage1-radar",
+          "demoLabel": "Launch Stage 1 demo"
+        },
+        {
+          "title": "Stage 2 · Offers & pipeline",
+          "blurb": "The radar grows a desk. A full desktop workbench — map, listings, and deal detail side by side — a human-in-the-loop offer checkpoint that never sends without you, and a pipeline board that walks every deal from approved to closed. Map, listings, pipeline: one backend, always live, in memQL.",
+          "videoId": "stage2-offers",
+          "videoLabel": "Stage 2 · Offers & pipeline",
+          "demoId": "stage2-offers",
+          "demoLabel": "Launch Stage 2 demo"
+        },
+        {
+          "title": "Stage 3 · VERA",
+          "blurb": "Meet Veera — her full potential. Proactive offer suggestions while you sleep, overnight morning briefs, receipts behind every number, and an analyst panel on your workbench. And under all of it: memQL — ours, our own creation — where every deal and every version is remembered, and the door AI uses to reach your data stays locked until you say so.",
+          "videoId": "stage3-vera",
+          "videoLabel": "Stage 3 · VERA",
+          "demoId": "stage3-vera",
+          "demoLabel": "Launch Stage 3 demo"
+        }
+      ],
+      "fullDemoId": "full",
+      "fullDemoLabel": "Haven Deals — the complete product",
+      "fullDemoBlurb": "All three stages in one build — exactly what Stage 3 delivers, kept as the single source of truth. Open it and click through the whole thing."
     }
   },
   "sentAt": "2026-07-10T14:00:00-07:00"

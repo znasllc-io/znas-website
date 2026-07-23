@@ -62,7 +62,7 @@ export interface ProposalViewerStrings {
   videoCta: string;
   videoLoading: string;
   videoReplay: string;
-  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string; assets: string; video: string };
+  sections: { executiveSummary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; documents: string; tryNow: string; assets: string; video: string; productShowcase: string };
   download: {
     headline: string;
     subtitle: string;
@@ -398,6 +398,7 @@ export const translations: Record<Lang, LangStrings> = {
           tryNow: "Try It Now",
           assets: "Assets",
           video: "Video",
+          productShowcase: "Deliverables",
         },
         download: {
           headline: "Ready to move forward?",
@@ -685,6 +686,7 @@ export const translations: Record<Lang, LangStrings> = {
           tryNow: "Pruébalo",
           assets: "Recursos",
           video: "Video",
+          productShowcase: "Entregables",
         },
         download: {
           headline: "¿Listo para avanzar?",
