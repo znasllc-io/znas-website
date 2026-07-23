@@ -24,7 +24,6 @@ export default function DemoFrame({
   label,
   ctaLabel,
   lang,
-  fixedViewport,
 }: {
   // Gated demo URL, e.g. /api/proposals/demo?slug=haven&demo=full
   src: string;
@@ -34,11 +33,6 @@ export default function DemoFrame({
   // Launch-button text. Defaults to the shared "Try Now" string.
   ctaLabel?: string;
   lang: "en" | "es";
-  // When set, the iframe renders at this fixed logical viewport (px) and is
-  // scaled uniformly to fit the frame width — so the demo always paints at a
-  // known-good desktop size and can never re-flow/overlap in a wide-short box,
-  // no matter the screen. Omit for the default responsive 16:9 iframe.
-  fixedViewport?: { w: number; h: number };
 }) {
   const t = translations[lang];
   const consoleLabel = label ?? "Live Portal";
@@ -50,21 +44,6 @@ export default function DemoFrame({
   const panelBRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const cursorCleanupRef = useRef<(() => void) | null>(null);
-
-  // Fixed-viewport scaling: measure the frame width and scale the fixed-size
-  // iframe to fit it (transform-origin top-left). Kept in sync via ResizeObserver.
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const [fixedScale, setFixedScale] = useState(1);
-  useEffect(() => {
-    if (!fixedViewport) return;
-    const el = viewportRef.current;
-    if (!el || typeof ResizeObserver === "undefined") return;
-    const apply = () => setFixedScale(el.clientWidth / fixedViewport.w);
-    apply();
-    const ro = new ResizeObserver(apply);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [fixedViewport]);
 
   // The site's custom cursor tracks mousemove on the parent window, which stops
   // firing inside the iframe. The demo is same-origin, so reach into its
@@ -212,41 +191,15 @@ export default function DemoFrame({
           )}
         </div>
 
-        {/* Viewport. Default: responsive 16:9. With fixedViewport: the frame
-            takes that logical aspect and the iframe renders at the fixed pixel
-            size, scaled to fit — so the demo always paints its known-good
-            desktop layout and can't re-flow/overlap on a wide-short box. */}
-        <div
-          ref={viewportRef}
-          style={{
-            position: "relative",
-            width: "100%",
-            aspectRatio: fixedViewport ? `${fixedViewport.w} / ${fixedViewport.h}` : "16 / 9",
-            backgroundColor: "var(--color-bg-void)",
-            overflow: "hidden",
-          }}
-        >
+        {/* Viewport — desktop 16:9 so the portal keeps its native proportions. */}
+        <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", backgroundColor: "var(--color-bg-void)" }}>
           {phase !== "idle" && (
             <iframe
               ref={iframeRef}
               src={src}
               title={consoleLabel}
               onLoad={wireCursorForwarding}
-              style={
-                fixedViewport
-                  ? {
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: `${fixedViewport.w}px`,
-                      height: `${fixedViewport.h}px`,
-                      transform: `scale(${fixedScale})`,
-                      transformOrigin: "top left",
-                      border: 0,
-                      display: "block",
-                    }
-                  : { width: "100%", height: "100%", border: 0, display: "block" }
-              }
+              style={{ width: "100%", height: "100%", border: 0, display: "block" }}
             />
           )}
 
