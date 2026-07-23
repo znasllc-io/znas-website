@@ -117,11 +117,11 @@
   },
   "sections": {
     "summary": {
-      "headline": "Haven has 20 years of work behind it. This proposal is about what gets built around it next.",
-      "body": "You've put two decades into Haven. The digital side hasn't kept pace. Four suspended Google Business Profiles are the most visible problem — but they're not the only one. ZNAS comes in as your technology partner: we identify what's broken, propose what needs to change, and execute only after you approve. You stay in control of every decision."
+      "headline": "Deals find you now.",
+      "body": "You told us the hunt eats your week — chasing listings that fit, running the numbers, deciding fast enough to move before someone else does. So ZNAS built Haven Deals: a fix & flip engine that turns it around. Properties that clear your buy box surface straight to you, with the numbers already run and every figure sourced.\n\nThe product is built — this proposal is your walkthrough of it, loaded with example deals from your own High Desert and Inland Empire market so you can click through exactly how it works today. From here, we wire it to your live deal flow and it goes to work."
     },
     "howItWorks": {
-      "intro": "ZNAS runs this engagement as a team — you're not handed off to a single point of contact with no backup. From week one, the focus is recovering the suspended profiles and mapping whatever else is holding Haven back. Scope and pricing are set together in the alignment meeting, before anything starts.",
+      "intro": "ZNAS runs this engagement as a team — you're not handed off to a single point of contact with no backup. Scope and pricing are set together in the alignment meeting before anything starts, and nothing ships without your sign-off.",
       "cards": [
         {
           "title": "Month-to-month",
@@ -138,32 +138,32 @@
       ]
     },
     "initiative": {
-      "headline": "The work starts before you sign.",
-      "body": "The gameplan below was drafted before this meeting. It covers exactly how ZNAS would recover your four suspended Google Business Profiles — what starts this week without needing any access from you, what we'll need your side to unblock, and the one step only you can take: a single 60-second on-camera verification that mirrors a documented reinstatement from a peer business.\n\nEvery task is assigned. Every dependency is mapped. The appeal sequence is structured so nothing wastes one of Google's limited review windows.\n\nHave a look before our meeting so we can spend that time on your questions and any adjustments.",
+      "headline": "The digital foundation, handled too.",
+      "body": "Alongside Deals, we're recovering your four suspended Google Business Profiles. The full gameplan is already drafted — download it below. It maps what starts this week without any access from you, the one 60-second on-camera verification only you can do, and how the appeals are sequenced so nothing wastes one of Google's limited review windows.",
       "attachmentId": "gameplan"
     },
     "realEstateAgent": {
-      "headline": "The real estate agent is already in build.",
-      "intro": "You mentioned it in our first conversation: property research and bidding takes too long. Finding listings that actually fit your criteria, running the numbers, deciding fast enough to move on a deal — it burns time Haven doesn't have to waste. ZNAS is already building the agent that handles this for you.",
+      "headline": "It does the hunting. You make the calls.",
+      "intro": "You said it in our first conversation: property research and bidding takes too long — finding listings that actually fit, running the numbers, deciding fast enough to move. Haven Deals does that work continuously in the background and only surfaces what's worth your attention. Here's what that means in practice.",
       "points": [
         {
-          "title": "Live market data",
-          "body": "A live market data integration pulls current listings, pricing, and comparable sales automatically — no manual searching required."
+          "title": "Deals find you",
+          "body": "Set your buy box once. When a property clears it — margin, ROI, condition, location — it surfaces to you with the numbers already run. No more manual searching."
         },
         {
-          "title": "Trained on how you think",
-          "body": "The agent learns your criteria: how you pick targets, how you weigh trade-offs, and what makes a property worth moving on."
+          "title": "Every number, sourced",
+          "body": "Comps, after-repair value, purchase price, renovation — each figure shows where it came from, so you can trust it and defend it. Nothing inflated."
         },
         {
-          "title": "Time back in your week",
-          "body": "Research and comparison happen in seconds, not afternoons — so you spend your time on the calls and decisions only you can make."
+          "title": "Your time back",
+          "body": "Research and comparison happen in seconds, not afternoons — so your hours go to the walk-throughs, calls, and decisions only you can make."
         }
       ],
-      "note": "The agent runs on MemQL, ZNAS's production-grade AI platform — everything built on top of it is yours."
+      "note": "Haven Deals runs on MemQL, ZNAS's production-grade AI platform — built for you and owned by you."
     },
     "productShowcase": {
-      "headline": "Haven Deals — the deal-sourcing engine we built for you",
-      "intro": "Three stages, each building on the last: a phone that surfaces deals, a desktop workbench for offers and pipeline, and VERA — an analyst working while you sleep. Watch each stage below, then open the live demos and click through them yourself.",
+      "headline": "See it working — then try it yourself.",
+      "intro": "Three stages, each building on the last: a phone that surfaces deals, a desktop workbench for offers and pipeline, and VERA — an analyst working while you sleep. Everything here is the real interface, loaded with example deals from your market. Watch each stage, then open the demos and click through them yourself — every screen is live.",
       "stages": [
         {
           "title": "Stage 1 · Radar",

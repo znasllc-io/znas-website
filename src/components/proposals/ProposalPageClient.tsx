@@ -219,6 +219,14 @@ export default function ProposalPageClient({
               ...(proposal.videoFilename
                 ? [{ label: t.proposals.viewer.nav.video, href: "#video" }]
                 : []),
+              // Product-led sections lead the nav (match ProposalViewer's order):
+              // the pitch (realEstateAgent), then the showcase (productShowcase).
+              ...(proposal.sections.realEstateAgent
+                ? [{ label: t.proposals.viewer.nav.realEstateAgent, href: "#realEstateAgent" }]
+                : []),
+              ...(proposal.sections.productShowcase
+                ? [{ label: t.proposals.viewer.nav.productShowcase, href: "#deliverables" }]
+                : []),
               ...(proposal.sections.roadmap
                 ? [{ label: t.proposals.viewer.nav.roadmap, href: "#roadmap" }]
                 : []),
@@ -234,11 +242,9 @@ export default function ProposalPageClient({
               ...(proposal.sections.team
                 ? [{ label: t.proposals.viewer.nav.team, href: "#team" }]
                 : []),
+              // GBP recovery — demoted to a supporting workstream near the end.
               ...(proposal.sections.initiative
                 ? [{ label: t.proposals.viewer.nav.initiative, href: "#initiative" }]
-                : []),
-              ...(proposal.sections.realEstateAgent
-                ? [{ label: t.proposals.viewer.nav.realEstateAgent, href: "#realEstateAgent" }]
                 : []),
               ...(proposal.assets && proposal.assets.length > 0
                 ? [{ label: t.proposals.viewer.nav.assets, href: "#assets" }]

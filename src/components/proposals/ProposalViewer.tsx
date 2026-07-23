@@ -223,6 +223,30 @@ export default function ProposalViewer({
               <TryNowSection number={nextNumber()} slug={proposal.slug} lang={lang} label={proposal.demoLabel} />
             )}
 
+            {/* Product-led sections render high, right after the summary: the
+                pitch (realEstateAgent) then the showcase (productShowcase).
+                These are Haven-only, so lifting them above the work-structure
+                sections doesn't affect any other proposal's order. */}
+            {sections.realEstateAgent && (
+              <RealEstateAgentSection
+                number={nextNumber()}
+                headline={sections.realEstateAgent.headline}
+                body={sections.realEstateAgent.body}
+                intro={sections.realEstateAgent.intro}
+                points={sections.realEstateAgent.points}
+                note={sections.realEstateAgent.note}
+              />
+            )}
+
+            {sections.productShowcase && (
+              <ProductShowcase
+                number={nextNumber()}
+                slug={proposal.slug}
+                showcase={sections.productShowcase}
+                lang={lang}
+              />
+            )}
+
             {sections.roadmap && (
               <RoadmapSection
                 number={nextNumber()}
@@ -264,6 +288,8 @@ export default function ProposalViewer({
               />
             )}
 
+            {/* GBP recovery — demoted to a supporting workstream near the
+                bottom, below the product story and engagement mechanics. */}
             {sections.initiative && (
               <InitiativeSection
                 number={nextNumber()}
@@ -272,26 +298,6 @@ export default function ProposalViewer({
                 attachmentId={sections.initiative.attachmentId}
                 attachments={proposal.attachments}
                 onDownload={onDownload}
-                lang={lang}
-              />
-            )}
-
-            {sections.realEstateAgent && (
-              <RealEstateAgentSection
-                number={nextNumber()}
-                headline={sections.realEstateAgent.headline}
-                body={sections.realEstateAgent.body}
-                intro={sections.realEstateAgent.intro}
-                points={sections.realEstateAgent.points}
-                note={sections.realEstateAgent.note}
-              />
-            )}
-
-            {sections.productShowcase && (
-              <ProductShowcase
-                number={nextNumber()}
-                slug={proposal.slug}
-                showcase={sections.productShowcase}
                 lang={lang}
               />
             )}

@@ -70,7 +70,7 @@ export interface ProposalViewerStrings {
     errorRefresh: string;
     errorFailed: string;
   };
-  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; assets: string; video: string };
+  nav: { summary: string; roadmap: string; howItWorks: string; timeline: string; investment: string; team: string; initiative: string; realEstateAgent: string; assets: string; video: string; productShowcase: string };
 }
 
 export interface ProposalGateStrings {
@@ -392,13 +392,13 @@ export const translations: Record<Lang, LangStrings> = {
           timeline: "Timeline",
           investment: "Investment",
           team: "Meet the Team",
-          initiative: "Initiative",
-          realEstateAgent: "Real Estate Agent",
+          initiative: "The Foundation",
+          realEstateAgent: "Haven Deals",
           documents: "Supporting Documents",
           tryNow: "Try It Now",
           assets: "Assets",
           video: "Video",
-          productShowcase: "Deliverables",
+          productShowcase: "See It In Action",
         },
         download: {
           headline: "Ready to move forward?",
@@ -414,10 +414,11 @@ export const translations: Record<Lang, LangStrings> = {
           timeline: "Timeline",
           investment: "Investment",
           team: "Meet the Team",
-          initiative: "Initiative",
-          realEstateAgent: "Real Estate Agent",
+          initiative: "Foundation",
+          realEstateAgent: "Haven Deals",
           assets: "Assets",
           video: "Video",
+          productShowcase: "See It",
         },
       },
       gate: {
@@ -680,13 +681,13 @@ export const translations: Record<Lang, LangStrings> = {
           timeline: "Cronograma",
           investment: "Inversión",
           team: "El Equipo",
-          initiative: "Iniciativa",
-          realEstateAgent: "Agente de Bienes Raíces",
+          initiative: "La Base",
+          realEstateAgent: "Haven Deals",
           documents: "Documentos de Apoyo",
           tryNow: "Pruébalo",
           assets: "Recursos",
           video: "Video",
-          productShowcase: "Entregables",
+          productShowcase: "En Acción",
         },
         download: {
           headline: "¿Listo para avanzar?",
@@ -702,10 +703,11 @@ export const translations: Record<Lang, LangStrings> = {
           timeline: "Cronograma",
           investment: "Inversión",
           team: "El Equipo",
-          initiative: "Iniciativa",
-          realEstateAgent: "Agente de Bienes Raíces",
+          initiative: "La Base",
+          realEstateAgent: "Haven Deals",
           assets: "Recursos",
           video: "Video",
+          productShowcase: "Verlo",
         },
       },
       gate: {
