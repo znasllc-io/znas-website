@@ -25,6 +25,7 @@ export default function DemoFrame({
   ctaLabel,
   lang,
   fixedViewport,
+  embed,
 }: {
   // Gated demo URL, e.g. /api/proposals/demo?slug=haven&demo=full
   src: string;
@@ -42,10 +43,17 @@ export default function DemoFrame({
   // the Haven demo needs a tall canvas (1280x1400) or the lock-screen
   // notifications collide with the clock. Omit for the default responsive 16:9.
   fixedViewport?: { w: number; h: number };
+  // When true, the iframe loads the demo with ?embed=1 — the server injects an
+  // overlay that hides the demo's title/description chrome and scales the active
+  // device (phone/workbench) to fill the frame. The "open in new tab" link keeps
+  // the full standalone chrome (no embed flag).
+  embed?: boolean;
 }) {
   const t = translations[lang];
   const consoleLabel = label ?? "Live Portal";
   const launchLabel = ctaLabel ?? t.proposals.viewer.tryNow;
+  // Embedded iframe gets the chrome-stripped presentation; the ↗ link stays full.
+  const iframeSrc = embed ? `${src}${src.includes("?") ? "&" : "?"}embed=1` : src;
   const [phase, setPhase] = useState<Phase>("idle");
 
   // Fixed-viewport scaling: measure the frame width and scale the fixed-size
@@ -235,7 +243,7 @@ export default function DemoFrame({
           {phase !== "idle" && (
             <iframe
               ref={iframeRef}
-              src={src}
+              src={iframeSrc}
               title={consoleLabel}
               onLoad={wireCursorForwarding}
               style={
