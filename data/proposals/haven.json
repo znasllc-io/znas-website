@@ -171,7 +171,8 @@
           "videoId": "stage1-radar",
           "videoLabel": "Stage 1 · Radar",
           "demoId": "stage1-radar",
-          "demoLabel": "Launch Stage 1 demo"
+          "demoLabel": "Launch Stage 1 demo",
+          "embedViewport": { "w": 460, "h": 1000 }
         },
         {
           "title": "Stage 2 · Offers & pipeline",

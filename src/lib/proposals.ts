@@ -248,6 +248,11 @@ export interface ProposalProductStage {
   // Label on the demo's launch control + browser-chrome title.
   demoLabel?: string;
   demoLabel_es?: string;
+  // Logical viewport (px) the embedded demo renders at, then scales to fit.
+  // Match the stage's primary shape: landscape (e.g. 1528x1000) for a desktop
+  // workbench, portrait (e.g. 440x960) for a phone-only stage. Defaults to
+  // landscape when omitted.
+  embedViewport?: { w: number; h: number };
 }
 
 /**
